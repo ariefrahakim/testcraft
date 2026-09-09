@@ -1,0 +1,47 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": "..",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@testcraft/shared$": "<rootDir>/../../packages/shared/src"
+  },
+  "setupFilesAfterEnv": [
+    "<rootDir>/test/setup.ts"
+  ],
+  "testTimeout": 30000,
+  "maxWorkers": 1,
+  "collectCoverage": false,
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!src/main.ts",
+    "!src/app.module.ts",
+    "!src/scripts/**",
+    "!src/**/*.module.ts",
+    "!src/**/dto/**",
+    "!src/swagger.ts",
+    "!src/config/configuration.ts"
+  ],
+  "coverageDirectory": "../coverage",
+  "coverageReporters": [
+    "text-summary",
+    "text",
+    "lcov"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "statements": 90,
+      "lines": 90,
+      "functions": 85,
+      "branches": 70
+    }
+  }
+}

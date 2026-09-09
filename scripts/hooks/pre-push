@@ -1,0 +1,34 @@
+#!/bin/bash
+# pre-push hook — Stage 5 smoke gate
+# Runs smoke tests before pushing to remote.
+# Install: cp scripts/hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+
+echo "🧪 TestCraft pre-push gate (Stage 5: Deploy)"
+echo "---"
+
+# Check if apps are running
+echo "→ Checking if apps are running..."
+if ! curl -sf http://localhost:4001/api/v1/health > /dev/null 2>&1; then
+  echo "  ⚠️  API not running — skipping E2E smoke tests"
+  echo "     To run them: npm run dev (in another terminal)"
+  echo "     Smoke tests will run in CI. Proceeding with push."
+  exit 0
+fi
+
+echo "  ✅ API is up"
+
+# Run smoke tests only
+echo "→ Running Playwright smoke tests (@smoke)..."
+cd tests/e2e
+
+if ! npx playwright test --grep "@smoke" --reporter=list 2>&1; then
+  echo ""
+  echo "❌ BLOCKED: Smoke tests failed."
+  echo "   Fix the failures then push again."
+  echo "   Debug: cd tests/e2e && npx playwright test --grep @smoke --headed"
+  exit 1
+fi
+
+echo ""
+echo "✅ Smoke tests passed. Pushing..."
+exit 0

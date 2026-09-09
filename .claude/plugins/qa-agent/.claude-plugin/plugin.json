@@ -1,0 +1,19 @@
+{
+  "name": "qa-agent",
+  "version": "1.0.0",
+  "description": "Autonomous, spec-driven Playwright QA platform. Choose your stack at setup — Jira + Qase or Azure Boards + Qase — and TDD or BDD. Scaffolds a ready-to-run repo via /qa-agent:setup.",
+  "author": {
+    "name": "Arief Rahman Hakim"
+  },
+  "keywords": [
+    "playwright",
+    "qase",
+    "jira",
+    "azure-devops",
+    "azure-boards",
+    "qa",
+    "bdd",
+    "tdd",
+    "test-automation"
+  ]
+}

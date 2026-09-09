@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestCraft Indonesia — Learn. Build. Automate.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0E9C9C; --blue-dark:#0B7E7E; --blue-light:#D5EFEE;
+  --navy:#12283E; --navy-800:#1E293B; --navy-700:#334155;
+  --light:#F8FAFC; --green:#10B981; --green-light:#D1FAE5;
+  --amber:#F59E0B; --red:#EF4444; --purple:#8B5CF6;
+  --bg:#F8FAFC; --card:#FFFFFF; --text:#12283E; --text-2:#475569; --text-3:#94A3B8;
+  --border:#E2E8F0; --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.07);
+  --shadow-lg:0 8px 40px rgba(15,23,42,.14);
+  --radius:16px; --radius-sm:10px;
+  --grad:linear-gradient(135deg,#0F2438 0%,#16506B 55%,#0E9C9C 100%);
+  --grad-accent:linear-gradient(135deg,#0E9C9C,#2FBF9F);
+}
+html[data-theme="dark"]{
+  --bg:#0B1220; --card:#111A2E; --text:#F1F5F9; --text-2:#CBD5E1; --text-3:#64748B;
+  --border:#1E293B; --blue-light:#0E9C9C26; --green-light:#065F4633;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;line-height:1.25}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+img{max-width:100%}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.flex{display:flex;align-items:center;gap:12px}
+.between{justify-content:space-between}
+.wrap{flex-wrap:wrap}
+.muted{color:var(--text-2)}.small{font-size:13px}.xs{font-size:12px}
+.mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt32{margin-top:32px}.mt48{margin-top:48px}
+.mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}.mb32{margin-bottom:32px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;transition:transform .2s,box-shadow .2s}
+.card.hover:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:12px 24px;font-weight:600;font-size:15px;transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 8px 20px rgba(14,156,156,.35)}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue)}
+.btn-ghost{background:transparent;color:var(--text-2)}
+.btn-ghost:hover{background:var(--blue-light);color:var(--blue)}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:10px}
+.btn-lg{padding:16px 32px;font-size:16px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:#FEF3C7;color:#B45309}
+html[data-theme="dark"] .badge-amber{background:#78350F33;color:#FBBF24}
+.badge-red{background:#FEE2E2;color:#B91C1C}
+html[data-theme="dark"] .badge-red{background:#7F1D1D33;color:#F87171}
+.badge-purple{background:#EDE9FE;color:#6D28D9}
+html[data-theme="dark"] .badge-purple{background:#4C1D9533;color:#A78BFA}
+.badge-navy{background:var(--navy);color:#fff}
+input,select,textarea{font-family:inherit;font-size:14px;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);width:100%;outline:none;transition:border .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+label{font-size:13px;font-weight:600;color:var(--text-2);display:block;margin-bottom:6px}
+.progress{height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress > div{height:100%;background:var(--grad-accent);border-radius:99px;transition:width .5s}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--grad-accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0}
+.avatar.lg{width:64px;height:64px;font-size:22px}
+.avatar.sm{width:30px;height:30px;font-size:12px}
+.stars{color:var(--amber);letter-spacing:1px;font-size:14px}
+.section-title{font-size:32px;font-weight:700;text-align:center}
+.section-sub{text-align:center;color:var(--text-2);max-width:600px;margin:12px auto 0}
+.divider{height:1px;background:var(--border);margin:20px 0}
+/* NAVBAR */
+nav.topnav{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Poppins';font-weight:800;font-size:19px;white-space:nowrap}
+.logo .shield{width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(15,23,42,.12);flex-shrink:0}
+.logo b{color:var(--text)}.logo span{color:var(--blue)}
+.nav-links{display:flex;gap:4px;flex:1}
+.nav-links a{padding:8px 14px;border-radius:10px;font-size:14px;font-weight:500;color:var(--text-2)}
+.nav-links a:hover,.nav-links a.active{background:var(--blue-light);color:var(--blue)}
+.icon-btn{width:40px;height:40px;border-radius:11px;border:1.5px solid var(--border);background:var(--card);display:inline-flex;align-items:center;justify-content:center;font-size:17px;position:relative}
+.icon-btn:hover{border-color:var(--blue)}
+.lang-dd{position:relative}
+.lang-dd summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;justify-content:center}
+.lang-dd summary::-webkit-details-marker{display:none}
+.lang-menu{position:absolute;top:46px;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-lg);padding:6px;z-index:400;min-width:104px}
+.lang-menu button{display:flex;gap:8px;align-items:center;width:100%;padding:9px 12px;border:none;background:none;border-radius:8px;font-weight:600;font-size:13px;color:var(--text);cursor:pointer}
+.lang-menu button:hover{background:var(--bg)}
+
+.icon-btn .dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--card)}
+.role-select{width:auto;padding:8px 12px;font-size:13px;font-weight:600;border-radius:10px}
+/* HERO */
+.hero{background:var(--grad);color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.25),transparent 65%);top:-200px;right:-150px}
+.hero::after{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(14,156,156,.4),transparent 65%);bottom:-250px;left:-100px}
+.hero-inner{max-width:1200px;margin:0 auto;padding:90px 24px 100px;position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+.hero h1{font-size:52px;font-weight:800;line-height:1.15}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,#5EEAD4,#34D399);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:#CBD5E1;margin-top:20px;max-width:540px}
+.hero-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(10px);border-radius:20px;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.hero-card .row{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.hero-card .row:last-child{border:none}
+.hero-card .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stats-band{max-width:1100px;margin:-52px auto 0;position:relative;z-index:5;padding:0 24px}
+.stats-band .card{display:grid;grid-template-columns:repeat(4,1fr);padding:28px;gap:16px;text-align:center}
+.stat-num{font-family:'Poppins';font-size:34px;font-weight:800;background:var(--grad-accent);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* COURSE CARD */
+.course-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;cursor:pointer;display:flex;flex-direction:column}
+.course-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.thumb{height:150px;position:relative;display:flex;align-items:center;justify-content:center;font-size:44px;color:#fff}
+.thumb .lvl{position:absolute;top:12px;left:12px}
+.thumb .dur{position:absolute;bottom:12px;right:12px;background:rgba(15,23,42,.75);color:#fff;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:600}
+.course-body{padding:18px;display:flex;flex-direction:column;gap:9px;flex:1}
+.course-body h3{font-size:16px;font-weight:600;font-family:'Inter'}
+.price{font-family:'Poppins';font-weight:700;font-size:18px;color:var(--blue)}
+.price s{color:var(--text-3);font-size:13px;font-weight:500;margin-left:8px}
+/* CATEGORY chips */
+.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.cat-chip{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s}
+.cat-chip:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:var(--shadow)}
+.cat-chip .ci{font-size:26px}
+.cat-chip .cn{font-weight:600;font-size:13px;margin-top:8px}
+/* PATH */
+.path-card{position:relative;padding-left:0}
+.path-steps{display:flex;flex-direction:column;gap:0;margin-top:14px}
+.path-step{display:flex;gap:14px;position:relative;padding-bottom:18px}
+.path-step::before{content:'';position:absolute;left:15px;top:34px;bottom:0;width:2px;background:var(--border)}
+.path-step:last-child::before{display:none}
+.path-dot{width:32px;height:32px;border-radius:50%;background:var(--blue-light);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;z-index:1}
+/* FAQ */
+details.faq{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;margin-bottom:12px;overflow:hidden}
+details.faq summary{padding:18px 22px;font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.faq summary::after{content:'+';font-size:22px;color:var(--blue);transition:transform .2s}
+details.faq[open] summary::after{transform:rotate(45deg)}
+details.faq .faq-body{padding:0 22px 18px;color:var(--text-2);font-size:14px}
+/* FOOTER */
+footer{background:var(--navy);color:#94A3B8;margin-top:80px}
+footer .container{padding:60px 24px 30px}
+footer h4{color:#fff;font-size:15px;margin-bottom:16px}
+footer a{display:block;padding:5px 0;font-size:14px}
+footer a:hover{color:#fff}
+/* REGISTER SECTION */
+.register-section{background:var(--grad);border-radius:24px;color:#fff;padding:56px;display:grid;grid-template-columns:1fr 1fr;gap:48px;position:relative;overflow:hidden}
+.register-section::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.3),transparent 60%);top:-150px;right:-100px}
+.register-form{background:#fff;border-radius:18px;padding:30px;color:var(--navy);position:relative;z-index:2}
+html[data-theme="dark"] .register-form{background:var(--card);color:var(--text)}
+.register-form input,.register-form select{margin-bottom:14px}
+.wa-btn{background:#25D366;color:#fff;width:100%;justify-content:center}
+.wa-btn:hover{filter:brightness(1.06)}
+/* DASHBOARD LAYOUT */
+.dash{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 68px)}
+.dash-side{background:var(--card);border-right:1px solid var(--border);padding:24px 14px;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
+.dash-side a{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:11px;font-size:14px;font-weight:500;color:var(--text-2);margin-bottom:3px}
+.dash-side a:hover{background:var(--bg)}
+.dash-side a.active{background:var(--blue-light);color:var(--blue);font-weight:600}
+.dash-main{padding:32px;max-width:1160px}
+.kpi{display:flex;flex-direction:column;gap:6px}
+.kpi .k-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:6px}
+.kpi .k-val{font-family:'Poppins';font-size:26px;font-weight:700}
+.kpi .k-delta{font-size:12px;font-weight:600}
+.up{color:var(--green)}.down{color:var(--red)}
+.welcome-banner{background:var(--grad);color:#fff;border-radius:20px;padding:32px;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
+.welcome-banner::after{content:'🚀';position:absolute;font-size:120px;right:30px;bottom:-25px;opacity:.15}
+table.tbl{width:100%;border-collapse:collapse;font-size:14px}
+table.tbl th{text-align:left;padding:11px 14px;color:var(--text-3);font-size:12px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+table.tbl td{padding:13px 14px;border-bottom:1px solid var(--border)}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl tr:hover td{background:var(--bg)}
+/* LEARNING UI */
+.learn{display:grid;grid-template-columns:290px 1fr 320px;min-height:calc(100vh - 68px)}
+.learn-side{background:var(--card);border-right:1px solid var(--border);overflow-y:auto;height:calc(100vh - 68px);position:sticky;top:68px}
+.learn-right{background:var(--card);border-left:1px solid var(--border);height:calc(100vh - 68px);position:sticky;top:68px;display:flex;flex-direction:column}
+.module-h{padding:14px 18px;font-weight:600;font-size:13.5px;background:var(--bg);border-bottom:1px solid var(--border);cursor:pointer;display:flex;justify-content:space-between}
+.lesson{padding:11px 18px;font-size:13.5px;display:flex;gap:10px;align-items:center;cursor:pointer;border-bottom:1px solid var(--border);color:var(--text-2)}
+.lesson:hover{background:var(--bg)}
+.lesson.active{background:var(--blue-light);color:var(--blue);font-weight:600;border-left:3px solid var(--blue)}
+.lesson.done .l-ic{color:var(--green)}
+.player{background:#000;aspect-ratio:16/9;border-radius:16px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.player .play-big{width:76px;height:76px;border-radius:50%;background:rgba(14,156,156,.9);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s;border:none}
+.player .play-big:hover{transform:scale(1.1)}
+.player-bar{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.85));padding:14px 18px;color:#fff;font-size:13px}
+.player-track{height:5px;background:rgba(255,255,255,.25);border-radius:99px;margin-bottom:10px;cursor:pointer}
+.player-track div{height:100%;width:34%;background:var(--blue);border-radius:99px;position:relative}
+.player-track div::after{content:'';position:absolute;right:-6px;top:-4px;width:13px;height:13px;background:#fff;border-radius:50%}
+.tabs{display:flex;border-bottom:1px solid var(--border)}
+.tabs button{flex:1;padding:13px;background:none;border:none;font-weight:600;font-size:13px;color:var(--text-3);border-bottom:2px solid transparent}
+.tabs button.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-body{padding:18px;overflow-y:auto;flex:1;font-size:13.5px}
+/* QUIZ */
+.quiz-opt{display:flex;align-items:center;gap:13px;padding:15px 18px;border:1.5px solid var(--border);border-radius:13px;cursor:pointer;margin-bottom:11px;transition:all .15s;background:var(--card)}
+.quiz-opt:hover{border-color:var(--blue)}
+.quiz-opt.sel{border-color:var(--blue);background:var(--blue-light)}
+.quiz-opt.correct{border-color:var(--green);background:var(--green-light)}
+.quiz-opt.wrong{border-color:var(--red);background:#FEE2E2}
+html[data-theme="dark"] .quiz-opt.wrong{background:#7F1D1D33}
+.quiz-opt .oL{width:30px;height:30px;border-radius:9px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.timer{font-family:'Poppins';font-weight:700;font-size:18px;color:var(--blue)}
+/* CERTIFICATE */
+.cert{background:linear-gradient(135deg,#fff,#F0F7FF);border:2px solid var(--blue);border-radius:20px;padding:44px;text-align:center;position:relative;color:#12283E;max-width:680px;margin:0 auto}
+html[data-theme="dark"] .cert{background:linear-gradient(135deg,#111A2E,#0F1E3D);color:#F1F5F9}
+.cert::before{content:'';position:absolute;inset:10px;border:1px solid var(--blue-light);border-radius:14px;pointer-events:none}
+.qr{display:grid;grid-template-columns:repeat(11,7px);grid-auto-rows:7px;gap:1px;padding:8px;background:#fff;border:1px solid var(--border);border-radius:8px;width:max-content;margin:0 auto}
+.qr i{background:#12283E;border-radius:1px}
+/* CHAT */
+.ai-fab{position:fixed;bottom:26px;right:26px;width:60px;height:60px;border-radius:50%;background:var(--grad-accent);color:#fff;font-size:26px;border:none;box-shadow:0 10px 30px rgba(14,156,156,.4);z-index:200;transition:transform .2s}
+.ai-fab:hover{transform:scale(1.08)}
+.ai-panel{position:fixed;bottom:100px;right:26px;width:360px;height:480px;background:var(--card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow-lg);z-index:200;display:flex;flex-direction:column;overflow:hidden}
+.ai-head{background:var(--grad);color:#fff;padding:16px 20px}
+.ai-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{max-width:82%;padding:10px 14px;border-radius:14px;font-size:13.5px}
+.ai-msg.bot{background:var(--bg);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px}
+.ai-msg.user{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--card);border-radius:20px;max-width:460px;width:100%;padding:30px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto}
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:13px 24px;border-radius:12px;font-size:14px;font-weight:500;z-index:400;box-shadow:var(--shadow-lg);animation:pop .3s}
+@keyframes pop{from{opacity:0;transform:translateX(-50%) translateY(16px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.fade-up{animation:fadeUp .5s ease both}
+/* leaderboard */
+.lb-row{display:flex;align-items:center;gap:13px;padding:11px 0;border-bottom:1px solid var(--border)}
+.lb-row:last-child{border:none}
+.lb-rank{width:28px;height:28px;border-radius:8px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.lb-row.top1 .lb-rank{background:#FEF3C7;color:#B45309}
+.lb-row.top2 .lb-rank{background:#E2E8F0;color:#475569}
+.lb-row.top3 .lb-rank{background:#FFEDD5;color:#C2410C}
+/* filters */
+.filter-group{margin-bottom:22px}
+.filter-group h4{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin-bottom:10px}
+.check{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:14px;cursor:pointer;color:var(--text-2)}
+.check input{width:16px;height:16px;padding:0;accent-color:var(--blue)}
+/* curriculum */
+.curr-mod{border:1px solid var(--border);border-radius:13px;margin-bottom:12px;overflow:hidden}
+.curr-mod summary{padding:16px 20px;background:var(--bg);font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;font-size:14.5px}
+.curr-lesson{padding:12px 20px;border-top:1px solid var(--border);font-size:14px;display:flex;justify-content:space-between;color:var(--text-2)}
+/* responsive */
+@media(max-width:940px){.nav-links{display:none}}
+.catalog-layout{display:grid;grid-template-columns:250px 1fr;gap:28px;align-items:start}
+.catalog-side{position:sticky;top:88px}
+@media(max-width:1024px){
+  .catalog-layout{grid-template-columns:1fr}
+  .catalog-side{position:static}
+  .g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}
+  .cat-grid{grid-template-columns:repeat(3,1fr)}
+  .hero-inner{grid-template-columns:1fr;padding:60px 24px 80px}
+  .hero h1{font-size:38px}
+  .learn{grid-template-columns:260px 1fr}
+  .learn-right{display:none}
+  .register-section{grid-template-columns:1fr;padding:36px}
+  .dash{grid-template-columns:1fr}
+  .dash-side{display:none}
+}
+@media(max-width:640px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-band .card{grid-template-columns:repeat(2,1fr)}
+  .nav-links{display:none}
+  .hero h1{font-size:31px}
+  .learn{grid-template-columns:1fr}
+  .learn-side{display:none}
+  .section-title{font-size:24px}
+}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--text-3);border-radius:99px}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+<div id="nav"></div>
+<main id="app"></main>
+<button class="ai-fab" onclick="toggleAI()" title="AI Learning Assistant">🤖</button>
+<div id="ai-root"></div>
+<div id="modal-root"></div>
+<script>
+/* ============ DATA ============ */
+const WA = "6282395568743", WA_DISPLAY = "+62 823-9556-8743", EMAIL = "testcraftindonesia@gmail.com";
+const GRADS = [
+ "linear-gradient(135deg,#16506B,#0E9C9C)","linear-gradient(135deg,#059669,#0E9C9C)",
+ "linear-gradient(135deg,#12283E,#16506B)","linear-gradient(135deg,#F59E0B,#D97706)",
+ "linear-gradient(135deg,#0E9C9C,#2FBF9F)","linear-gradient(135deg,#10B981,#0F766E)",
+ "linear-gradient(135deg,#12283E,#0E9C9C)","linear-gradient(135deg,#2C7A8C,#12283E)"
+];
+const INSTRUCTORS = [
+ {id:1,name:"Budi Santoso",role:"Principal SDET · ex-Gojek",exp:"12 yrs",rating:4.9,students:8420,courses:4,bio:"Led test automation platforms serving 50M+ users. Playwright & Selenium specialist, ISTQB-CTAL certified."},
+ {id:2,name:"Sari Wulandari",role:"QA Lead · ex-Tokopedia",exp:"10 yrs",rating:4.8,students:6210,courses:3,bio:"API testing and performance engineering expert. Speaker at SeleniumConf Asia and QA Global Summit."},
+ {id:3,name:"Andi Prasetyo",role:"DevOps Architect · ex-Traveloka",exp:"11 yrs",rating:4.9,students:5130,courses:3,bio:"CI/CD pipelines for QA at scale. Docker, Kubernetes, GitHub Actions, and shift-left testing evangelist."},
+ {id:4,name:"Maya Kusuma",role:"AI Testing Researcher",exp:"8 yrs",rating:4.7,students:3890,courses:2,bio:"Pioneering AI-assisted test generation and self-healing automation. Published researcher in ML for QA."}
+];
+const COURSES = [
+ {id:1,title:"Playwright Automation Testing from Zero to Expert",cat:"Automation Testing",level:"Beginner",dur:"32h",lessons:186,students:4215,rating:4.9,reviews:1240,priceIDR:1250000,priceUSD:79,oldIDR:2500000,inst:1,icon:"🎭",bestseller:true,
+  desc:"Master modern web automation with Playwright and TypeScript — from your very first script to enterprise-grade frameworks with CI/CD integration, POM design patterns, API mocking, and visual regression testing.",
+  outcomes:["Build a scalable Playwright framework from scratch","Master locators, auto-waiting & web-first assertions","Implement Page Object Model & fixtures","API testing & network interception","Visual regression & accessibility testing","Run tests in Docker + GitHub Actions CI/CD"],
+  prereq:["Basic HTML/CSS understanding","No prior automation experience required"]},
+ {id:2,title:"Cypress End-to-End Testing",cat:"Automation Testing",level:"Intermediate",dur:"24h",lessons:142,students:3180,rating:4.8,reviews:890,priceIDR:1150000,priceUSD:72,oldIDR:2200000,inst:1,icon:"🌲",
+  desc:"Modern E2E testing with Cypress: real-time reloads, time-travel debugging, custom commands, intercepts, and Cypress Cloud parallelization.",
+  outcomes:["Write robust E2E test suites","Custom commands & utilities","Network stubbing with cy.intercept","Component testing with React","Parallelize in Cypress Cloud"],prereq:["JavaScript fundamentals"]},
+ {id:3,title:"Selenium WebDriver with Java",cat:"Automation Testing",level:"Beginner",dur:"38h",lessons:210,students:5320,rating:4.8,reviews:1560,priceIDR:1350000,priceUSD:85,oldIDR:2700000,inst:1,icon:"☕",bestseller:true,
+  desc:"The industry classic — Selenium 4 with Java, TestNG, Maven, Extent Reports, Selenium Grid, and a complete hybrid framework project.",
+  outcomes:["Selenium 4 features & relative locators","TestNG framework & parallel runs","Data-driven testing with Apache POI","Selenium Grid & cross-browser testing","Full hybrid framework capstone"],prereq:["No prior coding needed — Java taught from scratch"]},
+ {id:4,title:"RestAssured API Automation",cat:"API Testing",level:"Intermediate",dur:"20h",lessons:118,students:2470,rating:4.7,reviews:620,priceIDR:1050000,priceUSD:66,oldIDR:2000000,inst:2,icon:"🔗",
+  desc:"Automate REST APIs in Java with RestAssured: request specs, JSON path, schema validation, OAuth2 flows, and framework design.",
+  outcomes:["CRUD API automation","JSON/XML schema validation","Auth: OAuth2, JWT, API keys","Serialization with POJOs","CI integration & reporting"],prereq:["Core Java","HTTP basics"]},
+ {id:5,title:"Postman API Testing",cat:"API Testing",level:"Beginner",dur:"14h",lessons:96,students:6110,rating:4.8,reviews:1810,priceIDR:750000,priceUSD:47,oldIDR:1500000,inst:2,icon:"📮",bestseller:true,
+  desc:"From first request to automated pipelines: collections, environments, pre-request scripts, test scripts, Newman CLI, and monitors.",
+  outcomes:["Design organized collections","Chain requests with variables","Write JS test assertions","Automate with Newman + CI","Contract testing basics"],prereq:["None — beginner friendly"]},
+ {id:6,title:"Performance Testing using JMeter",cat:"Performance Testing",level:"Intermediate",dur:"18h",lessons:104,students:1980,rating:4.7,reviews:480,priceIDR:1100000,priceUSD:69,oldIDR:2100000,inst:2,icon:"⚡",
+  desc:"Load, stress, and spike testing with Apache JMeter: thread groups, correlations, distributed testing, and Grafana dashboards.",
+  outcomes:["Design realistic load models","Parameterization & correlation","Distributed load generation","Analyze bottlenecks","InfluxDB + Grafana live dashboards"],prereq:["HTTP & web app basics"]},
+ {id:7,title:"Performance Testing using k6",cat:"Performance Testing",level:"Intermediate",dur:"15h",lessons:88,students:1420,rating:4.8,reviews:350,priceIDR:1050000,priceUSD:66,oldIDR:1900000,inst:3,icon:"📈",
+  desc:"Modern developer-centric load testing with Grafana k6: scripting in JS, thresholds, scenarios, browser testing, and k6 Cloud.",
+  outcomes:["k6 scripting & checks","Scenarios & executors","Thresholds as SLOs in CI","k6 browser module","Hybrid protocol+browser tests"],prereq:["JavaScript basics"]},
+ {id:8,title:"AI for Software Testing",cat:"AI for QA",level:"Advanced",dur:"22h",lessons:124,students:2890,rating:4.9,reviews:740,priceIDR:1450000,priceUSD:92,oldIDR:2900000,inst:4,icon:"🤖",bestseller:true,
+  desc:"Harness LLMs and ML for QA: AI test generation, self-healing locators, visual AI, copilots for test code, and building your own AI QA agents.",
+  outcomes:["Prompt engineering for test design","Generate tests with LLM APIs","Self-healing automation patterns","AI visual validation","Build an AI QA agent capstone"],prereq:["Automation experience","Python basics"]},
+ {id:9,title:"Git & CI/CD for QA Engineers",cat:"DevOps",level:"Beginner",dur:"12h",lessons:76,students:3540,rating:4.8,reviews:920,priceIDR:650000,priceUSD:41,oldIDR:1300000,inst:3,icon:"🔧",
+  desc:"Version control and pipelines made practical for testers: Git workflows, GitHub Actions, Docker for test environments, and quality gates.",
+  outcomes:["Git branching strategies","Build test pipelines in GitHub Actions","Dockerize test suites","Quality gates & reporting","Parallel & scheduled runs"],prereq:["None"]},
+ {id:10,title:"Mobile Testing with Appium",cat:"Mobile Testing",level:"Intermediate",dur:"26h",lessons:148,students:1760,rating:4.6,reviews:410,priceIDR:1250000,priceUSD:79,oldIDR:2400000,inst:1,icon:"📱",
+  desc:"Automate Android & iOS apps with Appium 2: inspector, gestures, hybrid apps, real-device clouds, and parallel execution.",
+  outcomes:["Appium 2 setup & drivers","Mobile locator strategies","Gestures & deep links","Cloud device farms","Parallel device execution"],prereq:["Java or JS basics"]},
+ {id:11,title:"Test Strategy & QA Leadership",cat:"Manual Testing",level:"Advanced",dur:"16h",lessons:82,students:1340,rating:4.9,reviews:380,priceIDR:1550000,priceUSD:98,oldIDR:3000000,inst:2,icon:"🎯",
+  desc:"For senior QAs stepping up: test strategy design, risk-based testing, metrics that matter, team building, and stakeholder communication.",
+  outcomes:["Craft a company-wide test strategy","Risk-based test prioritization","QA metrics & dashboards","Hiring & growing QA teams","Executive communication"],prereq:["3+ years QA experience"]},
+ {id:12,title:"ISTQB Foundation Preparation",cat:"Manual Testing",level:"Beginner",dur:"20h",lessons:110,students:7250,rating:4.8,reviews:2100,priceIDR:850000,priceUSD:54,oldIDR:1700000,inst:2,icon:"📜",bestseller:true,
+  desc:"Complete CTFL v4.0 syllabus coverage with 600+ practice questions, exam simulations, and memory techniques to pass on your first try.",
+  outcomes:["Master all 6 syllabus chapters","Test techniques deep-dive","600+ exam-style questions","3 full mock exams","First-attempt pass strategy"],prereq:["None"]}
+];
+const CATEGORIES = [
+ {n:"Manual Testing",i:"📋"},{n:"Automation Testing",i:"⚙️"},{n:"Selenium",i:"☕"},{n:"Playwright",i:"🎭"},{n:"Cypress",i:"🌲"},
+ {n:"API Testing",i:"🔗"},{n:"RestAssured",i:"🧩"},{n:"Postman",i:"📮"},{n:"Performance Testing",i:"⚡"},{n:"JMeter",i:"🧨"},
+ {n:"k6",i:"📈"},{n:"AI for QA",i:"🤖"},{n:"DevOps",i:"🔧"},{n:"CI/CD",i:"🔁"},{n:"Mobile Testing",i:"📱"}
+];
+const TESTIMONIALS = [
+ {n:"Rina Handayani",r:"QA Engineer @ Bank Digital",t:"Kursus Playwright-nya luar biasa lengkap! Dalam 3 bulan saya berhasil pindah dari manual tester ke SDET dengan kenaikan gaji 60%. Materinya selalu update dan mentor sangat responsif.",c:1},
+ {n:"Dimas Aditya",r:"SDET @ Unicorn Startup",t:"TestCraft benar-benar mengubah karier saya. Proyek capstone-nya jadi portofolio yang membuat saya lolos interview di 3 perusahaan sekaligus. Worth every rupiah!",c:8},
+ {n:"Fitri Amelia",r:"Test Lead @ Konsultan IT",t:"Sebagai lead, saya daftarkan seluruh tim di program corporate. Dashboard progress-nya memudahkan tracking, dan skill tim naik drastis dalam satu kuartal.",c:11},
+ {n:"Yoga Pratama",r:"Fresh Graduate → QA Automation",t:"Dari nol banget sampai dapat kerja pertama sebagai QA Automation Engineer dalam 5 bulan. Jalur belajarnya jelas, komunitasnya aktif, sertifikatnya diakui perusahaan.",c:3}
+];
+const CLIENTS = ["Bank Nusantara","GoTech Indonesia","TelkomDigital","AstraVenture","BukaKarya","FinPay","LogistiKu","EduPrime"];
+const PATHS = [
+ {t:"QA Automation Engineer",d:"From manual testing to full automation mastery",time:"6 months",steps:["ISTQB Foundation Preparation","Git & CI/CD for QA Engineers","Selenium WebDriver with Java","Playwright Automation Testing"],icon:"⚙️",color:GRADS[0]},
+ {t:"API Testing Specialist",d:"Become the backend quality expert every team needs",time:"4 months",steps:["Postman API Testing","RestAssured API Automation","Performance Testing using k6","Git & CI/CD for QA Engineers"],icon:"🔗",color:GRADS[1]},
+ {t:"AI-Powered QA Engineer",d:"Future-proof your career with AI testing skills",time:"5 months",steps:["Playwright Automation Testing","AI for Software Testing","Performance Testing using k6","Test Strategy & QA Leadership"],icon:"🤖",color:GRADS[4]}
+];
+const FAQS = [
+ {q:"Apakah saya bisa belajar dari nol tanpa background IT?",a:"Bisa! Learning path kami dirancang dari level pemula. Mulai dari ISTQB Foundation dan Manual Testing, lalu bertahap ke automation. Ribuan alumni kami berasal dari jurusan non-IT."},
+ {q:"Apakah sertifikat TestCraft diakui perusahaan?",a:"Sertifikat kami dilengkapi QR verification sehingga keasliannya dapat diverifikasi langsung oleh perusahaan mana pun."},
+ {q:"Berapa lama akses course berlaku?",a:"Akses seumur hidup (lifetime access) untuk semua course yang dibeli, termasuk semua update materi di masa depan."},
+ {q:"Apakah ada program cicilan atau diskon?",a:"Ya, kami mendukung cicilan 0% via Midtrans/Xendit, serta diskon khusus untuk mahasiswa dan pembelian bundle learning path."},
+ {q:"Bagaimana dengan pelatihan untuk perusahaan (corporate training)?",a:"Kami menyediakan paket Corporate dengan dashboard admin, laporan progress karyawan, kurikulum custom, dan sesi live private. Hubungi kami via WhatsApp untuk penawaran."},
+ {q:"Apakah ada career support?",a:"Kami menyediakan persiapan karier lengkap: konsultasi 1-on-1, review CV & LinkedIn, hingga latihan interview — mempersiapkanmu sampai siap menghadapi proses rekrutmen."}
+];
+const LIVE_CLASSES = [
+ {t:"Live Q&A: Playwright Fixtures Deep-Dive",d:"Today, 19:00 WIB",inst:"Budi Santoso",c:1},
+ {t:"Workshop: API Contract Testing",d:"Sat, 12 Jul · 10:00 WIB",inst:"Sari Wulandari",c:4},
+ {t:"Career Session: Breaking into SDET Roles",d:"Mon, 14 Jul · 19:30 WIB",inst:"Maya Kusuma",c:8}
+];
+const ASSIGNMENTS_DUE = [
+ {t:"Build a POM-based login test suite",course:"Playwright Automation",due:"Tomorrow, 23:59",status:"pending"},
+ {t:"API test collection for Orders service",course:"Postman API Testing",due:"14 Jul",status:"pending"},
+ {t:"Week 3 Reflection: Test Pyramid",course:"ISTQB Foundation",due:"16 Jul",status:"submitted"}
+];
+const LEADERBOARD = [
+ {n:"Dewi Lestari",xp:12840,lv:24},{n:"Arief Rahman",xp:11290,lv:22,me:true},{n:"Fajar Nugroho",xp:10870,lv:21},
+ {n:"Siti Rahma",xp:9640,lv:19},{n:"Bayu Wicaksono",xp:8420,lv:18}
+];
+const QUIZ = [
+ {type:"mcq",q:"Which Playwright method waits automatically for an element to be actionable before clicking?",opts:["page.click()","page.waitAndClick()","element.forceClick()","page.jsClick()"],ans:[0],exp:"page.click() has built-in auto-waiting — Playwright waits for the element to be visible, stable, and enabled."},
+ {type:"multi",q:"Select ALL valid Playwright locator strategies:",opts:["getByRole()","getByTestId()","getByCssXpath()","getByText()"],ans:[0,1,3],exp:"getByRole, getByTestId, and getByText are built-in locators. getByCssXpath does not exist."},
+ {type:"tf",q:"Playwright tests run in a single browser context by default, sharing cookies between tests.",opts:["True","False"],ans:[1],exp:"False — each test gets an isolated BrowserContext, ensuring clean state between tests."},
+ {type:"mcq",q:"What is the purpose of a fixture in Playwright Test?",opts:["To take screenshots on failure","To provide reusable setup/teardown and dependencies to tests","To fix flaky tests automatically","To generate test reports"],ans:[1],exp:"Fixtures establish the environment for each test: pages, data, authenticated states, and custom dependencies."},
+ {type:"fill",q:"The Playwright config file is conventionally named ______.config.ts",ans:["playwright"],exp:"playwright.config.ts is the standard configuration file name."}
+];
+const DISCUSSIONS = [
+ {u:"Yoga Pratama",t:"How to handle dynamic iframes in Playwright?",replies:8,likes:24,best:true,time:"2h ago",pinned:true},
+ {u:"Siti Rahma",t:"getByRole vs getByTestId — which should be default?",replies:15,likes:41,best:true,time:"5h ago"},
+ {u:"Fajar Nugroho",t:"CI pipeline fails only on webkit — anyone else?",replies:4,likes:9,time:"1d ago"},
+ {u:"Dewi Lestari",t:"Sharing my fixture pattern for multi-role auth",replies:22,likes:67,best:true,time:"2d ago"}
+];
+const NOTIFS = [
+ {i:"📝",t:"Assignment due tomorrow: POM login suite",time:"1h ago"},
+ {i:"🎓",t:"Certificate issued: Postman API Testing",time:"3h ago"},
+ {i:"📺",t:"Live class tonight 19:00: Playwright Fixtures",time:"5h ago"},
+ {i:"🔥",t:"7-day streak! +50 bonus XP earned",time:"1d ago"},
+ {i:"💳",t:"Payment confirmed: AI for Software Testing",time:"2d ago"}
+];
+/* ============ STATE & HELPERS ============ */
+let state = {
+  lang: localStorage.getItem("tc_lang") || "en",
+  currency: localStorage.getItem("tc_cur") || "IDR",
+  theme: localStorage.getItem("tc_theme") || "light",
+  role: "guest", enrolled:[1,5,12], progress:{1:34,5:78,12:100},
+  quizIdx:0, quizAnswers:{}, quizDone:false, quizTime:600, quizTimer:null,
+  activeLesson:{m:0,l:1}, learnTab:"notes", aiOpen:false,
+  filters:{cat:[],level:[],search:"",sort:"popular"}
+};
+const $ = s=>document.querySelector(s);
+const inst = id=>INSTRUCTORS.find(i=>i.id===id);
+const course = id=>COURSES.find(c=>c.id===id);
+const fmtIDR = n=>"Rp "+n.toLocaleString("id-ID");
+const price = c=> state.currency==="IDR" ? fmtIDR(c.priceIDR) : "$"+c.priceUSD;
+const oldPrice = c=> state.currency==="IDR" ? fmtIDR(c.oldIDR) : "$"+Math.round(c.oldIDR/15800);
+const initials = n=>n.split(" ").map(w=>w[0]).slice(0,2).join("");
+const starStr = r=>"★".repeat(Math.round(r))+"☆".repeat(5-Math.round(r));
+const grad = id=>GRADS[id%GRADS.length];
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function setTheme(t){state.theme=t;localStorage.setItem("tc_theme",t);document.documentElement.dataset.theme=t;renderNav()}
+function setCurrency(c){state.currency=c;localStorage.setItem("tc_cur",c);render()}
+function setLang(l){state.lang=l;localStorage.setItem("tc_lang",l);render()}
+const ID_DICT={
+ "Login":"Masuk","Courses":"Kursus","Verify Certificate":"Verifikasi Sertifikat","Dashboard":"Dasbor","Catalog":"Katalog","My Learning":"Pembelajaran Saya","Forum":"Forum","Register":"Daftar","Studio":"Studio","Grading":"Penilaian","Team":"Tim",
+ "Overview":"Ringkasan","Quizzes":"Kuis","Certificates":"Sertifikat","Browse Courses":"Jelajahi Kursus","Discussions":"Diskusi","Bookmarks":"Penanda","Wishlist":"Favorit","Settings":"Pengaturan",
+ "My Courses":"Kursus Saya","Quiz Builder":"Pembuat Kuis","Assignments":"Tugas","Messages":"Pesan",
+ "Analytics":"Analitik","Users":"Pengguna","Instructors":"Instruktur","Categories":"Kategori","Enrollments":"Pendaftaran","Payments":"Pembayaran","Roles & Permissions":"Peran & Izin","CMS Pages":"Halaman CMS",
+ "Team Overview":"Ringkasan Tim","Employees":"Karyawan","Seats & Licenses":"Kursi & Lisensi","Reports":"Laporan","Billing":"Tagihan",
+ "Course Catalog":"Katalog Kursus","courses found":"kursus ditemukan","Filters":"Filter","Reset":"Atur Ulang","Category":"Kategori","Difficulty":"Tingkat Kesulitan","Rating":"Rating","Price":"Harga",
+ "Most Popular":"Paling Populer","Highest Rated":"Rating Tertinggi","Price: Low → High":"Harga: Rendah → Tinggi","Price: High → Low":"Harga: Tinggi → Rendah",
+ "🔍 Search courses…":"🔍 Cari kursus…","No courses found":"Kursus tidak ditemukan","Try a different keyword or reset the filters.":"Coba kata kunci lain atau atur ulang filter.","↺ Reset Filters":"↺ Atur Ulang Filter",
+ "students":"siswa","lessons":"pelajaran","Enroll":"Daftar","Continue":"Lanjutkan","Enroll Now":"Daftar Sekarang","▶ Continue Learning":"▶ Lanjutkan Belajar","📚 Continue Learning":"📚 Lanjutkan Belajar",
+ "Sign in to your account":"Masuk ke akun Anda","Sign In":"Masuk","Remember me":"Ingat saya","Forgot password?":"Lupa kata sandi?",
+ "Quick demo access — Role-Based Access Control":"Akses demo cepat — Kontrol Akses Berbasis Peran",
+ "Student":"Siswa","Instructor":"Instruktur","Corporate":"Korporat","Learning Management System":"Sistem Manajemen Pembelajaran",
+ "Sign in to continue learning, teaching, or managing the platform.":"Masuk untuk melanjutkan pembelajaran, mengajar, atau mengelola platform.",
+ "Don't have an account?":"Belum punya akun?","Register here":"Daftar di sini","🌐 Company Website ↗":"🌐 Situs Web Perusahaan ↗",
+ "Welcome back, Arief! 👋":"Selamat datang kembali, Arief! 👋",
+ "🎯 What you'll learn":"🎯 Yang akan Anda pelajari","📌 Prerequisites":"📌 Prasyarat","👨‍🏫 Your Instructor":"👨‍🏫 Instruktur Anda","⭐ Student Reviews":"⭐ Ulasan Siswa","Related Courses":"Kursus Terkait",
+ "Time remaining":"Sisa waktu","← Back":"← Kembali","Next →":"Berikutnya →","Submit Quiz ✓":"Kirim Kuis ✓",
+ "← Previous Lesson":"← Pelajaran Sebelumnya","Next Lesson →":"Pelajaran Berikutnya →"
+};
+const t=s=>state.lang==="id"?(ID_DICT[s]||s):s;
+
+function setRole(r){state.role=r;const map={guest:"#/",student:"#/dashboard",instructor:"#/instructor",admin:"#/admin",corporate:"#/corporate"};location.hash=map[r];render()}
+function qrGrid(){let s="";for(let i=0;i<121;i++){const r=Math.floor(i/11),c=i%11;const corner=(r<3&&c<3)||(r<3&&c>7)||(r>7&&c<3);const fill=corner?((r%3===0||c%3===0||(r%11<3&&c%11<3)))?1:((r===1&&(c===1||c===9))||(r===9&&c===1)?1:0):((i*7+r*3)%5<2?1:0);s+=fill?"<i></i>":"<i style='background:transparent'></i>"}return `<div class="qr">${s}</div>`}
+function svgLine(data,color,h=120,w=320){
+  const max=Math.max(...data),min=Math.min(...data);
+  const pts=data.map((v,i)=>[(i/(data.length-1))*w, h-8-((v-min)/(max-min||1))*(h-24)]);
+  const path=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const area=path+` L${w},${h} L0,${h} Z`;
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:auto">
+    <defs><linearGradient id="lg${color.replace('#','')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${color}" stop-opacity=".25"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#lg${color.replace('#','')})"/><path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+    ${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${color}"/>`).join("")}</svg>`}
+function svgBars(data,labels,color,h=150){
+  const max=Math.max(...data);const bw=100/data.length;
+  return `<svg viewBox="0 0 320 ${h}" style="width:100%;height:auto">${data.map((v,i)=>{
+    const bh=(v/max)*(h-30);return `<rect x="${i*(320/data.length)+8}" y="${h-22-bh}" width="${320/data.length-16}" height="${bh}" rx="6" fill="${color}" opacity="${.55+.45*(v/max)}"/>
+    <text x="${i*(320/data.length)+(320/data.length)/2}" y="${h-6}" text-anchor="middle" font-size="10" fill="var(--text-3)">${labels[i]}</text>`}).join("")}</svg>`}
+function donut(pct,color,size=90){
+  const r=(size-12)/2,c=2*Math.PI*r;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+   <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--border)" stroke-width="9"/>
+   <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round"
+    stroke-dasharray="${c*pct/100} ${c}" transform="rotate(-90 ${size/2} ${size/2})"/>
+   <text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-size="${size/5}" font-weight="700" fill="var(--text)" font-family="Poppins">${pct}%</text></svg>`}
+</script>
+<script>
+/* ============ NAV ============ */
+function renderNav(){
+  const links = state.role==="guest"
+    ? `<a href="#/" data-r="/">Home</a><a href="#/catalog" data-r="/catalog">Courses</a><a href="#/paths" data-r="/paths">Learning Paths</a><a href="#/verify" data-r="/verify">Verify Certificate</a>`
+    : state.role==="student"
+    ? `<a href="#/dashboard" data-r="/dashboard">Dashboard</a><a href="#/catalog" data-r="/catalog">Catalog</a><a href="#/learn/1" data-r="/learn">My Learning</a><a href="#/quiz" data-r="/quiz">Quiz Demo</a><a href="#/certificate" data-r="/certificate">Certificates</a>`
+    : state.role==="instructor"
+    ? `<a href="#/instructor" data-r="/instructor">Dashboard</a><a href="#/catalog" data-r="/catalog">My Courses</a>`
+    : state.role==="admin"
+    ? `<a href="#/admin" data-r="/admin">Analytics</a><a href="#/catalog" data-r="/catalog">Courses</a>`
+    : `<a href="#/corporate" data-r="/corporate">Team Dashboard</a><a href="#/catalog" data-r="/catalog">Catalog</a>`;
+  $("#nav").innerHTML = `<nav class="topnav"><div class="nav-inner">
+    <a class="logo" href="#/"><span class="shield"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="tcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#16607C"/><stop offset="1" stop-color="#0E9C9C"/></linearGradient></defs><path d="M32 5 L55 13 V30 C55 45 44 55 32 59 C20 55 9 45 9 30 V13 Z" fill="none" stroke="url(#tcg)" stroke-width="5" stroke-linejoin="round"/><path d="M20 31 L30 41 L48 19" fill="none" stroke="#0E9C9C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>TEST</b><span>CRAFT</span></span></a>
+    <div class="nav-links">${links}</div>
+    <select class="role-select" onchange="setRole(this.value)" title="Preview as role">
+      ${["guest","student","instructor","admin","corporate"].map(r=>`<option value="${r}" ${state.role===r?"selected":""}>${r==="guest"?"👤 Guest":r==="student"?"🎓 Student":r==="instructor"?"👨‍🏫 Instructor":r==="admin"?"🛡️ Admin":"🏢 Corporate"}</option>`).join("")}
+    </select>
+    <details class="lang-dd">
+      <summary class="icon-btn" style="width:auto;padding:0 10px;font-size:12px;font-weight:700">${state.lang==="id"?"🇮🇩":"🇬🇧"}&nbsp;${state.lang.toUpperCase()}&nbsp;<span style="font-size:9px">▾</span></summary>
+      <div class="lang-menu">
+        <button onclick="setLang('en')">🇬🇧 EN</button>
+        <button onclick="setLang('id')">🇮🇩 ID</button>
+      </div>
+    </details>
+    <button class="icon-btn" onclick="setCurrency(state.currency==='IDR'?'USD':'IDR')" title="Toggle currency" style="font-size:12px;font-weight:700">${state.currency}</button>
+    <button class="icon-btn" onclick="setTheme(state.theme==='light'?'dark':'light')" title="Toggle theme">${state.theme==="light"?"🌙":"☀️"}</button>
+    <button class="icon-btn" onclick="toast('${NOTIFS.length} notifications — see Student Dashboard')" title="Notifications">🔔<span class="dot"></span></button>
+    ${state.role==="guest"?`<button class="btn btn-primary btn-sm" onclick="openRegister()">${t("Register")}</button>`:`<span class="avatar" title="Arief Rahman">AR</span>`}
+  </div></nav>`;
+  const r=location.hash.replace("#","")||"/";
+  document.querySelectorAll(".nav-links a").forEach(a=>{if(r.startsWith(a.dataset.r)&&a.dataset.r!=="/"||r===a.dataset.r)a.classList.add("active")});
+}
+/* ============ COMPONENTS ============ */
+function courseCard(c){
+  return `<div class="course-card fade-up" onclick="location.hash='#/course/${c.id}'">
+    <div class="thumb" style="background:${grad(c.id)}">
+      <span>${c.icon}</span>
+      <span class="badge ${c.level==='Beginner'?'badge-green':c.level==='Intermediate'?'badge-blue':'badge-purple'} lvl">${c.level}</span>
+      <span class="dur">⏱ ${c.dur}</span>
+      ${c.bestseller?`<span class="badge badge-amber" style="position:absolute;top:12px;right:12px">🔥 Bestseller</span>`:""}
+    </div>
+    <div class="course-body">
+      <span class="xs muted">${c.cat} · ${inst(c.inst).name}</span>
+      <h3>${c.title}</h3>
+      <div class="flex small"><span class="stars">${starStr(c.rating)}</span><b>${c.rating}</b><span class="muted">(${c.reviews.toLocaleString()})</span></div>
+      <div class="flex small muted"><span>👥 ${c.students.toLocaleString()} ${t("students")}</span><span>· ${c.lessons} ${t("lessons")}</span></div>
+      <div class="flex between" style="margin-top:auto"><span class="price">${price(c)}<s>${oldPrice(c)}</s></span>
+      <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();enroll(${c.id})">${state.enrolled.includes(c.id)?t("Continue"):t("Enroll")}</button></div>
+    </div></div>`;
+}
+function enroll(id){
+  if(state.enrolled.includes(id)){location.hash="#/learn/"+id;return}
+  openModal(`<h3 class="mb16">💳 Checkout</h3>
+   <div class="card" style="padding:16px;box-shadow:none" >
+     <div class="flex"><div class="thumb" style="width:56px;height:56px;border-radius:12px;font-size:24px;background:${grad(id)}">${course(id).icon}</div>
+     <div><b style="font-size:14px">${course(id).title}</b><div class="price mt8">${price(course(id))}</div></div></div></div>
+   <label class="mt16">Payment method</label>
+   <div class="grid g2" style="gap:10px">
+    ${["💳 Stripe","🇮🇩 Midtrans","🏦 Xendit","🅿️ PayPal"].map((p,i)=>`<button class="btn btn-outline btn-sm" style="justify-content:center" onclick="payNow(${id})">${p}</button>`).join("")}
+   </div>
+   <label class="mt16">Coupon code</label>
+   <div class="flex"><input placeholder="e.g. TESTCRAFT20" id="coupon"><button class="btn btn-outline btn-sm" onclick="toast('Coupon applied: 20% off! 🎉')">Apply</button></div>
+   <button class="btn btn-primary btn-lg mt16" style="width:100%;justify-content:center" onclick="payNow(${id})">Pay ${price(course(id))}</button>
+   <p class="xs muted mt8" style="text-align:center">Secured payment · Invoice sent to your email · 30-day money-back guarantee</p>`);
+}
+function payNow(id){closeModal();state.enrolled.push(id);state.progress[id]=0;toast("🎉 Enrolled successfully! Invoice sent to your email.");render()}
+function openModal(html){$("#modal-root").innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`}
+function closeModal(){$("#modal-root").innerHTML=""}
+function openRegister(){
+  openModal(`<h3>Create your free account</h3><p class="small muted mb16">Join 28,000+ QA engineers levelling up at TestCraft Indonesia</p>
+   <label>Full name</label><input id="r-name" placeholder="Your name" class="mb8">
+   <label class="mt8">Email</label><input id="r-email" type="email" placeholder="you@email.com" class="mb8">
+   <label class="mt8">WhatsApp number</label><input id="r-phone" placeholder="+62 8xx-xxxx-xxxx" class="mb8">
+   <label class="mt8">Interest</label><select id="r-int">${["QA Automation","API Testing","Performance Testing","AI for QA","Manual Testing / ISTQB","Corporate Training"].map(o=>`<option>${o}</option>`).join("")}</select>
+   <button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="submitRegister()">Create Account</button>
+   <div class="divider"></div>
+   <button class="btn btn-outline" style="width:100%;justify-content:center" onclick="toast('Google OAuth flow would start here')">🔵 Continue with Google</button>
+   <a class="btn wa-btn mt8" href="https://wa.me/${WA}?text=Halo%20TestCraft%20Indonesia,%20saya%20ingin%20mendaftar%20kursus!" target="_blank">💬 Register via WhatsApp ${WA_DISPLAY}</a>`);
+}
+function submitRegister(){
+  const n=$("#r-name").value.trim(),e=$("#r-email").value.trim(),p=$("#r-phone").value.trim();
+  if(!n||!e){toast("Please fill in your name and email");return}
+  closeModal();state.role="student";
+  toast(`Welcome aboard, ${n.split(" ")[0]}! 🎉 Confirmation sent to ${e}`);
+  location.hash="#/dashboard";render();
+}
+/* ============ LANDING ============ */
+function viewLanding(){
+  return `
+  <section class="hero"><div class="hero-inner">
+    <div>
+      <span class="badge" style="background:rgba(16,185,129,.18);color:#5EEAD4;border:1px solid rgba(16,185,129,.35)">🇮🇩 #1 Software Testing Academy in Indonesia</span>
+      <h1 class="mt16">Learn. Build. <em>Automate.</em></h1>
+      <p>Master Software Testing, QA Automation, API & Performance Testing, and AI for QA — with industry mentors from Indonesia's top tech companies. Quality Software. Confident Delivery.</p>
+      <div class="flex mt32 wrap">
+        <button class="btn btn-primary btn-lg" onclick="location.hash='#/catalog'">🚀 Explore Courses</button>
+        <button class="btn btn-lg" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)" onclick="openRegister()">Become an Instructor</button>
+      </div>
+      <div class="flex mt24 small" style="color:#94A3B8">
+        <span>⭐ 4.8/5 average rating</span><span>·</span><span>🎓 12,400+ certificates issued</span>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="flex between mb16"><b style="font-family:'Poppins'">Why TestCraft?</b><span class="badge badge-green">Live</span></div>
+      ${[["🎭","Hands-on projects","Real frameworks, not toy examples",'rgba(14,156,156,.25)'],["🏆","Industry certificates","QR-verified & recognized by 50+ companies",'rgba(16,185,129,.25)'],["👨‍🏫","Mentors from unicorns","Gojek, Tokopedia & Traveloka alumni",'rgba(139,92,246,.25)'],["🤖","AI-powered learning","Personal AI tutor & smart recommendations",'rgba(245,158,11,.25)']].map(r=>`
+      <div class="row"><span class="ic" style="background:${r[3]}">${r[0]}</span><div><b style="font-size:14px">${r[1]}</b><div class="xs" style="color:#94A3B8">${r[2]}</div></div></div>`).join("")}
+    </div>
+  </div></section>
+  <div class="stats-band"><div class="card">
+    ${[["28,400+","Active Students"],["48","Expert Courses"],["24","Industry Instructors"],["12,400+","Certificates Issued"]].map(s=>`<div><div class="stat-num">${s[0]}</div><div class="small muted">${s[1]}</div></div>`).join("")}
+  </div></div>
+
+  <section class="container mt48" style="padding-top:24px">
+    <h2 class="section-title">Featured Courses</h2>
+    <p class="section-sub">Kurikulum terupdate mengikuti kebutuhan industri — dari fundamental hingga AI-powered testing.</p>
+    <div class="grid g4 mt32">${COURSES.filter(c=>c.bestseller).slice(0,4).map(courseCard).join("")}</div>
+    <div style="text-align:center" class="mt24"><button class="btn btn-outline" onclick="location.hash='#/catalog'">View All 48 Courses →</button></div>
+  </section>
+
+  <section class="container mt48">
+    <h2 class="section-title">Learning Categories</h2>
+    <p class="section-sub">Explore every discipline of modern software quality engineering.</p>
+    <div class="cat-grid mt32">${CATEGORIES.map(c=>`<div class="cat-chip" onclick="state.filters.search='${c.n}';location.hash='#/catalog'"><div class="ci">${c.i}</div><div class="cn">${c.n}</div></div>`).join("")}</div>
+  </section>
+
+  <section class="container mt48">
+    <h2 class="section-title">Guided Learning Paths</h2>
+    <p class="section-sub">Structured roadmaps that take you from beginner to job-ready specialist.</p>
+    <div class="grid g3 mt32">${PATHS.map(p=>`
+      <div class="card hover path-card">
+        <div class="flex between"><span style="width:52px;height:52px;border-radius:14px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:24px">${p.icon}</span><span class="badge badge-blue">⏱ ${p.time}</span></div>
+        <h3 class="mt16" style="font-size:19px">${p.t}</h3><p class="small muted mt8">${p.d}</p>
+        <div class="path-steps">${p.steps.map((s,i)=>`<div class="path-step"><span class="path-dot">${i+1}</span><span class="small" style="padding-top:4px">${s}</span></div>`).join("")}</div>
+        <button class="btn btn-primary btn-sm mt8" style="width:100%;justify-content:center" onclick="location.hash='#/catalog'">Start This Path</button>
+      </div>`).join("")}</div>
+  </section>
+
+  <section class="container mt48">
+    <h2 class="section-title">Meet Your Instructors</h2>
+    <p class="section-sub">Belajar langsung dari praktisi senior di perusahaan teknologi terbesar Indonesia.</p>
+    <div class="grid g4 mt32">${INSTRUCTORS.map(i=>`
+      <div class="card hover" style="text-align:center">
+        <span class="avatar lg" style="margin:0 auto">${initials(i.name)}</span>
+        <h3 class="mt16" style="font-size:17px">${i.name}</h3>
+        <div class="xs" style="color:var(--blue);font-weight:600">${i.role}</div>
+        <p class="xs muted mt8">${i.bio}</p>
+        <div class="divider"></div>
+        <div class="flex" style="justify-content:center;gap:18px" >
+          <span class="xs"><b>⭐ ${i.rating}</b></span><span class="xs"><b>${(i.students/1000).toFixed(1)}k</b> students</span><span class="xs"><b>${i.courses}</b> courses</span>
+        </div>
+      </div>`).join("")}</div>
+  </section>
+
+  <section class="container mt48">
+    <h2 class="section-title">What Our Alumni Say</h2>
+    <div class="grid g2 mt32">${TESTIMONIALS.map(t=>`
+      <div class="card hover"><div class="stars mb8">★★★★★</div>
+      <p class="small" style="font-style:italic">"${t.t}"</p>
+      <div class="flex mt16"><span class="avatar">${initials(t.n)}</span><div><b class="small">${t.n}</b><div class="xs muted">${t.r}</div></div></div></div>`).join("")}</div>
+  </section>
+
+  <section class="container mt48" style="text-align:center">
+    <p class="xs muted" style="text-transform:uppercase;letter-spacing:2px;font-weight:700">Trusted by leading companies</p>
+    <div class="flex wrap mt16" style="justify-content:center;gap:14px">
+      ${CLIENTS.map(c=>`<span class="badge" style="background:var(--card);border:1px solid var(--border);color:var(--text-2);padding:10px 20px;font-size:14px">🏢 ${c}</span>`).join("")}
+    </div>
+  </section>
+
+  <section class="container mt48">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="mt32" style="max-width:760px;margin-left:auto;margin-right:auto">
+      ${FAQS.map(f=>`<details class="faq"><summary>${f.q}</summary><div class="faq-body">${f.a}</div></details>`).join("")}
+    </div>
+  </section>
+
+  <section class="container mt48" id="register">
+    <div class="register-section">
+      <div style="position:relative;z-index:2">
+        <h2 style="font-size:32px">Siap Memulai Karier QA Impianmu?</h2>
+        <p class="mt16" style="color:#CBD5E1">Daftar sekarang dan dapatkan konsultasi learning path GRATIS dengan mentor kami. Tim kami akan menghubungi Anda via WhatsApp dalam 1×24 jam.</p>
+        <div class="mt24" style="display:flex;flex-direction:column;gap:12px">
+          <div class="flex"><span style="font-size:20px">💬</span><div><div class="xs" style="color:#94A3B8">WhatsApp / Telepon</div><a href="https://wa.me/${WA}" target="_blank"><b>${WA_DISPLAY}</b></a></div></div>
+          <div class="flex"><span style="font-size:20px">✉️</span><div><div class="xs" style="color:#94A3B8">Email</div><a href="mailto:${EMAIL}"><b>${EMAIL}</b></a></div></div>
+          <div class="flex"><span style="font-size:20px">📍</span><div><div class="xs" style="color:#94A3B8">Office</div><b>Jakarta, Indonesia</b></div></div>
+        </div>
+      </div>
+      <div class="register-form">
+        <h3 class="mb16" style="font-size:19px">📝 Registrasi / Konsultasi Gratis</h3>
+        <label>Nama lengkap</label><input id="reg-name" placeholder="Nama Anda">
+        <label>Email</label><input id="reg-email" type="email" placeholder="anda@email.com">
+        <label>No. WhatsApp</label><input id="reg-phone" placeholder="+62 8xx-xxxx-xxxx">
+        <label>Program yang diminati</label>
+        <select id="reg-course">${COURSES.map(c=>`<option>${c.title}</option>`).join("")}<option>Corporate Training</option></select>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitLanding()">Kirim Pendaftaran</button>
+        <div style="text-align:center;margin:10px 0" class="xs muted">— atau langsung chat kami —</div>
+        <a class="btn wa-btn" href="https://wa.me/${WA}?text=Halo%20TestCraft%20Indonesia,%20saya%20ingin%20mendaftar%20kursus!" target="_blank">💬 WhatsApp ${WA_DISPLAY}</a>
+      </div>
+    </div>
+  </section>
+  ${footer()}`;
+}
+function submitLanding(){
+  const n=$("#reg-name").value.trim(),e=$("#reg-email").value.trim(),p=$("#reg-phone").value.trim(),c=$("#reg-course").value;
+  if(!n||(!e&&!p)){toast("Mohon isi nama dan email/WhatsApp Anda");return}
+  openModal(`<div style="text-align:center"><div style="font-size:56px">✅</div>
+   <h3 class="mt8">Pendaftaran Terkirim!</h3>
+   <p class="small muted mt8">Terima kasih <b>${n}</b>! Tim TestCraft akan menghubungi Anda via WhatsApp dalam 1×24 jam mengenai program <b>${c}</b>.</p>
+   <a class="btn wa-btn mt16" href="https://wa.me/${WA}?text=${encodeURIComponent("Halo TestCraft, saya "+n+" baru saja mendaftar program "+c)}" target="_blank">💬 Chat Sekarang di WhatsApp</a>
+   <button class="btn btn-ghost mt8" style="width:100%;justify-content:center" onclick="closeModal()">Tutup</button></div>`);
+}
+function footer(){
+  return `<footer><div class="container">
+   <div class="grid g4">
+    <div>
+      <div class="logo" style="color:#fff"><span class="shield"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="tcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#16607C"/><stop offset="1" stop-color="#0E9C9C"/></linearGradient></defs><path d="M32 5 L55 13 V30 C55 45 44 55 32 59 C20 55 9 45 9 30 V13 Z" fill="none" stroke="url(#tcg)" stroke-width="5" stroke-linejoin="round"/><path d="M20 31 L30 41 L48 19" fill="none" stroke="#0E9C9C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b style="color:#fff">TEST</b><span style="color:#3ECFC4">CRAFT</span></span></div>
+      <p class="small mt16">Quality Software. Confident Delivery.<br>Indonesia's leading academy for software testing & QA engineering.</p>
+      <div class="flex mt16" style="gap:10px">
+        ${["𝕏","in","▶","📷"].map(s=>`<a href="#" onclick="toast('Social link — demo');return false" style="width:36px;height:36px;border-radius:9px;background:#1E293B;display:inline-flex;align-items:center;justify-content:center;padding:0">${s}</a>`).join("")}
+      </div>
+    </div>
+    <div><h4>Company</h4><a href="#/" onclick="toast('About page — demo')">About Us</a><a href="https://wa.me/${WA}" target="_blank">Contact</a><a href="#" onclick="toast('Careers — demo');return false">Careers</a><a href="#" onclick="toast('Blog — demo');return false">Blog</a></div>
+    <div><h4>Learn</h4><a href="#/catalog">All Courses</a><a href="#/paths">Learning Paths</a><a href="#/verify">Verify Certificate</a><a href="#" onclick="openRegister();return false">Become an Instructor</a></div>
+    <div><h4>Contact & Legal</h4>
+      <a href="https://wa.me/${WA}" target="_blank">💬 ${WA_DISPLAY}</a>
+      <a href="mailto:${EMAIL}">✉️ ${EMAIL}</a>
+      <a href="#" onclick="toast('Terms of Service — demo');return false">Terms of Service</a>
+      <a href="#" onclick="toast('Privacy Policy — demo');return false">Privacy Policy</a></div>
+   </div>
+   <div class="divider" style="background:#1E293B;margin-top:40px"></div>
+   <div class="flex between wrap small" style="color:#64748B"><span>© 2026 TestCraft Indonesia. All rights reserved.</span><span>Learn. Build. Automate. 🇮🇩</span></div>
+  </div></footer>`;
+}
+/* ============ CATALOG ============ */
+function catalogList(){
+  const f=state.filters;
+  let list=COURSES.filter(c=>
+    (!f.cat.length||f.cat.includes(c.cat)) &&
+    (!f.level.length||f.level.includes(c.level)) &&
+    (!f.search||c.title.toLowerCase().includes(f.search.toLowerCase())||c.cat.toLowerCase().includes(f.search.toLowerCase())));
+  if(f.sort==="popular")list.sort((a,b)=>b.students-a.students);
+  if(f.sort==="rating")list.sort((a,b)=>b.rating-a.rating);
+  if(f.sort==="priceLow")list.sort((a,b)=>a.priceIDR-b.priceIDR);
+  if(f.sort==="priceHigh")list.sort((a,b)=>b.priceIDR-a.priceIDR);
+  return list;
+}
+function catalogResultsHtml(list){
+  return list.map(courseCard).join("")||`<div class="card" style="grid-column:1/-1;text-align:center;padding:56px 24px">
+    <div style="font-size:46px">🔍</div><h3 class="mt8">${t("No courses found")}</h3>
+    <p class="small muted mt8">${t("Try a different keyword or reset the filters.")}</p>
+    <button class="btn btn-outline btn-sm mt16" onclick="resetFilters()">${t("↺ Reset Filters")}</button></div>`;
+}
+function resetFilters(){state.filters={cat:[],level:[],search:"",sort:"popular"};render()}
+function onSearchInput(v){
+  state.filters.search=v;
+  const list=catalogList();
+  const res=$("#catalog-results"),cnt=$("#catalog-count");
+  if(res)res.innerHTML=catalogResultsHtml(list);
+  if(cnt)cnt.textContent=list.length+" "+t("courses found");
+}
+function viewCatalog(){
+  const f=state.filters;
+  const list=catalogList();
+  const cats=[...new Set(COURSES.map(c=>c.cat))];
+  const esc=f.search.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+  return `<div class="container mt32 catalog-layout">
+   <aside class="card catalog-side">
+    <div class="flex between mb16"><b>${t("Filters")}</b><button class="btn btn-ghost btn-sm" onclick="resetFilters()">${t("Reset")}</button></div>
+    <div class="filter-group"><h4>${t("Category")}</h4>
+     ${cats.map(c=>`<label class="check"><input type="checkbox" ${f.cat.includes(c)?"checked":""} onchange="toggleFilter('cat','${c}')">${c}</label>`).join("")}</div>
+    <div class="filter-group"><h4>${t("Difficulty")}</h4>
+     ${["Beginner","Intermediate","Advanced"].map(l=>`<label class="check"><input type="checkbox" ${f.level.includes(l)?"checked":""} onchange="toggleFilter('level','${l}')">${l}</label>`).join("")}</div>
+    <div class="filter-group"><h4>${t("Rating")}</h4>
+     ${[4.5,4.0].map(r=>`<label class="check"><input type="checkbox" onchange="toast('Rating filter — demo')"><span class="stars">${starStr(r)}</span> ${r}+</label>`).join("")}</div>
+    <div class="filter-group"><h4>${t("Price")}</h4>
+     <label class="check"><input type="checkbox" onchange="toast('Price filter — demo')">Under Rp 1.000.000</label>
+     <label class="check"><input type="checkbox" onchange="toast('Price filter — demo')">Rp 1jt – 1.5jt</label></div>
+   </aside>
+   <div>
+    <div class="flex between wrap mb16">
+      <div><h2 style="font-size:26px">${t("Course Catalog")}</h2><span class="small muted" id="catalog-count">${list.length} ${t("courses found")}</span></div>
+      <div class="flex wrap">
+        <input id="catalog-search" placeholder="${t("🔍 Search courses…")}" style="width:230px" value="${esc}" oninput="onSearchInput(this.value)">
+        <select style="width:auto" onchange="state.filters.sort=this.value;render()">
+          <option value="popular" ${f.sort==="popular"?"selected":""}>${t("Most Popular")}</option>
+          <option value="rating" ${f.sort==="rating"?"selected":""}>${t("Highest Rated")}</option>
+          <option value="priceLow" ${f.sort==="priceLow"?"selected":""}>${t("Price: Low → High")}</option>
+          <option value="priceHigh" ${f.sort==="priceHigh"?"selected":""}>${t("Price: High → Low")}</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid g3" id="catalog-results">${catalogResultsHtml(list)}</div>
+   </div></div>${footer()}`;
+}
+function toggleFilter(k,v){const a=state.filters[k];const i=a.indexOf(v);i>-1?a.splice(i,1):a.push(v);render()}
+/* ============ COURSE DETAIL ============ */
+function viewCourse(id){
+  const c=course(id);if(!c)return viewLanding();
+  const ins=inst(c.inst);
+  const modules=[["Getting Started",5],["Core Concepts & Locators",8],["Framework Design (POM)",7],["Advanced: API & Network",6],["CI/CD & Reporting",6],["Capstone Project",4]];
+  const related=COURSES.filter(x=>x.cat===c.cat&&x.id!==c.id).slice(0,3);
+  return `
+  <section style="background:var(--grad);color:#fff"><div class="container" style="padding:52px 24px;display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:start">
+    <div>
+      <div class="flex small" style="color:#94A3B8"><a href="#/catalog">Courses</a> / <span>${c.cat}</span></div>
+      <h1 class="mt8" style="font-size:34px">${c.title}</h1>
+      <p class="mt16" style="color:#CBD5E1">${c.desc}</p>
+      <div class="flex mt16 wrap small">
+        <span class="badge badge-amber">⭐ ${c.rating} (${c.reviews.toLocaleString()} reviews)</span>
+        <span>👥 ${c.students.toLocaleString()} students</span><span>⏱ ${c.dur}</span><span>🎬 ${c.lessons} lessons</span>
+        <span class="badge ${c.level==='Beginner'?'badge-green':'badge-blue'}">${c.level}</span>
+      </div>
+      <div class="flex mt16 small"><span class="avatar sm">${initials(ins.name)}</span> Created by <b>${ins.name}</b> · ${ins.role}</div>
+    </div>
+    <div class="card" style="color:var(--text);position:sticky;top:88px">
+      <div class="player" style="aspect-ratio:16/9;border-radius:12px;background:${grad(c.id)}">
+        <button class="play-big" onclick="toast('▶ Preview video playing — demo')">▶</button>
+        <span style="position:absolute;top:12px;left:12px" class="badge badge-navy">Preview</span>
+      </div>
+      <div class="flex between mt16"><span class="price" style="font-size:26px">${price(c)}</span><s class="muted">${oldPrice(c)}</s><span class="badge badge-red">-50%</span></div>
+      <button class="btn btn-primary btn-lg mt16" style="width:100%;justify-content:center" onclick="enroll(${c.id})">${state.enrolled.includes(c.id)?t("▶ Continue Learning"):t("Enroll Now")}</button>
+      <button class="btn btn-outline mt8" style="width:100%;justify-content:center" onclick="toast('💚 Added to wishlist')">🤍 Add to Wishlist</button>
+      <div class="divider"></div>
+      <div class="small" style="display:flex;flex-direction:column;gap:8px">
+        <span>✅ Lifetime access & free updates</span><span>✅ QR-verified certificate</span>
+        <span>✅ Downloadable resources</span><span>✅ AI tutor & discussion access</span><span>✅ 30-day money-back guarantee</span>
+      </div>
+    </div>
+  </div></section>
+  <div class="container" style="display:grid;grid-template-columns:1.4fr 1fr;gap:44px;margin-top:36px">
+   <div>
+    <div class="card mb24"><h3 class="mb16">${t("🎯 What you'll learn")}</h3>
+     <div class="grid g2" style="gap:10px">${c.outcomes.map(o=>`<div class="flex small" style="align-items:flex-start"><span style="color:var(--green)">✔</span>${o}</div>`).join("")}</div></div>
+    <div class="card mb24"><h3 class="mb16">${t("📌 Prerequisites")}</h3>
+     ${c.prereq.map(p=>`<div class="flex small mb8"><span>•</span>${p}</div>`).join("")}</div>
+    <h3 class="mb16">📚 Curriculum · ${c.lessons} lessons · ${c.dur}</h3>
+    ${modules.map((m,mi)=>`<details class="curr-mod" ${mi===0?"open":""}><summary>Module ${mi+1}: ${m[0]}<span class="muted xs">${m[1]} lessons</span></summary>
+      ${Array.from({length:m[1]},(_,li)=>`<div class="curr-lesson"><span>${li===0&&mi===0?"🔓":"🔒"} ${mi+1}.${li+1} ${["Introduction & setup","Deep-dive walkthrough","Hands-on lab","Common pitfalls","Best practices","Quiz & recap","Assignment briefing","Bonus: pro tips"][li%8]}</span><span class="xs">${6+((li*7)%14)} min</span></div>`).join("")}</details>`).join("")}
+    <div class="card mt32"><h3 class="mb16">${t("👨‍🏫 Your Instructor")}</h3>
+      <div class="flex" style="align-items:flex-start"><span class="avatar lg">${initials(ins.name)}</span>
+      <div><b>${ins.name}</b><div class="xs" style="color:var(--blue);font-weight:600">${ins.role}</div>
+      <p class="small muted mt8">${ins.bio}</p>
+      <div class="flex mt8 xs"><span>⭐ ${ins.rating} rating</span><span>· ${ins.students.toLocaleString()} students</span><span>· ${ins.courses} courses</span><span>· ${ins.exp} experience</span></div></div></div></div>
+    <div class="card mt24"><h3 class="mb16">${t("⭐ Student Reviews")}</h3>
+      <div class="flex mb16"><span style="font-family:'Poppins';font-size:44px;font-weight:800">${c.rating}</span>
+      <div><div class="stars">${starStr(c.rating)}</div><span class="xs muted">${c.reviews.toLocaleString()} reviews</span></div></div>
+      ${[["Rina H.","Framework section alone is worth the price. Instructor menjelaskan dengan sangat jelas!",5],["Dimas A.","Best investment for my QA career. The capstone project got me hired.",5],["Fitri A.","Great content, would love even more k6 integration examples.",4]].map(r=>`
+       <div class="divider"></div><div class="flex between"><div class="flex"><span class="avatar sm">${initials(r[0])}</span><b class="small">${r[0]}</b></div><span class="stars xs">${starStr(r[2])}</span></div>
+       <p class="small muted mt8">"${r[1]}"</p>`).join("")}</div>
+   </div>
+   <div>
+    <div class="card mb24"><h3 class="mb16">❓ Course FAQ</h3>
+      ${[["Is this course updated for the latest version?","Yes — content is refreshed every quarter and you get all updates free."],["Do I get a certificate?","Yes, a QR-verified certificate is auto-issued when you pass the final quiz."],["Can I ask questions?","Absolutely — every lesson has a discussion thread answered by the instructor."]].map(f=>`<details class="faq"><summary style="font-size:14px">${f[0]}</summary><div class="faq-body">${f[1]}</div></details>`).join("")}</div>
+    <h4 class="mb16" style="font-family:'Poppins'">${t("Related Courses")}</h4>
+    <div class="grid" style="grid-template-columns:1fr">${related.map(courseCard).join("")}</div>
+   </div>
+  </div>${footer()}`;
+}
+</script>
+<script>
+/* ============ LEARNING EXPERIENCE ============ */
+const LEARN_MODULES=[
+ {t:"Getting Started",lessons:["Welcome & course roadmap","Installing Playwright & VS Code setup","Your first test in 10 minutes","Understanding the test runner","Project structure best practices"]},
+ {t:"Core Concepts & Locators",lessons:["Locator philosophy: user-first","getByRole deep-dive","Auto-waiting & web-first assertions","Handling dynamic content","Frames, popups & new tabs","Debugging with trace viewer"]},
+ {t:"Framework Design (POM)",lessons:["Why Page Object Model?","Building your first page object","Fixtures & dependency injection","Multi-role authentication states","Data-driven test patterns"]},
+ {t:"CI/CD & Reporting",lessons:["GitHub Actions pipeline","Docker for consistent runs","HTML & Allure reports","Sharding & parallelization"]}
+];
+function viewLearn(id){
+  const c=course(id)||course(1);
+  const {m:am,l:al}=state.activeLesson;
+  const lessonName=LEARN_MODULES[am].lessons[al];
+  const prog=state.progress[c.id]||34;
+  return `<div class="learn">
+   <aside class="learn-side">
+     <div style="padding:18px;border-bottom:1px solid var(--border)">
+       <b class="small">${c.title}</b>
+       <div class="flex mt8"><div class="progress" style="flex:1"><div style="width:${prog}%"></div></div><span class="xs" style="font-weight:700;color:var(--green)">${prog}%</span></div>
+     </div>
+     ${LEARN_MODULES.map((m,mi)=>`
+      <div class="module-h">Module ${mi+1}: ${m.t}<span class="xs muted">${m.lessons.length}</span></div>
+      ${m.lessons.map((l,li)=>{
+        const done=mi<am||(mi===am&&li<al);
+        const active=mi===am&&li===al;
+        return `<div class="lesson ${active?"active":""} ${done?"done":""}" onclick="state.activeLesson={m:${mi},l:${li}};render()">
+          <span class="l-ic">${done?"✅":active?"▶":"🎬"}</span><span>${l}</span></div>`}).join("")}`).join("")}
+   </aside>
+   <div style="padding:26px;min-width:0">
+     <div class="player" style="background:${grad(c.id)}">
+       <button class="play-big" onclick="toast('▶ Playing: ${lessonName} — demo player')">▶</button>
+       <div class="player-bar">
+         <div class="player-track" onclick="toast('Seek — demo')"><div></div></div>
+         <div class="flex between">
+           <div class="flex" style="gap:14px"><span style="cursor:pointer" onclick="toast('Play/pause')">⏯</span><span>04:32 / 13:20</span><span style="cursor:pointer" onclick="toast('Volume')">🔊</span></div>
+           <div class="flex" style="gap:14px">
+             <span style="cursor:pointer" onclick="toast('Speed: 1.25x')">1.0x</span>
+             <span style="cursor:pointer" onclick="toast('Captions: EN / ID')">CC</span>
+             <span style="cursor:pointer" onclick="toast('Quality: 1080p')">⚙️</span>
+             <span style="cursor:pointer" onclick="toast('Fullscreen')">⛶</span>
+           </div>
+         </div>
+       </div>
+     </div>
+     <div class="flex between mt16 wrap">
+       <div><span class="xs muted">Module ${am+1} · Lesson ${al+1}</span><h2 style="font-size:21px">${lessonName}</h2></div>
+       <div class="flex">
+         <button class="btn btn-outline btn-sm" onclick="toast('🔖 Lesson bookmarked')">🔖 Bookmark</button>
+         <button class="btn btn-outline btn-sm" onclick="toast('⬇ Materials downloaded: slides.pdf, code.zip')">⬇ Materials</button>
+         <button class="btn btn-green btn-sm" onclick="markComplete()">✓ Mark Complete</button>
+       </div>
+     </div>
+     <div class="card mt16" style="padding:18px">
+       <p class="small muted">In this lesson we cover <b>${lessonName.toLowerCase()}</b> with a hands-on demo. Resume playback is enabled — you'll pick up right where you left off. Download the companion repo to code along, and post questions in the Discussion tab.</p>
+     </div>
+     <div class="flex between mt24">
+       <button class="btn btn-outline" onclick="navLesson(-1)">${t("← Previous Lesson")}</button>
+       <button class="btn btn-primary" onclick="navLesson(1)">${t("Next Lesson →")}</button>
+     </div>
+   </div>
+   <aside class="learn-right">
+     <div class="tabs">
+       ${["notes","discussion","resources"].map(t=>`<button class="${state.learnTab===t?"active":""}" onclick="state.learnTab='${t}';render()">${t==="notes"?"📝 Notes":t==="discussion"?"💬 Discussion":"📎 Resources"}</button>`).join("")}
+     </div>
+     <div class="tab-body">${
+       state.learnTab==="notes"?`
+        <textarea rows="6" placeholder="Take notes at 04:32… (auto-saved & timestamped)"></textarea>
+        <button class="btn btn-primary btn-sm mt8" style="width:100%;justify-content:center" onclick="toast('📝 Note saved at 04:32')">Save Note</button>
+        <div class="mt16"><b class="xs muted">MY NOTES</b>
+        ${[["02:14","getByRole is preferred over CSS selectors for resilience"],["08:45","await expect(locator).toBeVisible() — web-first assertion"]].map(n=>`
+          <div class="card mt8" style="padding:12px"><span class="badge badge-blue xs">${n[0]}</span><p class="xs mt8">${n[1]}</p></div>`).join("")}</div>`
+       :state.learnTab==="discussion"?`
+        ${DISCUSSIONS.map(d=>`<div class="card mb8" style="padding:13px">
+          ${d.pinned?'<span class="badge badge-amber xs mb8">📌 Pinned</span>':""}
+          <div class="flex"><span class="avatar sm">${initials(d.u)}</span><div><b class="xs">${d.u}</b><div class="xs muted">${d.time}</div></div></div>
+          <p class="small mt8" style="font-weight:600">${d.t}</p>
+          <div class="flex mt8 xs muted"><span style="cursor:pointer" onclick="toast('👍 Liked')">👍 ${d.likes}</span><span>💬 ${d.replies} replies</span>${d.best?'<span class="badge badge-green xs">✓ Best answer</span>':""}</div>
+        </div>`).join("")}
+        <div class="flex mt8"><input placeholder="Ask a question…"><button class="btn btn-primary btn-sm" onclick="toast('💬 Question posted! Instructor typically replies within 24h')">Post</button></div>`
+       :`${[["📄","Lesson slides (PDF)","2.4 MB"],["💻","Companion code repo (ZIP)","8.1 MB"],["🔗","Playwright official docs","link"],["📋","Locator cheat-sheet","0.3 MB"]].map(r=>`
+        <div class="card mb8 flex between" style="padding:13px;cursor:pointer" onclick="toast('⬇ Downloading ${r[1]}')">
+          <div class="flex"><span style="font-size:20px">${r[0]}</span><div><b class="xs">${r[1]}</b><div class="xs muted">${r[2]}</div></div></div><span>⬇</span></div>`).join("")}`
+     }</div>
+   </aside>
+  </div>`;
+}
+function navLesson(dir){
+  let {m,l}=state.activeLesson;
+  l+=dir;
+  if(l<0){m=Math.max(0,m-1);l=LEARN_MODULES[m].lessons.length-1}
+  if(l>=LEARN_MODULES[m].lessons.length){if(m<LEARN_MODULES.length-1){m++;l=0}else{location.hash="#/quiz";toast("Module complete! Time for the quiz 🎯");return}}
+  state.activeLesson={m,l};render();
+}
+function markComplete(){toast("✅ Lesson completed! +25 XP");navLesson(1)}
+/* ============ QUIZ ============ */
+function viewQuiz(){
+  if(state.quizDone)return quizResults();
+  const i=state.quizIdx,q=QUIZ[i];
+  const sel=state.quizAnswers[i]||[];
+  if(!state.quizTimer){state.quizTimer=setInterval(()=>{state.quizTime--;const el=$("#qt");if(el)el.textContent=fmtTime(state.quizTime);if(state.quizTime<=0)finishQuiz()},1000)}
+  return `<div class="container mt32" style="max-width:760px">
+   <div class="card">
+    <div class="flex between mb16">
+      <div><span class="badge badge-blue">Module 2 Quiz</span><h2 class="mt8" style="font-size:22px">Playwright Core Concepts</h2></div>
+      <div style="text-align:right"><div class="xs muted">${t("Time remaining")}</div><div class="timer" id="qt">${fmtTime(state.quizTime)}</div></div>
+    </div>
+    <div class="progress mb24"><div style="width:${(i)/QUIZ.length*100}%"></div></div>
+    <div class="flex between mb8"><span class="xs muted">Question ${i+1} of ${QUIZ.length} · ${q.type==="multi"?"Select all that apply":q.type==="tf"?"True / False":q.type==="fill"?"Fill in the blank":"Single choice"}</span><span class="xs muted">Passing score: 80%</span></div>
+    <h3 class="mb16" style="font-size:17px;font-family:'Inter'">${q.q}</h3>
+    ${q.type==="fill"
+      ?`<input id="fillans" placeholder="Type your answer…" value="${sel[0]||""}" oninput="state.quizAnswers[${i}]=[this.value]">`
+      :q.opts.map((o,oi)=>`<div class="quiz-opt ${sel.includes(oi)?"sel":""}" onclick="pickAns(${i},${oi},'${q.type}')">
+        <span class="oL">${String.fromCharCode(65+oi)}</span><span class="small">${o}</span></div>`).join("")}
+    <div class="flex between mt24">
+      <button class="btn btn-outline" ${i===0?"disabled style='opacity:.4'":""} onclick="state.quizIdx--;render()">${t("← Back")}</button>
+      <span class="xs muted">Questions are randomized per attempt · 2 retakes allowed</span>
+      ${i<QUIZ.length-1
+        ?`<button class="btn btn-primary" onclick="state.quizIdx++;render()">${t("Next →")}</button>`
+        :`<button class="btn btn-green" onclick="finishQuiz()">${t("Submit Quiz ✓")}</button>`}
+    </div>
+   </div></div>`;
+}
+const fmtTime=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function pickAns(qi,oi,type){
+  let a=state.quizAnswers[qi]||[];
+  if(type==="multi"){a.includes(oi)?a=a.filter(x=>x!==oi):a.push(oi)}else a=[oi];
+  state.quizAnswers[qi]=a;render();
+}
+function finishQuiz(){clearInterval(state.quizTimer);state.quizTimer=null;state.quizDone=true;render()}
+function quizResults(){
+  let correct=0;
+  const rows=QUIZ.map((q,i)=>{
+    const a=state.quizAnswers[i]||[];
+    let ok;
+    if(q.type==="fill")ok=(a[0]||"").trim().toLowerCase()===q.ans[0];
+    else ok=JSON.stringify([...a].sort())===JSON.stringify([...q.ans].sort());
+    if(ok)correct++;
+    return {q,a,ok};
+  });
+  const pct=Math.round(correct/QUIZ.length*100),pass=pct>=80;
+  return `<div class="container mt32" style="max-width:760px">
+   <div class="card" style="text-align:center">
+    <div style="font-size:60px">${pass?"🏆":"📚"}</div>
+    <h2 class="mt8">${pass?"Congratulations — You Passed!":"Almost There!"}</h2>
+    <p class="muted small mt8">${pass?"Your certificate has been generated automatically. +200 XP earned!":"You need 80% to pass. Review the feedback below — you have 2 retakes remaining."}</p>
+    <div class="mt24">${donut(pct,pass?"#10B981":"#F59E0B",130)}</div>
+    <div class="flex mt16" style="justify-content:center"><span class="badge badge-green">${correct} correct</span><span class="badge badge-red">${QUIZ.length-correct} wrong</span><span class="badge badge-blue">⏱ ${fmtTime(600-state.quizTime)} used</span></div>
+    <div class="flex mt24" style="justify-content:center">
+      ${pass?`<button class="btn btn-green" onclick="location.hash='#/certificate'">🎓 View Certificate</button>`:""}
+      <button class="btn btn-outline" onclick="state.quizDone=false;state.quizIdx=0;state.quizAnswers={};state.quizTime=600;render()">↺ Retake Quiz</button>
+    </div>
+   </div>
+   <h3 class="mt32 mb16">📋 Instant Feedback</h3>
+   ${rows.map((r,i)=>`<div class="card mb16">
+     <div class="flex between"><b class="small">Q${i+1}. ${r.q.q}</b><span class="badge ${r.ok?"badge-green":"badge-red"}">${r.ok?"✓ Correct":"✗ Wrong"}</span></div>
+     <p class="xs muted mt8">💡 ${r.q.exp}</p></div>`).join("")}
+  </div>`;
+}
+/* ============ CERTIFICATE ============ */
+function viewCertificate(){
+  return `<div class="container mt32">
+   <div class="flex between wrap mb24"><h2>🎓 My Certificates</h2>
+   <button class="btn btn-outline btn-sm" onclick="toast('⬇ Certificate downloaded as PDF')">⬇ Download PDF</button></div>
+   <div class="cert">
+     <div style="font-size:13px;letter-spacing:4px;color:var(--blue);font-weight:700">CERTIFICATE OF COMPLETION</div>
+     <div class="logo mt16" style="justify-content:center"><span class="shield"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="tcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#16607C"/><stop offset="1" stop-color="#0E9C9C"/></linearGradient></defs><path d="M32 5 L55 13 V30 C55 45 44 55 32 59 C20 55 9 45 9 30 V13 Z" fill="none" stroke="url(#tcg)" stroke-width="5" stroke-linejoin="round"/><path d="M20 31 L30 41 L48 19" fill="none" stroke="#0E9C9C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>TEST</b><span style="color:var(--blue)">CRAFT</span> <span style="font-size:13px;font-weight:600">INDONESIA</span></span></div>
+     <p class="small muted mt24">This certifies that</p>
+     <h1 style="font-size:34px;margin:8px 0;background:var(--grad-accent);-webkit-background-clip:text;background-clip:text;color:transparent">Arief Rahman Hakim</h1>
+     <p class="small muted">has successfully completed</p>
+     <h3 class="mt8">Playwright Automation Testing from Zero to Expert</h3>
+     <p class="small muted mt8">32 hours · Final score 92% · Completed 8 July 2026</p>
+     <div class="mt24" style="display:flex;justify-content:center;gap:44px;align-items:center">
+       <div style="text-align:center"><b style="font-family:'Poppins'">Budi Santoso</b><div class="xs muted">Instructor</div></div>
+       ${qrGrid()}
+       <div style="text-align:center"><b style="font-family:'Poppins'">TC-2026-08421</b><div class="xs muted">Certificate No.</div></div>
+     </div>
+     <p class="xs muted mt16">Verify authenticity at testcraft.id/verify · Scan the QR code</p>
+   </div>
+   <div style="text-align:center" class="mt24">
+     <button class="btn btn-primary" onclick="location.hash='#/verify'">🔍 Try the Verification Page</button>
+     <button class="btn btn-outline" onclick="toast('🔗 LinkedIn share dialog — demo')">in Share on LinkedIn</button>
+   </div></div>`;
+}
+function viewVerify(){
+  return `<div class="container mt48" style="max-width:560px">
+   <div class="card" style="text-align:center">
+     <div style="font-size:48px">🔍</div>
+     <h2 class="mt8">Certificate Verification</h2>
+     <p class="small muted mt8">Enter a certificate number to verify its authenticity. Employers can trust QR-verified TestCraft certificates.</p>
+     <div class="flex mt24"><input id="vnum" placeholder="e.g. TC-2026-08421" value="TC-2026-08421"><button class="btn btn-primary" onclick="verifyCert()">Verify</button></div>
+     <div id="vresult"></div>
+   </div></div>${footer()}`;
+}
+function verifyCert(){
+  const v=$("#vnum").value.trim().toUpperCase();
+  $("#vresult").innerHTML = v==="TC-2026-08421"
+   ? `<div class="card mt24" style="border-color:var(--green);text-align:left">
+      <span class="badge badge-green mb8">✅ VALID CERTIFICATE</span>
+      <div class="divider"></div>
+      <div class="grid g2 small">
+        <div><span class="xs muted">Student</span><br><b>Arief Rahman Hakim</b></div>
+        <div><span class="xs muted">Course</span><br><b>Playwright Automation Testing</b></div>
+        <div><span class="xs muted">Instructor</span><br><b>Budi Santoso</b></div>
+        <div><span class="xs muted">Completed</span><br><b>8 July 2026 · Score 92%</b></div>
+      </div></div>`
+   : `<div class="card mt24" style="border-color:var(--red)"><span class="badge badge-red">✗ NOT FOUND</span><p class="small muted mt8">No certificate matches "${v}". Check the number and try again, or contact ${EMAIL}.</p></div>`;
+}
+/* ============ STUDENT DASHBOARD ============ */
+function viewDashboard(){
+  return `<div class="dash">
+   ${dashSide(MENUS.student)}
+   <div class="dash-main">
+    <div class="welcome-banner">
+      <div><h2 style="font-size:24px">${t("Welcome back, Arief! 👋")}</h2>
+      <p class="small mt8" style="color:#CBD5E1">You're on a <b>7-day streak</b> 🔥 — 45 minutes today keeps it alive. Level 22 · 11,290 XP</p></div>
+      <button class="btn btn-green" onclick="location.hash='#/learn/1'" style="position:relative;z-index:2">${t("▶ Continue Learning")}</button>
+    </div>
+    <div class="grid g4 mt24">
+      ${[["⏱","Learning Hours","86.5h","+4.2h this week","var(--blue-light)"],["📈","Avg. Completion","71%","+6% vs last month","var(--green-light)"],["🏅","Badges Earned","14","2 new this week","#FEF3C7"],["🔥","Daily Streak","7 days","Best: 21 days","#FEE2E2"]].map(k=>`
+      <div class="card kpi"><span class="k-ic" style="background:${k[4]}">${k[0]}</span><span class="xs muted">${k[1]}</span><span class="k-val">${k[2]}</span><span class="k-delta up">${k[3]}</span></div>`).join("")}
+    </div>
+    <div class="grid mt24" style="grid-template-columns:1.5fr 1fr">
+      <div>
+        <div class="card">
+          <div class="flex between mb16"><h3 style="font-size:17px">${t("📚 Continue Learning")}</h3><a href="#/catalog" class="small" style="color:var(--blue);font-weight:600">Browse more →</a></div>
+          ${state.enrolled.map(id=>{const c=course(id);const p=state.progress[id]??0;return `
+           <div class="flex mb16" style="cursor:pointer" onclick="location.hash='#/learn/${id}'">
+             <div class="thumb" style="width:74px;height:52px;border-radius:10px;font-size:24px;flex-shrink:0;background:${grad(id)}">${c.icon}</div>
+             <div style="flex:1;min-width:0"><b class="small">${c.title}</b>
+               <div class="flex mt8"><div class="progress" style="flex:1"><div style="width:${p}%"></div></div><span class="xs" style="font-weight:700;color:${p===100?"var(--green)":"var(--blue)"}">${p}%</span></div></div>
+             <button class="btn ${p===100?"btn-green":"btn-primary"} btn-sm">${p===100?"🎓 Cert":"Resume"}</button>
+           </div>`}).join("")}
+        </div>
+        <div class="card mt24">
+          <h3 class="mb16" style="font-size:17px">📝 Assignments Due</h3>
+          ${ASSIGNMENTS_DUE.map(a=>`<div class="flex between mb16">
+            <div><b class="small">${a.t}</b><div class="xs muted">${a.course} · Due ${a.due}</div></div>
+            <span class="badge ${a.status==="submitted"?"badge-green":"badge-amber"}">${a.status==="submitted"?"✓ Submitted":"⏳ Pending"}</span></div>`).join("")}
+          <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="openAssignment()">Open Assignment Workspace</button>
+        </div>
+        <div class="card mt24">
+          <h3 class="mb16" style="font-size:17px">🗓 Upcoming Live Classes</h3>
+          ${LIVE_CLASSES.map(l=>`<div class="flex between mb16">
+            <div class="flex"><div style="width:44px;height:44px;border-radius:11px;background:${grad(l.c)};display:flex;align-items:center;justify-content:center;font-size:19px">${course(l.c).icon}</div>
+            <div><b class="small">${l.t}</b><div class="xs muted">${l.d} · ${l.inst}</div></div></div>
+            <button class="btn btn-outline btn-sm" onclick="toast('📅 Added to calendar + reminder set')">Remind me</button></div>`).join("")}
+        </div>
+      </div>
+      <div>
+        <div class="card" style="text-align:center">
+          <h3 style="font-size:16px" class="mb8">Weekly Goal</h3>
+          ${donut(76,"#0E9C9C",110)}
+          <p class="xs muted mt8">4.2h of 5.5h target · Keep going! 💪</p>
+        </div>
+        <div class="card mt24">
+          <div class="flex between mb16"><h3 style="font-size:16px">🏆 Leaderboard</h3><span class="xs muted">This week</span></div>
+          ${LEADERBOARD.map((u,i)=>`<div class="lb-row top${i+1}" ${u.me?'style="background:var(--blue-light);border-radius:10px;padding:11px 10px"':""}>
+            <span class="lb-rank">${i+1}</span><span class="avatar sm">${initials(u.n)}</span>
+            <div style="flex:1"><b class="xs">${u.n}${u.me?" (you)":""}</b><div class="xs muted">Level ${u.lv}</div></div>
+            <b class="xs" style="color:var(--blue)">${u.xp.toLocaleString()} XP</b></div>`).join("")}
+        </div>
+        <div class="card mt24">
+          <h3 class="mb16" style="font-size:16px">🏅 Recent Achievements</h3>
+          <div class="grid g3" style="gap:10px;text-align:center">
+            ${[["🚀","Fast Starter"],["🔥","7-Day Streak"],["🎯","Quiz Ace"],["🧪","Lab Rat"],["🤝","Helper"],["🌙","Night Owl"]].map(b=>`
+            <div style="padding:10px;border:1px solid var(--border);border-radius:12px"><div style="font-size:26px">${b[0]}</div><div class="xs" style="font-weight:600;margin-top:4px">${b[1]}</div></div>`).join("")}
+          </div>
+        </div>
+        <div class="card mt24">
+          <h3 class="mb16" style="font-size:16px">🔔 Notifications</h3>
+          ${NOTIFS.map(n=>`<div class="flex mb16" style="align-items:flex-start"><span style="font-size:17px">${n.i}</span>
+           <div><span class="xs">${n.t}</span><div class="xs muted">${n.time}</div></div></div>`).join("")}
+        </div>
+        <div class="card mt24">
+          <h3 class="mb8" style="font-size:16px">✨ Recommended for You</h3>
+          <p class="xs muted mb16">Based on your Playwright progress (AI-powered)</p>
+          ${[8,7].map(id=>{const c=course(id);return `<div class="flex mb16" style="cursor:pointer" onclick="location.hash='#/course/${id}'">
+            <div class="thumb" style="width:58px;height:44px;border-radius:9px;font-size:19px;flex-shrink:0;background:${grad(id)}">${c.icon}</div>
+            <div><b class="xs">${c.title}</b><div class="xs muted">⭐ ${c.rating} · ${price(c)}</div></div></div>`}).join("")}
+        </div>
+      </div>
+    </div>
+   </div></div>`;
+}
+function openAssignment(){
+  openModal(`<h3 class="mb8">📝 Assignment: POM-based Login Suite</h3>
+   <span class="badge badge-amber mb16">Due tomorrow 23:59 · 100 pts</span>
+   <p class="small muted mt8">Build a Page Object Model test suite covering login success, failure, and locked-account flows. Include fixtures and at least 6 assertions.</p>
+   <label class="mt16">Your answer (rich text editor)</label>
+   <textarea rows="4" placeholder="Describe your approach…"></textarea>
+   <label class="mt8">Code snippet</label>
+   <textarea rows="4" style="font-family:monospace;font-size:12px" placeholder="// paste your Playwright code here
+import { test, expect } from '@playwright/test';"></textarea>
+   <label class="mt8">Attach files</label>
+   <div style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer" onclick="toast('📎 File picker — demo')">
+     <span class="small muted">📎 Drop files or click to upload (.zip, .ts, .pdf — max 25MB)</span></div>
+   <div class="flex mt16"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="closeModal();toast('✅ Assignment submitted! Instructor feedback within 48h')">Submit Assignment</button>
+   <button class="btn btn-outline" onclick="closeModal()">Save Draft</button></div>
+   <p class="xs muted mt8">Submission history: 0 previous attempts · Graded against rubric (functionality 40 · code quality 30 · coverage 30)</p>`);
+}
+/* ============ PATHS PAGE ============ */
+function viewPaths(){
+  return `<div class="container mt32">
+    <h2 class="section-title">Learning Paths</h2>
+    <p class="section-sub">Structured roadmaps designed with hiring managers — finish a path, get portfolio-ready.</p>
+    <div class="grid g3 mt32">${PATHS.map(p=>`
+      <div class="card hover">
+        <div class="flex between"><span style="width:52px;height:52px;border-radius:14px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:24px">${p.icon}</span><span class="badge badge-blue">⏱ ${p.time}</span></div>
+        <h3 class="mt16" style="font-size:19px">${p.t}</h3><p class="small muted mt8">${p.d}</p>
+        <div class="path-steps">${p.steps.map((s,i)=>`<div class="path-step"><span class="path-dot">${i+1}</span><span class="small" style="padding-top:4px">${s}</span></div>`).join("")}</div>
+        <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center" onclick="location.hash='#/catalog'">Start This Path</button>
+      </div>`).join("")}</div>${footer()}</div>`;
+}
+</script>
+<script>
+/* ============ INSTRUCTOR DASHBOARD ============ */
+function viewInstructor(){
+  return `<div class="dash">
+   ${dashSide(MENUS.instructor)}
+   <div class="dash-main">
+    <div class="flex between wrap mb24"><div><h2>Instructor Studio</h2><span class="small muted">Welcome back, Budi Santoso 👨‍🏫</span></div>
+    <button class="btn btn-primary" onclick="openCourseBuilder()">+ Create New Course</button></div>
+    <div class="grid g4">
+      ${[["👥","Total Students","19,945","+312 this month","var(--blue-light)","up"],["💰","Revenue (month)",state.currency==="IDR"?"Rp 128,4jt":"$8,120","+18% vs last month","var(--green-light)","up"],["⭐","Avg. Rating","4.85","Across 4 courses","#FEF3C7","up"],["✅","Completion Rate","68%","-2% needs attention","#FEE2E2","down"]].map(k=>`
+      <div class="card kpi"><span class="k-ic" style="background:${k[4]}">${k[0]}</span><span class="xs muted">${k[1]}</span><span class="k-val">${k[2]}</span><span class="k-delta ${k[5]}">${k[3]}</span></div>`).join("")}
+    </div>
+    <div class="grid mt24" style="grid-template-columns:1.4fr 1fr">
+      <div class="card">
+        <div class="flex between mb16"><h3 style="font-size:17px">💰 Revenue Trend</h3><span class="badge badge-green">Last 8 weeks</span></div>
+        ${svgLine([42,55,48,70,66,84,92,105],"#0E9C9C",160,340)}
+        <div class="flex between xs muted mt8"><span>May W2</span><span>Jul W1</span></div>
+      </div>
+      <div class="card">
+        <h3 class="mb16" style="font-size:17px">📈 Engagement by Course</h3>
+        ${svgBars([88,72,64,51],["Playwright","Selenium","Cypress","Appium"],"#10B981",170)}
+      </div>
+    </div>
+    <div class="card mt24">
+      <div class="flex between mb16"><h3 style="font-size:17px">📚 Course Performance</h3><button class="btn btn-outline btn-sm" onclick="toast('⬇ Report exported as CSV')">⬇ Export</button></div>
+      <table class="tbl"><thead><tr><th>Course</th><th>Students</th><th>Rating</th><th>Completion</th><th>Revenue</th><th>Status</th></tr></thead><tbody>
+        ${[[1,"72%"],[3,"66%"],[2,"64%"],[10,"58%"]].map(r=>{const c=course(r[0]);return `<tr>
+          <td><div class="flex"><span style="font-size:19px">${c.icon}</span><b class="small">${c.title.slice(0,34)}…</b></div></td>
+          <td>${c.students.toLocaleString()}</td><td>⭐ ${c.rating}</td>
+          <td><div class="flex"><div class="progress" style="width:70px"><div style="width:${r[1]}"></div></div>${r[1]}</div></td>
+          <td><b>${state.currency==="IDR"?fmtIDR(c.students*c.priceIDR/100):"$"+Math.round(c.students*c.priceUSD/100).toLocaleString()}</b></td>
+          <td><span class="badge badge-green">Published</span></td></tr>`}).join("")}
+      </tbody></table>
+    </div>
+    <div class="grid g2 mt24">
+      <div class="card"><h3 class="mb16" style="font-size:17px">📝 Pending Grading</h3>
+        ${[["Yoga Pratama","POM login suite","Playwright",2],["Siti Rahma","API collection: Orders","Postman",5],["Fajar Nugroho","JMeter load profile","JMeter",1]].map(a=>`
+        <div class="flex between mb16"><div class="flex"><span class="avatar sm">${initials(a[0])}</span>
+        <div><b class="small">${a[1]}</b><div class="xs muted">${a[0]} · ${a[2]} · ${a[3]}d ago</div></div></div>
+        <button class="btn btn-primary btn-sm" onclick="openGrading('${a[0]}','${a[1]}')">Grade</button></div>`).join("")}
+      </div>
+      <div class="card"><h3 class="mb16" style="font-size:17px">💬 Awaiting Your Reply</h3>
+        ${DISCUSSIONS.slice(0,3).map(d=>`<div class="flex between mb16">
+         <div class="flex"><span class="avatar sm">${initials(d.u)}</span><div><b class="small">${d.t.slice(0,38)}…</b><div class="xs muted">${d.u} · ${d.time}</div></div></div>
+         <button class="btn btn-outline btn-sm" onclick="toast('💬 Reply editor — demo')">Reply</button></div>`).join("")}
+      </div>
+    </div>
+   </div></div>`;
+}
+function openCourseBuilder(){
+  openModal(`<h3 class="mb16">🎬 Create New Course</h3>
+   <label>Course title</label><input placeholder="e.g. Advanced API Contract Testing" class="mb8">
+   <label class="mt8">Category</label><select>${[...new Set(COURSES.map(c=>c.cat))].map(c=>`<option>${c}</option>`).join("")}</select>
+   <label class="mt8">Level</label><select><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+   <label class="mt8">Price (IDR)</label><input type="number" placeholder="1250000">
+   <label class="mt8">Upload intro video</label>
+   <div style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer" onclick="toast('🎬 Video uploader → Cloudflare Stream — demo')"><span class="small muted">🎬 Drop video or click (MP4, max 4GB) → auto-transcoded</span></div>
+   <button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Course draft created! Continue in Course Builder')">Create Draft</button>`);
+}
+function openGrading(student,work){
+  openModal(`<h3 class="mb8">📝 Grade Submission</h3><span class="small muted">${student} · ${work}</span>
+   <div class="card mt16" style="padding:14px;font-family:monospace;font-size:12px;background:var(--bg)">import { test, expect } from '@playwright/test';<br>test('login success', async ({ page }) => {…})</div>
+   <label class="mt16">Rubric</label>
+   ${[["Functionality (40)",38],["Code quality (30)",26],["Coverage (30)",27]].map(r=>`
+   <div class="flex between mb8"><span class="small">${r[0]}</span><input type="number" value="${r[1]}" style="width:70px;padding:6px 10px"></div>`).join("")}
+   <label class="mt8">Feedback</label><textarea rows="3" placeholder="Great fixture usage! Consider extracting locators…">Great fixture usage! Consider extracting the locators into the page object for reusability.</textarea>
+   <button class="btn btn-green mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Graded 91/100 — student notified')">Submit Grade: 91/100</button>`);
+}
+/* ============ ADMIN DASHBOARD ============ */
+function viewAdmin(){
+  return `<div class="dash">
+   ${dashSide(MENUS.admin)}
+   <div class="dash-main">
+    <div class="flex between wrap mb24"><div><h2>Admin Analytics</h2><span class="small muted">Platform overview · Live data</span></div>
+      <div class="flex"><select style="width:auto"><option>Last 30 days</option><option>Last quarter</option><option>YTD</option></select>
+      <button class="btn btn-outline btn-sm" onclick="toast('⬇ Full report exported (PDF + CSV)')">⬇ Export</button></div></div>
+    <div class="grid g4">
+      ${[["💰","Revenue (month)",state.currency==="IDR"?"Rp 842jt":"$53,290","+22.4%","var(--green-light)","up"],["🎟","Enrollments","3,481","+11.8%","var(--blue-light)","up"],["👥","Daily Active Users","6,204","+8.1%","#EDE9FE","up"],["📆","Monthly Active Users","21,870","+14.9%","#FEF3C7","up"],["✅","Completion Rate","64%","+3.2%","var(--green-light)","up"],["⏱","Learning Hours","48,220h","+9.6%","var(--blue-light)","up"],["🎓","Certificates (month)","1,204","+17%","#FEF3C7","up"],["⚠️","Refund Rate","0.8%","-0.3%","#FEE2E2","up"]].map(k=>`
+      <div class="card kpi"><span class="k-ic" style="background:${k[4]}">${k[0]}</span><span class="xs muted">${k[1]}</span><span class="k-val" style="font-size:22px">${k[2]}</span><span class="k-delta ${k[5]}">${k[3]} vs prev.</span></div>`).join("")}
+    </div>
+    <div class="grid mt24" style="grid-template-columns:1.5fr 1fr">
+      <div class="card">
+        <div class="flex between mb16"><h3 style="font-size:17px">💰 Revenue & Enrollments</h3><div class="flex xs"><span class="badge badge-blue">Revenue</span><span class="badge badge-green">Enrollments</span></div></div>
+        ${svgLine([320,410,385,520,490,610,680,842],"#0E9C9C",150,340)}
+        ${svgLine([1.9,2.3,2.1,2.8,2.6,3.0,3.2,3.5],"#10B981",90,340)}
+        <div class="flex between xs muted mt8"><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span></div>
+      </div>
+      <div>
+        <div class="card"><h3 class="mb16" style="font-size:17px">🔥 Popular Courses</h3>
+          ${[12,5,3,1].map((id,i)=>{const c=course(id);return `<div class="flex mb16">
+           <span class="lb-rank">${i+1}</span><span style="font-size:20px">${c.icon}</span>
+           <div style="flex:1;min-width:0"><b class="xs">${c.title.slice(0,30)}…</b><div class="xs muted">${c.students.toLocaleString()} students</div></div>
+           <span class="xs up">▲</span></div>`}).join("")}
+        </div>
+        <div class="card mt24"><h3 class="mb16" style="font-size:17px">🖥 System Health</h3>
+          ${[["API latency (p95)","142 ms","badge-green","Healthy"],["Video CDN","99.98%","badge-green","Operational"],["Payment gateway","OK","badge-green","Operational"],["Queue backlog","37 jobs","badge-amber","Elevated"]].map(s=>`
+          <div class="flex between mb8"><span class="small">${s[0]}</span><div class="flex"><b class="xs">${s[1]}</b><span class="badge ${s[2]} xs">${s[3]}</span></div></div>`).join("")}
+        </div>
+      </div>
+    </div>
+    <div class="grid g2 mt24">
+      <div class="card"><h3 class="mb16" style="font-size:17px">🏆 Top Instructors</h3>
+        <table class="tbl"><thead><tr><th>Instructor</th><th>Students</th><th>Rating</th><th>Revenue</th></tr></thead><tbody>
+        ${INSTRUCTORS.map(i=>`<tr><td><div class="flex"><span class="avatar sm">${initials(i.name)}</span><b class="small">${i.name}</b></div></td>
+        <td>${i.students.toLocaleString()}</td><td>⭐ ${i.rating}</td><td><b>${state.currency==="IDR"?fmtIDR(i.students*9500):"$"+Math.round(i.students*.6).toLocaleString()}</b></td></tr>`).join("")}
+        </tbody></table></div>
+      <div class="card"><h3 class="mb16" style="font-size:17px">💳 Recent Payments</h3>
+        <table class="tbl"><thead><tr><th>User</th><th>Course</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody>
+        ${[["Rina H.",8,"Midtrans","paid"],["Yoga P.",1,"Xendit","paid"],["Dimas A.",11,"Stripe","paid"],["PT LogistiKu",12,"Invoice","pending"],["Fitri A.",5,"Midtrans","paid"]].map(p=>{const c=course(p[1]);return `<tr>
+        <td><b class="small">${p[0]}</b></td><td class="small">${c.icon} ${c.title.slice(0,18)}…</td><td class="small">${p[2]}</td>
+        <td><b class="small">${price(c)}</b></td><td><span class="badge ${p[3]==="paid"?"badge-green":"badge-amber"} xs">${p[3]}</span></td></tr>`}).join("")}
+        </tbody></table></div>
+    </div>
+    <div class="card mt24"><h3 class="mb16" style="font-size:17px">🕐 Recent Activities</h3>
+      ${[["🎓","Certificate TC-2026-08421 issued to Arief Rahman Hakim","2 min ago"],["💳","New corporate order: PT LogistiKu × 25 seats (ISTQB)","18 min ago"],["👨‍🏫","Instructor Maya Kusuma published 'AI for Software Testing v2'","1 h ago"],["⚠️","Payment webhook retry succeeded (Xendit #88123)","2 h ago"],["👥","312 new student registrations today","4 h ago"]].map(a=>`
+      <div class="flex mb16"><span style="font-size:18px">${a[0]}</span><span class="small" style="flex:1">${a[1]}</span><span class="xs muted">${a[2]}</span></div>`).join("")}
+    </div>
+   </div></div>`;
+}
+/* ============ CORPORATE DASHBOARD ============ */
+function viewCorporate(){
+  const emp=[["Rina Handayani",1,84],["Yoga Pratama",1,62],["Fajar Nugroho",5,91],["Siti Rahma",12,100],["Bayu Wicaksono",3,37],["Dewi Lestari",12,100]];
+  return `<div class="dash">
+   ${dashSide(MENUS.corporate)}
+   <div class="dash-main">
+    <div class="flex between wrap mb24"><div><h2>PT LogistiKu — Team Dashboard</h2><span class="small muted">Corporate plan · 25 seats</span></div>
+      <div class="flex"><button class="btn btn-outline btn-sm" onclick="toast('⬇ Progress report downloaded (XLSX)')">⬇ Download Report</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('<h3 class=mb16>🎟 Purchase Seats</h3><label>Number of seats</label><input type=number value=10><label class=mt8>Billing</label><select><option>Annual invoice (save 20%)</option><option>Monthly</option></select><button class=\\'btn btn-primary mt16\\' style=\\'width:100%;justify-content:center\\' onclick=\\'closeModal();toast(&quot;✅ Quote sent to your email — invoice via corporate billing&quot;)\\'>Request Quote</button>')">+ Buy Seats</button></div></div>
+    <div class="grid g4">
+      ${[["🎟","Seats Used","19 / 25","6 available","var(--blue-light)"],["📈","Avg. Team Progress","79%","+12% this quarter","var(--green-light)"],["🎓","Certificates Earned","11","3 this month","#FEF3C7"],["⏱","Team Learning Hours","428h","This quarter","#EDE9FE"]].map(k=>`
+      <div class="card kpi"><span class="k-ic" style="background:${k[4]}">${k[0]}</span><span class="xs muted">${k[1]}</span><span class="k-val">${k[2]}</span><span class="k-delta up">${k[3]}</span></div>`).join("")}
+    </div>
+    <div class="card mt24">
+      <div class="flex between mb16"><h3 style="font-size:17px">👥 Employee Progress</h3>
+      <button class="btn btn-primary btn-sm" onclick="openModal('<h3 class=mb16>📚 Assign Course</h3><label>Employee</label><select><option>Bayu Wicaksono</option><option>Rina Handayani</option><option>All team members</option></select><label class=mt8>Course</label><select>${COURSES.map(c=>`<option>${c.title}</option>`).join("")}</select><label class=mt8>Deadline</label><input type=date value=2026-09-30><button class=\\'btn btn-primary mt16\\' style=\\'width:100%;justify-content:center\\' onclick=\\'closeModal();toast(&quot;✅ Course assigned — employee notified via email&quot;)\\'>Assign Course</button>')">+ Assign Course</button></div>
+      <table class="tbl"><thead><tr><th>Employee</th><th>Assigned Course</th><th>Progress</th><th>Last Active</th><th>Status</th></tr></thead><tbody>
+      ${emp.map(e=>{const c=course(e[1]);return `<tr>
+        <td><div class="flex"><span class="avatar sm">${initials(e[0])}</span><b class="small">${e[0]}</b></div></td>
+        <td class="small">${c.icon} ${c.title.slice(0,32)}…</td>
+        <td><div class="flex"><div class="progress" style="width:90px"><div style="width:${e[2]}%"></div></div><b class="xs">${e[2]}%</b></div></td>
+        <td class="small muted">${["Today","Today","Yesterday","2d ago","Today","3d ago"][emp.indexOf(e)]}</td>
+        <td><span class="badge ${e[2]===100?"badge-green":e[2]>50?"badge-blue":"badge-amber"} xs">${e[2]===100?"🎓 Certified":e[2]>50?"On track":"Needs nudge"}</span></td></tr>`}).join("")}
+      </tbody></table>
+    </div>
+    <div class="grid g2 mt24">
+      <div class="card"><h3 class="mb16" style="font-size:17px">📊 Skill Coverage</h3>
+        ${svgBars([85,70,55,40,25],["Manual","Automation","API","Perf","AI-QA"],"#0E9C9C",170)}</div>
+      <div class="card"><h3 class="mb16" style="font-size:17px">💳 Billing Summary</h3>
+        ${[["Corporate Annual Plan · 25 seats",state.currency==="IDR"?"Rp 187.500.000":"$11,870","Active until Mar 2027"],["Add-on: Live workshop bundle",state.currency==="IDR"?"Rp 25.000.000":"$1,580","Paid · Invoice #INV-2291"]].map(b=>`
+        <div class="flex between mb16"><div><b class="small">${b[0]}</b><div class="xs muted">${b[2]}</div></div><b class="small">${b[1]}</b></div>`).join("")}
+        <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="toast('🧾 Invoice history — demo')">View All Invoices</button></div>
+    </div>
+   </div></div>`;
+}
+/* ============ AI ASSISTANT ============ */
+const AI_REPLIES=[
+ "Great question! For dynamic elements, prefer `page.getByRole()` with accessible names — it survives DOM changes far better than CSS selectors. Want a code example?",
+ "Based on your progress (34% in Playwright), I recommend finishing Module 3 on POM before starting the CI/CD module — it builds directly on fixtures. 📚",
+ "Here's a quick quiz I generated from your last lesson: What does `await expect(locator).toBeVisible()` do differently from `isVisible()`? Reply to answer!",
+ "Your learning pace is 4.2h/week — at this rate you'll finish the course by 28 July and be ready for the AI for QA course next. Keep it up! 🔥"
+];
+let aiCount=0;
+function toggleAI(){
+  state.aiOpen=!state.aiOpen;
+  $("#ai-root").innerHTML = state.aiOpen?`
+   <div class="ai-panel">
+     <div class="ai-head"><b>🤖 TestCraft AI Tutor</b><div class="xs" style="color:#94A3B8">Powered by AI · Knows your progress</div></div>
+     <div class="ai-msgs" id="ai-msgs">
+       <div class="ai-msg bot">Halo Arief! 👋 I'm your AI learning assistant. Ask me anything about your courses, or try:<br><br>• "Explain fixtures like I'm five"<br>• "Quiz me on locators"<br>• "What should I learn next?"</div>
+     </div>
+     <div style="padding:12px;border-top:1px solid var(--border)" class="flex">
+       <input id="ai-in" placeholder="Ask your AI tutor…" onkeydown="if(event.key==='Enter')aiSend()">
+       <button class="btn btn-primary btn-sm" onclick="aiSend()">➤</button>
+     </div>
+   </div>`:"";
+}
+function aiSend(){
+  const inp=$("#ai-in");const v=inp.value.trim();if(!v)return;
+  const box=$("#ai-msgs");
+  box.innerHTML+=`<div class="ai-msg user">${v.replace(/</g,"&lt;")}</div>`;
+  inp.value="";box.scrollTop=box.scrollHeight;
+  setTimeout(()=>{box.innerHTML+=`<div class="ai-msg bot">${AI_REPLIES[aiCount++%AI_REPLIES.length]}</div>`;box.scrollTop=box.scrollHeight},600);
+}
+
+</script>
+
+<script>
+/* ============ ROLE MENUS (complete) ============ */
+const MENUS={
+ student:[["/dashboard","🏠","Overview"],["/learn/1","📚","My Learning"],["/quiz","📝","Quizzes"],["/certificate","🎓","Certificates"],["/catalog","🔍","Browse Courses"],["/discussions","💬","Discussions"],["/bookmarks","🔖","Bookmarks"],["/wishlist","💚","Wishlist"],["/settings","⚙️","Settings"]],
+ instructor:[["/instructor","📊","Overview"],["/instructor/courses","📚","My Courses"],["/instructor/quizzes","📝","Quiz Builder"],["/instructor/assignments","📋","Assignments"],["/instructor/discussions","💬","Discussions"],["/instructor/messages","✉️","Messages"],["/instructor/settings","⚙️","Settings"]],
+ admin:[["/admin","📊","Analytics"],["/admin/users","👥","Users"],["/admin/instructors","👨‍🏫","Instructors"],["/admin/categories","🗂","Categories"],["/admin/courses","📚","Courses"],["/admin/enrollments","🎟","Enrollments"],["/admin/payments","💳","Payments"],["/admin/certificates","🎓","Certificates"],["/admin/roles","🛡","Roles & Permissions"],["/admin/cms","📰","CMS Pages"],["/admin/settings","⚙️","Settings"]],
+ corporate:[["/corporate","🏢","Team Overview"],["/corporate/employees","👥","Employees"],["/corporate/seats","🎟","Seats & Licenses"],["/corporate/reports","📊","Reports"],["/corporate/billing","💳","Billing"],["/corporate/settings","⚙️","Settings"]]
+};
+function dashSide(menu){
+  const h=location.hash.replace("#","")||"/";
+  return `<aside class="dash-side">${menu.map(i=>`<a href="#${i[0]}" class="${h===i[0]?"active":""}"><span>${i[1]}</span>${t(i[2])}</a>`).join("")}</aside>`;
+}
+function dashPage(role,title,sub,content,actions){
+  return `<div class="dash">${dashSide(MENUS[role])}<div class="dash-main">
+    <div class="flex between wrap mb24"><div><h2>${title}</h2><span class="small muted">${sub}</span></div><div class="flex wrap">${actions||""}</div></div>
+    ${content}</div></div>`;
+}
+/* ============ LOGIN (LMS entry — company website is separate) ============ */
+function viewLogin(){
+ return `<div class="container mt48" style="max-width:980px">
+  <div class="grid g2" style="align-items:stretch">
+   <div class="card" style="background:var(--grad);color:#fff;display:flex;flex-direction:column;justify-content:center;border:none">
+     <div class="logo" style="color:#fff"><span class="shield"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="tcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#16607C"/><stop offset="1" stop-color="#0E9C9C"/></linearGradient></defs><path d="M32 5 L55 13 V30 C55 45 44 55 32 59 C20 55 9 45 9 30 V13 Z" fill="none" stroke="url(#tcg)" stroke-width="5" stroke-linejoin="round"/><path d="M20 31 L30 41 L48 19" fill="none" stroke="#0E9C9C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b style="color:#fff">TEST</b><span style="color:#3ECFC4">CRAFT</span> <span class="xs" style="font-weight:600">LMS</span></span></div>
+     <h2 class="mt16" style="font-size:26px">${t("Learning Management System")}</h2>
+     <p class="small mt8" style="color:#CBD5E1">Learn. Build. Automate. ${t("Sign in to continue learning, teaching, or managing the platform.")}</p>
+     <div class="mt24 small" style="display:flex;flex-direction:column;gap:10px">
+       <span>🎓 28,400+ active students</span><span>🏆 12,400+ certificates issued</span><span>🎯 Career prep up to interview</span>
+     </div>
+     <a class="btn mt24" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);justify-content:center" href="https://ariefrahakim.github.io/testcraft-website/" target="_blank">${t("🌐 Company Website ↗")}</a>
+   </div>
+   <div class="card">
+     <h3 class="mb16">${t("Sign in to your account")}</h3>
+     <label>Email</label><input id="li-email" type="email" value="arief.rahman@hubexo.com">
+     <label class="mt8">Password</label><input id="li-pass" type="password" value="demo1234">
+     <div class="flex between mt8"><label class="check" style="margin:0"><input type="checkbox" checked>${t("Remember me")}</label><a href="#" class="xs" style="color:var(--blue)" onclick="toast('Password reset link sent — demo');return false">${t("Forgot password?")}</a></div>
+     <button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="doLogin('student')">${t("Sign In")}</button>
+     <button class="btn btn-outline mt8" style="width:100%;justify-content:center" onclick="toast('Google OAuth — demo')">🔵 Continue with Google</button>
+     <div class="divider"></div>
+     <p class="xs muted mb8" style="text-align:center">${t("Quick demo access — Role-Based Access Control")}</p>
+     <div class="grid g2" style="gap:8px">
+       <button class="btn btn-outline btn-sm" style="justify-content:center" onclick="doLogin('student')">🎓 ${t("Student")}</button>
+       <button class="btn btn-outline btn-sm" style="justify-content:center" onclick="doLogin('instructor')">👨‍🏫 ${t("Instructor")}</button>
+       <button class="btn btn-outline btn-sm" style="justify-content:center" onclick="doLogin('admin')">🛡️ Super Admin</button>
+       <button class="btn btn-outline btn-sm" style="justify-content:center" onclick="doLogin('corporate')">🏢 ${t("Corporate")}</button>
+     </div>
+     <p class="xs muted mt16" style="text-align:center">${t("Don't have an account?")} <a style="color:var(--blue);font-weight:600" href="#" onclick="openRegister();return false">${t("Register here")}</a> · WhatsApp ${WA_DISPLAY}</p>
+   </div>
+  </div></div>`;
+}
+function doLogin(role){setRole(role);toast("Signed in — "+role+" workspace (demo)")}
+/* ============ STUDENT: forum / bookmarks / wishlist / settings ============ */
+const FORUM=[
+ {u:"Yoga Pratama",t:"How to handle dynamic iframes in Playwright?",c:"Playwright",replies:8,likes:24,best:true,time:"2h ago",pinned:true},
+ {u:"Siti Rahma",t:"getByRole vs getByTestId — which should be default?",c:"Playwright",replies:15,likes:41,best:true,time:"5h ago"},
+ {u:"Dewi Lestari",t:"Sharing my fixture pattern for multi-role auth",c:"Playwright",replies:22,likes:67,best:true,time:"2d ago"},
+ {u:"Fajar Nugroho",t:"CI pipeline fails only on webkit — anyone else?",c:"DevOps",replies:4,likes:9,time:"1d ago"},
+ {u:"Rina Handayani",t:"JMeter correlation for CSRF tokens?",c:"JMeter",replies:6,likes:13,time:"3d ago"}];
+function forumCard(d){
+ return `<div class="card mb16">
+   <div class="flex between wrap">
+     <div class="flex"><span class="avatar sm">${initials(d.u)}</span><div><b class="small">${d.u}</b><div class="xs muted">${d.time} · ${d.c}</div></div></div>
+     <div class="flex xs">${d.pinned?'<span class="badge badge-amber">📌 Pinned</span>':""}${d.best?'<span class="badge badge-green">✓ Best answer</span>':""}</div>
+   </div>
+   <p class="mt8" style="font-weight:600">${d.t}</p>
+   <div class="flex mt8 small muted">
+     <a href="#" onclick="toast('👍 Liked');return false">👍 ${d.likes}</a><span>💬 ${d.replies} replies</span>
+     <a href="#" style="color:var(--blue);font-weight:600" onclick="openReply('${d.u}');return false">Reply</a>
+   </div></div>`;
+}
+function openReply(u){openModal(`<h3 class="mb16">💬 Reply to ${u}</h3><textarea rows="4" placeholder="Write a helpful answer… code blocks supported"></textarea><label class="check mt8"><input type="checkbox">Notify me on further replies</label><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('💬 Reply posted! +10 XP')">Post Reply</button>`)}
+function openNewQuestion(){openModal(`<h3 class="mb16">💬 New Question</h3><label>Course</label><select>${COURSES.map(c=>`<option>${c.title}</option>`).join("")}</select><label class="mt8">Title</label><input placeholder="Summarize your question"><label class="mt8">Details</label><textarea rows="4" placeholder="Include code, errors, and what you tried…"></textarea><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('💬 Question posted! Instructor replies within 24h')">Post Question</button>`)}
+function viewDiscussions(){
+ return dashPage("student","💬 Discussion Forum","Ask questions, share answers, earn XP",
+  FORUM.map(forumCard).join(""),
+  `<input placeholder="🔍 Search discussions…" style="width:240px" oninput="toast('Forum search — demo')"><button class="btn btn-primary btn-sm" onclick="openNewQuestion()">+ New Question</button>`);
+}
+const BOOKMARKS=[["Playwright Automation","2.3 Auto-waiting & web-first assertions","04:32"],["Playwright Automation","3.3 Fixtures & dependency injection","11:05"],["Postman API Testing","1.6 Chaining requests with variables","07:48"],["ISTQB Foundation","4.2 Boundary value analysis","02:15"]];
+function viewBookmarks(){
+ return dashPage("student","🔖 Bookmarks","Lessons you saved to revisit",
+  BOOKMARKS.map(b=>`<div class="card mb16 flex between wrap">
+    <div class="flex"><span style="font-size:22px">🎬</span><div><b class="small">${b[1]}</b><div class="xs muted">${b[0]} · bookmarked at ${b[2]}</div></div></div>
+    <div class="flex"><button class="btn btn-primary btn-sm" onclick="location.hash='#/learn/1'">▶ Resume</button><button class="btn btn-ghost btn-sm" onclick="toast('Bookmark removed')">✕</button></div>
+  </div>`).join(""));
+}
+function viewWishlist(){
+ const wl=[8,7,11].filter(id=>!state.enrolled.includes(id));
+ return dashPage("student","💚 Wishlist","Courses you're planning to take",
+  `<div class="grid g3">${wl.map(id=>courseCard(course(id))).join("")||'<p class="muted">Your wishlist is empty — browse the catalog!</p>'}</div>`,
+  `<button class="btn btn-outline btn-sm" onclick="location.hash='#/catalog'">Browse Catalog</button>`);
+}
+function viewSettings(){
+ return dashPage("student","⚙️ Settings","Profile, security & notification preferences",
+  `<div class="grid g2" style="align-items:start">
+   <div class="card"><h3 class="mb16" style="font-size:17px">👤 Profile</h3>
+     <label>Full name</label><input value="Arief Rahman Hakim">
+     <label class="mt8">Email</label><input value="arief.rahman@hubexo.com">
+     <label class="mt8">WhatsApp</label><input value="+62 812-0000-0000">
+     <label class="mt8">Language</label><select><option>Bahasa Indonesia</option><option>English</option></select>
+     <button class="btn btn-primary mt16" onclick="toast('✅ Profile saved')">Save Profile</button></div>
+   <div>
+    <div class="card"><h3 class="mb16" style="font-size:17px">🔔 Notifications</h3>
+     ${["Email — assignment reminders","Email — live class reminders","Email — new courses & promos","In-app notifications","Push notifications","WhatsApp reminders"].map((n,i)=>`<label class="check"><input type="checkbox" ${i<5?"checked":""} onchange="toast('Preference updated')">${n}</label>`).join("")}
+    </div>
+    <div class="card mt24"><h3 class="mb16" style="font-size:17px">🔒 Security</h3>
+     <label>Current password</label><input type="password" placeholder="••••••••">
+     <label class="mt8">New password</label><input type="password" placeholder="Min. 8 characters">
+     <button class="btn btn-outline mt16 btn-sm" onclick="toast('✅ Password updated')">Change Password</button></div>
+   </div></div>`);
+}
+/* ============ INSTRUCTOR sub-pages ============ */
+function viewInstructorCourses(){
+ const mine=[1,3,2,10];
+ return dashPage("instructor","📚 My Courses","4 published · 1 draft",
+  `<div class="grid g2">${mine.map(id=>{const c=course(id);return `<div class="card hover">
+    <div class="flex between"><div class="flex"><span style="font-size:30px">${c.icon}</span><div><b class="small">${c.title}</b><div class="xs muted">${c.students.toLocaleString()} students · ⭐ ${c.rating}</div></div></div><span class="badge badge-green">Published</span></div>
+    <div class="flex mt16"><button class="btn btn-outline btn-sm" onclick="toast('Course builder — demo')">✏️ Edit</button><button class="btn btn-outline btn-sm" onclick="toast('🎬 Video manager → Cloudflare Stream')">🎬 Videos</button><button class="btn btn-outline btn-sm" onclick="location.hash='#/course/${c.id}'">👁 Preview</button><button class="btn btn-ghost btn-sm" onclick="toast('Unpublished — hidden from catalog')">Unpublish</button></div>
+  </div>`}).join("")}
+  <div class="card" style="border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:130px;cursor:pointer" onclick="openCourseBuilder()"><span class="muted">+ Create New Course</span></div></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="openCourseBuilder()">+ Create Course</button>`);
+}
+function openQuizBuilder(){openModal(`<h3 class="mb16">📝 New Quiz</h3>
+  <label>Course / module</label><select><option>Playwright — Module 2: Core Concepts</option><option>Selenium — Module 5: Framework</option></select>
+  <label class="mt8">Question type</label><select><option>Multiple Choice</option><option>Multiple Select</option><option>True / False</option><option>Drag & Drop</option><option>Matching</option><option>Fill in the Blank</option></select>
+  <label class="mt8">Question</label><textarea rows="2" placeholder="Type the question…"></textarea>
+  <div class="grid g2 mt8" style="gap:10px"><div><label>Time limit (min)</label><input type="number" value="10"></div><div><label>Passing score %</label><input type="number" value="80"></div></div>
+  <label class="check mt8"><input type="checkbox" checked>Randomize question order</label>
+  <label class="check"><input type="checkbox" checked>Instant feedback after submit</label>
+  <label class="check"><input type="checkbox" checked>Allow 2 retakes</label>
+  <button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Quiz saved as draft')">Save Quiz</button>`)}
+function viewInstructorQuizzes(){
+ const rows=[["Playwright Core Concepts","Playwright",5,"80%",412,"87%"],["POM & Fixtures","Playwright",8,"80%",356,"79%"],["Selenium Locators","Selenium",10,"75%",610,"84%"],["API Assertions","Cypress",6,"80%",233,"91%"]];
+ return dashPage("instructor","📝 Quiz Builder","MCQ, multi-select, true/false, drag & drop, matching, fill-blank",
+  `<div class="card"><table class="tbl"><thead><tr><th>Quiz</th><th>Course</th><th>Questions</th><th>Passing</th><th>Attempts</th><th>Avg. score</th><th></th></tr></thead><tbody>
+   ${rows.map(r=>`<tr><td><b class="small">${r[0]}</b></td><td class="small">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td><span class="badge badge-green">${r[5]}</span></td>
+   <td><button class="btn btn-outline btn-sm" onclick="openQuizBuilder()">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toast('📊 Quiz analytics — per-question difficulty & discrimination')">📊</button></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="openQuizBuilder()">+ New Quiz</button>`);
+}
+function viewInstructorAssignments(){
+ const rows=[["POM login test suite","Playwright","14 Jul",23,8],["API collection: Orders","Postman","16 Jul",41,12],["JMeter load profile","JMeter","20 Jul",12,3]];
+ return dashPage("instructor","📋 Assignments","Briefs, rubrics & grading queue",
+  `<div class="card mb24"><h3 class="mb16" style="font-size:17px">⏳ Grading Queue</h3>
+   ${[["Yoga Pratama","POM login suite",2],["Siti Rahma","API collection: Orders",5],["Fajar Nugroho","JMeter load profile",1]].map(a=>`
+    <div class="flex between mb16"><div class="flex"><span class="avatar sm">${initials(a[0])}</span><div><b class="small">${a[1]}</b><div class="xs muted">${a[0]} · submitted ${a[2]}d ago</div></div></div>
+    <button class="btn btn-primary btn-sm" onclick="openGrading('${a[0]}','${a[1]}')">Grade with Rubric</button></div>`).join("")}</div>
+  <div class="card"><h3 class="mb16" style="font-size:17px">All Assignments</h3><table class="tbl"><thead><tr><th>Assignment</th><th>Course</th><th>Due</th><th>Submitted</th><th>Ungraded</th></tr></thead><tbody>
+   ${rows.map(r=>`<tr><td><b class="small">${r[0]}</b></td><td class="small">${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="badge ${r[4]>5?"badge-amber":"badge-green"}">${r[4]}</span></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="toast('Assignment builder — brief, rubric, deadline, attachments')">+ New Assignment</button>`);
+}
+function viewInstructorDiscussions(){
+ return dashPage("instructor","💬 Discussions","Threads awaiting your expertise",
+  FORUM.map(d=>`<div class="card mb16 flex between wrap">
+    <div class="flex"><span class="avatar sm">${initials(d.u)}</span><div><b class="small">${d.t}</b><div class="xs muted">${d.u} · ${d.time} · 💬 ${d.replies}</div></div></div>
+    <div class="flex"><button class="btn btn-primary btn-sm" onclick="openReply('${d.u}')">Reply</button><button class="btn btn-outline btn-sm" onclick="toast('✓ Marked as best answer')">✓ Best</button><button class="btn btn-ghost btn-sm" onclick="toast('📌 Thread pinned')">📌</button></div>
+  </div>`).join(""));
+}
+const INBOX=[["Rina Handayani","Question about lifetime access","10:24",1],["PT LogistiKu","Private batch for 25 engineers?","09:10",1],["Yoga Pratama","Thank you! Got hired as SDET 🎉","Yesterday",0],["Admin TestCraft","Payout processed: Rp 42.500.000","2d ago",0]];
+function viewInstructorMessages(){
+ return dashPage("instructor","✉️ Messages","Direct messages from students & admin",
+  INBOX.map(m=>`<div class="card mb8 flex between wrap" style="${m[3]?"border-color:var(--blue)":""}">
+    <div class="flex"><span class="avatar sm">${initials(m[0])}</span><div><b class="small">${m[0]} ${m[3]?'<span class="badge badge-blue xs">new</span>':""}</b><div class="xs muted">${m[1]}</div></div></div>
+    <div class="flex"><span class="xs muted">${m[2]}</span><button class="btn btn-outline btn-sm" onclick="openReply('${m[0]}')">Reply</button></div>
+  </div>`).join(""));
+}
+function viewInstructorSettings(){
+ return dashPage("instructor","⚙️ Instructor Settings","Public profile & payout",
+  `<div class="grid g2" style="align-items:start">
+   <div class="card"><h3 class="mb16" style="font-size:17px">👨‍🏫 Public Profile</h3>
+    <label>Name</label><input value="Budi Santoso"><label class="mt8">Headline</label><input value="Principal SDET · ex-Gojek">
+    <label class="mt8">Bio</label><textarea rows="3">Led test automation platforms serving 50M+ users. Playwright & Selenium specialist, ISTQB-CTAL certified.</textarea>
+    <button class="btn btn-primary mt16" onclick="toast('✅ Profile saved')">Save</button></div>
+   <div class="card"><h3 class="mb16" style="font-size:17px">💰 Payout</h3>
+    <label>Bank</label><select><option>BCA</option><option>Mandiri</option><option>BNI</option></select>
+    <label class="mt8">Account number</label><input value="•••• •••• 8821">
+    <div class="card mt16" style="padding:14px;background:var(--bg)"><span class="xs muted">Next payout (25 Jul)</span><div class="price">${state.currency==="IDR"?"Rp 42.500.000":"$2,690"}</div></div>
+    <button class="btn btn-outline mt16 btn-sm" onclick="toast('Payout history — demo')">View History</button></div></div>`);
+}
+/* ============ ADMIN sub-pages ============ */
+const USERS=[["Arief Rahman Hakim","arief.rahman@hubexo.com","Student","active","12 Jan 2026"],["Rina Handayani","rina@mail.com","Student","active","03 Feb 2026"],["Budi Santoso","budi@testcraft.id","Instructor","active","11 Nov 2024"],["Sari Wulandari","sari@testcraft.id","Instructor","active","02 Dec 2024"],["Fajar Nugroho","fajar@mail.com","Student","suspended","19 Mar 2026"],["PT LogistiKu","admin@logistiku.co.id","Corporate Admin","active","01 Apr 2026"],["Maya Kusuma","maya@testcraft.id","Instructor","pending","28 Jun 2026"]];
+function openAddUser(){openModal(`<h3 class="mb16">👥 Add User</h3><label>Full name</label><input placeholder="Name"><label class="mt8">Email</label><input type="email" placeholder="user@email.com"><label class="mt8">Role</label><select><option>Student</option><option>Instructor</option><option>Corporate Admin</option><option>Super Admin</option></select><label class="check mt8"><input type="checkbox" checked>Send invitation email</label><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ User created & invited')">Create User</button>`)}
+function viewAdminUsers(){
+ return dashPage("admin","👥 User Management",(USERS.length+" of 28,412 users shown"),
+  `<div class="card"><div class="flex mb16 wrap"><input placeholder="🔍 Search name or email…" style="max-width:280px" oninput="toast('User search — demo')"><select style="width:auto"><option>All roles</option><option>Student</option><option>Instructor</option><option>Corporate Admin</option></select><select style="width:auto"><option>All status</option><option>Active</option><option>Suspended</option><option>Pending</option></select></div>
+  <table class="tbl"><thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>
+  ${USERS.map(u=>`<tr><td><div class="flex"><span class="avatar sm">${initials(u[0])}</span><div><b class="small">${u[0]}</b><div class="xs muted">${u[1]}</div></div></div></td>
+   <td><span class="badge ${u[2]==="Instructor"?"badge-purple":u[2]==="Corporate Admin"?"badge-blue":"badge-green"}">${u[2]}</span></td>
+   <td><span class="badge ${u[3]==="active"?"badge-green":u[3]==="pending"?"badge-amber":"badge-red"}">${u[3]}</span></td>
+   <td class="small muted">${u[4]}</td>
+   <td><button class="btn btn-outline btn-sm" onclick="toast('Edit user — demo')">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toast('${u[3]==="suspended"?"User reactivated":"User suspended"}')">${u[3]==="suspended"?"Activate":"Suspend"}</button></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-outline btn-sm" onclick="toast('⬇ Users exported (CSV)')">⬇ Export</button><button class="btn btn-primary btn-sm" onclick="openAddUser()">+ Add User</button>`);
+}
+function viewAdminInstructors(){
+ return dashPage("admin","👨‍🏫 Instructor Management","4 active · 1 application pending",
+  `<div class="card mb24" style="border-color:var(--amber)"><div class="flex between wrap"><div class="flex"><span class="avatar">MK</span><div><b class="small">Maya Kusuma — application pending</b><div class="xs muted">AI Testing Researcher · 8 yrs exp · submitted CV + demo lesson</div></div></div>
+   <div class="flex"><button class="btn btn-green btn-sm" onclick="toast('✅ Instructor approved & onboarded')">Approve</button><button class="btn btn-outline btn-sm" onclick="toast('Application rejected with feedback')">Reject</button></div></div></div>
+  <div class="grid g2">${INSTRUCTORS.map(i=>`<div class="card"><div class="flex between"><div class="flex"><span class="avatar">${initials(i.name)}</span><div><b class="small">${i.name}</b><div class="xs muted">${i.role}</div></div></div><span class="badge badge-green">active</span></div>
+   <div class="flex mt16 xs" style="gap:16px"><span>⭐ ${i.rating}</span><span>👥 ${i.students.toLocaleString()}</span><span>📚 ${i.courses} courses</span><span>💰 ${state.currency==="IDR"?fmtIDR(i.students*9500):"$"+Math.round(i.students*.6).toLocaleString()}</span></div>
+   <div class="flex mt16"><button class="btn btn-outline btn-sm" onclick="toast('Instructor profile editor')">Edit</button><button class="btn btn-outline btn-sm" onclick="toast('Revenue share: 60% instructor / 40% platform')">Rev. share</button><button class="btn btn-ghost btn-sm" onclick="toast('Instructor deactivated')">Deactivate</button></div></div>`).join("")}</div>`,
+  `<button class="btn btn-primary btn-sm" onclick="toast('✉️ Instructor invitation sent')">+ Invite Instructor</button>`);
+}
+function viewAdminCategories(){
+ return dashPage("admin","🗂 Category Management","15 categories power catalog filtering & the company website menu",
+  `<div class="card"><table class="tbl"><thead><tr><th>Category</th><th>Courses</th><th>Students</th><th>Visible</th><th>Actions</th></tr></thead><tbody>
+   ${CATEGORIES.map((c,i)=>`<tr><td><b class="small">${c.i} ${c.n}</b></td><td>${COURSES.filter(x=>x.cat===c.n).length||Math.max(1,(i*3)%6)}</td><td>${(1200+i*831%4800).toLocaleString()}</td>
+   <td><label class="check" style="margin:0"><input type="checkbox" checked onchange="toast('Visibility updated')"></label></td>
+   <td><button class="btn btn-outline btn-sm" onclick="toast('Rename / re-icon — demo')">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toast('Category must be empty to delete')">Delete</button></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="openAddCategory()">+ Add Category</button>`);
+}
+function viewAdminCourses(){
+ return dashPage("admin","📚 Course Management","12 published · 3 drafts · 1 archived",
+  `<div class="card"><div class="flex mb16 wrap"><input placeholder="🔍 Search courses…" style="max-width:280px" oninput="toast('Search — demo')"><select style="width:auto"><option>All categories</option>${[...new Set(COURSES.map(c=>c.cat))].map(c=>`<option>${c}</option>`).join("")}</select></div>
+  <table class="tbl"><thead><tr><th>Course</th><th>Instructor</th><th>Price</th><th>Students</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+   ${COURSES.map(c=>`<tr><td><div class="flex"><span style="font-size:19px">${c.icon}</span><b class="small">${c.title.slice(0,36)}${c.title.length>36?"…":""}</b></div></td>
+   <td class="small">${inst(c.inst).name}</td><td class="small"><b>${price(c)}</b></td><td>${c.students.toLocaleString()}</td>
+   <td><select style="width:auto;padding:5px 8px;font-size:12px" onchange="toast('Status → '+this.value)"><option>Published</option><option>Draft</option><option>Archived</option></select></td>
+   <td><button class="btn btn-outline btn-sm" onclick="location.hash='#/course/${c.id}'">View</button> <button class="btn btn-ghost btn-sm" onclick="toast('${c.bestseller?"Removed from":"Added to"} featured')">${c.bestseller?"★":"☆"}</button></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="openCourseBuilder()">+ New Course</button>`);
+}
+function viewAdminEnrollments(){
+ const rows=[["Rina Handayani",8,"10 Jul 2026","Self-purchase",12],["Yoga Pratama",1,"09 Jul 2026","Self-purchase",62],["Bayu Wicaksono",3,"08 Jul 2026","Corporate: PT LogistiKu",37],["Dewi Lestari",12,"07 Jul 2026","Voucher: QACLASS26",100],["Siti Rahma",5,"06 Jul 2026","Self-purchase",91]];
+ return dashPage("admin","🎟 Enrollment Management","3,481 enrollments this month (+11.8%)",
+  `<div class="card"><table class="tbl"><thead><tr><th>Student</th><th>Course</th><th>Date</th><th>Source</th><th>Progress</th><th>Actions</th></tr></thead><tbody>
+   ${rows.map(r=>{const c=course(r[1]);return `<tr><td><b class="small">${r[0]}</b></td><td class="small">${c.icon} ${c.title.slice(0,28)}…</td><td class="small muted">${r[2]}</td><td class="small">${r[3]}</td>
+   <td><div class="flex"><div class="progress" style="width:70px"><div style="width:${r[4]}%"></div></div><b class="xs">${r[4]}%</b></div></td>
+   <td><button class="btn btn-outline btn-sm" onclick="toast('Enrollment extended 30 days')">Extend</button> <button class="btn btn-ghost btn-sm" onclick="toast('Enrollment revoked & refund initiated')">Revoke</button></td></tr>`}).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-outline btn-sm" onclick="toast('⬇ Enrollments exported (CSV)')">⬇ Export</button><button class="btn btn-primary btn-sm" onclick="toast('Manual enrollment — pick user + course')">+ Manual Enroll</button>`);
+}
+function viewAdminPayments(){
+ const rows=[["TRX-88291","Rina H.",8,"Midtrans","paid","10 Jul"],["TRX-88290","Yoga P.",1,"Xendit","paid","09 Jul"],["TRX-88287","Dimas A.",11,"Stripe","paid","09 Jul"],["INV-2291","PT LogistiKu",12,"Invoice","pending","08 Jul"],["TRX-88281","Fitri A.",5,"Midtrans","refunded","07 Jul"]];
+ return dashPage("admin","💳 Payment Management","Stripe · Midtrans · Xendit · PayPal · Corporate invoicing",
+  `<div class="grid g4 mb24">
+    ${[["💰","Volume (month)",state.currency==="IDR"?"Rp 842jt":"$53,290"],["✅","Success rate","98.7%"],["↩️","Refunds","0.8%"],["🎟","Active coupons","6"]].map(k=>`<div class="card kpi"><span class="k-ic" style="background:var(--blue-light)">${k[0]}</span><span class="xs muted">${k[1]}</span><span class="k-val" style="font-size:21px">${k[2]}</span></div>`).join("")}</div>
+  <div class="card"><table class="tbl"><thead><tr><th>Ref</th><th>User</th><th>Course</th><th>Gateway</th><th>Amount</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody>
+   ${rows.map(r=>{const c=course(r[2]);return `<tr><td class="small" style="font-family:monospace">${r[0]}</td><td><b class="small">${r[1]}</b></td><td class="small">${c.icon} ${c.title.slice(0,20)}…</td><td class="small">${r[3]}</td><td><b class="small">${price(c)}</b></td>
+   <td><span class="badge ${r[4]==="paid"?"badge-green":r[4]==="pending"?"badge-amber":"badge-red"} xs">${r[4]}</span></td><td class="small muted">${r[5]}</td>
+   <td><button class="btn btn-outline btn-sm" onclick="toast('🧾 Invoice PDF downloaded')">🧾</button></td></tr>`}).join("")}
+  </tbody></table></div>
+  <div class="card mt24"><h3 class="mb16" style="font-size:17px">🎟 Coupons & Vouchers</h3>
+   ${[["TESTCRAFT20","20% off — all courses","324 used","active"],["QACLASS26","100% voucher — partner program","88 used","active"],["RAMADAN25","25% off — seasonal","1,204 used","expired"]].map(cp=>`
+   <div class="flex between mb8 wrap"><div><b class="small" style="font-family:monospace">${cp[0]}</b><span class="small muted"> — ${cp[1]}</span></div>
+   <div class="flex"><span class="xs muted">${cp[2]}</span><span class="badge ${cp[3]==="active"?"badge-green":"badge-red"} xs">${cp[3]}</span><button class="btn btn-ghost btn-sm" onclick="toast('Coupon deactivated')">✕</button></div></div>`).join("")}
+   <button class="btn btn-outline btn-sm mt8" onclick="openAddCoupon()">+ New Coupon</button></div>`,
+  `<button class="btn btn-outline btn-sm" onclick="toast('⬇ Payment report exported (CSV + PDF)')">⬇ Payment Reports</button>`);
+}
+function viewAdminCertificates(){
+ const rows=[["TC-2026-08421","Arief Rahman Hakim",1,"92%","08 Jul 2026"],["TC-2026-08420","Siti Rahma",12,"88%","07 Jul 2026"],["TC-2026-08419","Dewi Lestari",12,"95%","07 Jul 2026"],["TC-2026-08415","Fajar Nugroho",5,"84%","05 Jul 2026"]];
+ return dashPage("admin","🎓 Certificate Management","12,400 issued · QR verification enabled",
+  `<div class="card"><table class="tbl"><thead><tr><th>Number</th><th>Student</th><th>Course</th><th>Score</th><th>Issued</th><th>Actions</th></tr></thead><tbody>
+   ${rows.map(r=>{const c=course(r[2]);return `<tr><td class="small" style="font-family:monospace"><b>${r[0]}</b></td><td class="small">${r[1]}</td><td class="small">${c.icon} ${c.title.slice(0,26)}…</td><td><span class="badge badge-green">${r[3]}</span></td><td class="small muted">${r[4]}</td>
+   <td><button class="btn btn-outline btn-sm" onclick="location.hash='#/verify'">Verify</button> <button class="btn btn-outline btn-sm" onclick="toast('🎓 Certificate PDF re-sent to student')">Resend</button> <button class="btn btn-ghost btn-sm" onclick="toast('⚠️ Certificate revoked')">Revoke</button></td></tr>`}).join("")}
+  </tbody></table></div>
+  <div class="card mt24"><h3 class="mb8" style="font-size:17px">⚙️ Certificate Template</h3><p class="small muted">Auto-issued when a student passes the final quiz (≥ passing score). Contains student name, course, instructor, certificate number, completion date & QR verification link.</p>
+  <div class="flex mt16"><button class="btn btn-outline btn-sm" onclick="location.hash='#/certificate'">👁 Preview Template</button><button class="btn btn-outline btn-sm" onclick="toast('Template editor — logo, signature, colors')">✏️ Edit Template</button></div></div>`);
+}
+const PERMS=[["Manage users",1,0,0,0],["Manage instructors",1,0,0,0],["Manage categories",1,0,0,0],["Create / edit courses",1,1,0,0],["Publish courses",1,0,0,0],["Upload videos",1,1,0,0],["Create quizzes & assignments",1,1,0,0],["Grade submissions",1,1,0,0],["Respond to discussions",1,1,1,0],["Browse & purchase courses",0,0,1,0],["Purchase seats",0,0,0,1],["Assign courses to employees",0,0,0,1],["View own learning progress",0,1,1,1],["View employee progress",1,0,0,1],["Download reports",1,0,0,1],["Manage payments & refunds",1,0,0,0],["Issue / revoke certificates",1,0,0,0],["Download own certificates",0,0,1,0],["View platform analytics",1,0,0,0],["CMS — company website content",1,0,0,0],["System settings",1,0,0,0]];
+function viewAdminRoles(){
+ return dashPage("admin","🛡 Roles & Permissions","RBAC matrix — 4 system roles",
+  `<div class="grid g4 mb24">
+    ${[["🛡️","Super Admin","2 users","Full platform control"],["👨‍🏫","Instructor","24 users","Teach & grade"],["🎓","Student","28,102 users","Learn & earn certificates"],["🏢","Corporate Admin","52 users","Manage team seats"]].map(r=>`
+    <div class="card kpi"><span class="k-ic" style="background:var(--blue-light)">${r[0]}</span><b class="small">${r[1]}</b><span class="xs muted">${r[2]}</span><span class="xs">${r[3]}</span></div>`).join("")}</div>
+  <div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr><th>Permission</th><th style="text-align:center">🛡️ Super Admin</th><th style="text-align:center">👨‍🏫 Instructor</th><th style="text-align:center">🎓 Student</th><th style="text-align:center">🏢 Corporate</th></tr></thead><tbody>
+   ${PERMS.map(p=>`<tr><td class="small"><b>${p[0]}</b></td>${p.slice(1).map(v=>`<td style="text-align:center"><span style="cursor:pointer" onclick="toast('Permission toggled — saved')">${v?'<span class="badge badge-green">✓</span>':'<span class="badge" style="background:var(--bg);color:var(--text-3)">—</span>'}</span></td>`).join("")}</tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-outline btn-sm" onclick="toast('Custom roles available on Enterprise plan')">+ Custom Role</button><button class="btn btn-primary btn-sm" onclick="toast('✅ Permission matrix saved')">Save Changes</button>`);
+}
+const CMS_PAGES=[["🏠","Company Website — Hero","Headline, tagline, CTA buttons","Published","2d ago"],["🏢","Company Website — About Us","Company profile, vision & mission","Published","1w ago"],["🛠","Company Website — Services","Training, corporate, consulting, certification","Published","3d ago"],["⭐","Testimonials","Alumni success stories (4 shown)","Published","5d ago"],["❓","FAQ","6 questions","Published","3d ago"],["📜","Terms of Service","Legal","Published","2mo ago"],["🔒","Privacy Policy","Legal","Published","2mo ago"],["📢","Announcement Banner","Promo: Independence Day 45% off","Draft","1h ago"]];
+function openCmsEditor(t){openModal(`<h3 class="mb16">📰 Edit: ${t}</h3><label>Title</label><input value="${t}"><label class="mt8">Content</label><textarea rows="6">Rich text content for "${t}" — supports headings, images, embeds, and SEO meta. Changes publish to the company website instantly.</textarea><label class="mt8">SEO meta description</label><input placeholder="Meta description…"><div class="flex mt16"><button class="btn btn-primary" style="flex:1;justify-content:center" onclick="closeModal();toast('✅ Published to company website')">Publish</button><button class="btn btn-outline" onclick="closeModal();toast('Draft saved')">Save Draft</button></div>`)}
+function viewAdminCMS(){
+ return dashPage("admin","📰 CMS — Content Management","Manages the separate company website & platform content",
+  `<div class="card mb24" style="border-color:var(--blue)"><div class="flex between wrap"><div><b class="small">🌐 Company Website</b><div class="xs muted">testcraft-website.html — separate from the LMS, content managed here</div></div>
+   <a class="btn btn-outline btn-sm" href="https://ariefrahakim.github.io/testcraft-website/" target="_blank">Open Website ↗</a></div></div>
+  <div class="card"><table class="tbl"><thead><tr><th>Page / Section</th><th>Description</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead><tbody>
+   ${CMS_PAGES.map(p=>`<tr><td><b class="small">${p[0]} ${p[1]}</b></td><td class="small muted">${p[2]}</td>
+   <td><span class="badge ${p[3]==="Published"?"badge-green":"badge-amber"}">${p[3]}</span></td><td class="small muted">${p[4]}</td>
+   <td><button class="btn btn-outline btn-sm" onclick="openCmsEditor('${p[1]}')">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toast('${p[3]==="Published"?"Unpublished":"Published"}')">${p[3]==="Published"?"Unpublish":"Publish"}</button></td></tr>`).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-primary btn-sm" onclick="openCmsEditor('New Page')">+ New Page</button>`);
+}
+function viewAdminSettings(){
+ return dashPage("admin","⚙️ System Settings","Platform configuration",
+  `<div class="grid g2" style="align-items:start">
+   <div>
+    <div class="card"><h3 class="mb16" style="font-size:17px">🏷 General</h3>
+     <label>Platform name</label><input value="TestCraft Indonesia LMS">
+     <label class="mt8">Support WhatsApp</label><input value="${WA_DISPLAY}">
+     <label class="mt8">Support email</label><input value="${EMAIL}">
+     <label class="mt8">Default currency</label><select><option>IDR (Rupiah)</option><option>USD</option></select>
+     <label class="check mt8"><input type="checkbox" onchange="toast('Maintenance mode toggled')">Maintenance mode</label>
+     <button class="btn btn-primary mt16" onclick="toast('✅ Settings saved')">Save</button></div>
+    <div class="card mt24"><h3 class="mb16" style="font-size:17px">✉️ Email (Resend)</h3>
+     <label>Sender</label><input value="TestCraft Indonesia &lt;noreply@testcraft.id&gt;">
+     <label class="mt8">API key</label><input type="password" value="re_xxxxxxxxxxxx">
+     <button class="btn btn-outline btn-sm mt16" onclick="toast('✅ Test email sent')">Send Test Email</button></div>
+   </div>
+   <div>
+    <div class="card"><h3 class="mb16" style="font-size:17px">💳 Payment Gateways</h3>
+     ${["Stripe","Midtrans","Xendit","PayPal"].map((g,i)=>`<label class="check"><input type="checkbox" ${i<3?"checked":""} onchange="toast('${g} ${i<3?"disabled":"enabled"}')">${g}</label>`).join("")}
+     <label class="mt8">Corporate invoicing terms (days)</label><input type="number" value="30"></div>
+    <div class="card mt24"><h3 class="mb16" style="font-size:17px">🎬 Video & Storage</h3>
+     <label>Video provider</label><select><option>Cloudflare Stream</option><option>Vimeo</option></select>
+     <label class="mt8">S3 bucket</label><input value="testcraft-assets (ap-southeast-1)">
+     <label class="check mt8"><input type="checkbox" checked>Signed playback URLs</label></div>
+    <div class="card mt24"><h3 class="mb16" style="font-size:17px">🤖 AI Features</h3>
+     ${["AI Learning Assistant","Course recommendations","Quiz generator","Assignment feedback"].map(f=>`<label class="check"><input type="checkbox" checked onchange="toast('${f} toggled')">${f}</label>`).join("")}</div>
+   </div></div>`);
+}
+/* ============ CORPORATE sub-pages ============ */
+const EMPLOYEES=[["Rina Handayani","rina@logistiku.co.id",1,84,"Today"],["Yoga Pratama","yoga@logistiku.co.id",1,62,"Today"],["Fajar Nugroho","fajar@logistiku.co.id",5,91,"Yesterday"],["Siti Rahma","siti@logistiku.co.id",12,100,"2d ago"],["Bayu Wicaksono","bayu@logistiku.co.id",3,37,"Today"],["Dewi Lestari","dewi@logistiku.co.id",12,100,"3d ago"]];
+function openInvite(){openModal(`<h3 class="mb16">👥 Invite Employee</h3><label>Email(s)</label><textarea rows="2" placeholder="one@company.com, two@company.com"></textarea><label class="mt8">Assign course (optional)</label><select><option>— None —</option>${COURSES.map(c=>`<option>${c.title}</option>`).join("")}</select><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✉️ Invitations sent — 2 seats reserved')">Send Invites</button>`)}
+function openAssignCourse(){openModal(`<h3 class="mb16">📚 Assign Course</h3><label>Employee</label><select><option>All team members</option>${EMPLOYEES.map(e=>`<option>${e[0]}</option>`).join("")}</select><label class="mt8">Course</label><select>${COURSES.map(c=>`<option>${c.title}</option>`).join("")}</select><label class="mt8">Deadline</label><input type="date" value="2026-09-30"><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Course assigned — employees notified')">Assign</button>`)}
+function viewCorpEmployees(){
+ return dashPage("corporate","👥 Employees","19 of 25 seats in use",
+  `<div class="card"><table class="tbl"><thead><tr><th>Employee</th><th>Assigned Course</th><th>Progress</th><th>Last Active</th><th>Actions</th></tr></thead><tbody>
+   ${EMPLOYEES.map(e=>{const c=course(e[2]);return `<tr><td><div class="flex"><span class="avatar sm">${initials(e[0])}</span><div><b class="small">${e[0]}</b><div class="xs muted">${e[1]}</div></div></div></td>
+   <td class="small">${c.icon} ${c.title.slice(0,26)}…</td>
+   <td><div class="flex"><div class="progress" style="width:80px"><div style="width:${e[3]}%"></div></div><b class="xs">${e[3]}%</b></div></td>
+   <td class="small muted">${e[4]}</td>
+   <td><button class="btn btn-outline btn-sm" onclick="openAssignCourse()">Assign</button> <button class="btn btn-outline btn-sm" onclick="toast('📧 Reminder nudge sent')">Nudge</button> <button class="btn btn-ghost btn-sm" onclick="toast('Seat released')">Remove</button></td></tr>`}).join("")}
+  </tbody></table></div>`,
+  `<button class="btn btn-outline btn-sm" onclick="openAssignCourse()">📚 Assign Course</button><button class="btn btn-primary btn-sm" onclick="openInvite()">+ Invite Employee</button>`);
+}
+function viewCorpSeats(){
+ return dashPage("corporate","🎟 Seats & Licenses","Corporate Annual Plan",
+  `<div class="grid g2" style="align-items:start">
+   <div class="card" style="text-align:center"><h3 class="mb16" style="font-size:17px">Seat Utilization</h3>${donut(76,"#0E9C9C",140)}<p class="small muted mt8">19 of 25 seats used · 6 available</p>
+    <button class="btn btn-primary mt8" onclick="openBuySeats()">+ Buy More Seats</button></div>
+   <div class="card"><h3 class="mb16" style="font-size:17px">Plan Details</h3>
+    ${[["Plan","Corporate Annual — 25 seats"],["Valid until","31 Mar 2027"],["Catalog access","All 48 courses + live workshops"],["Reports","Weekly email + on-demand XLSX"],["Support","Dedicated account manager"]].map(r=>`<div class="flex between mb8"><span class="small muted">${r[0]}</span><b class="small">${r[1]}</b></div>`).join("")}
+    <div class="divider"></div><button class="btn btn-outline btn-sm" onclick="toast('Upgrade options sent to your email')">Upgrade Plan</button></div></div>`);
+}
+function viewCorpReports(){
+ return dashPage("corporate","📊 Reports","Download team learning analytics",
+  `<div class="grid g2 mb24">
+   ${[["📈","Team Progress Report","Per-employee progress, time spent, quiz scores","XLSX"],["🎓","Certification Report","Certificates earned + verification links","PDF"],["⏱","Learning Hours Report","Monthly hours by employee & course","XLSX"],["🎯","Skill Gap Analysis","Coverage vs. target QA competency matrix","PDF"]].map(r=>`
+   <div class="card"><div class="flex"><span style="font-size:26px">${r[0]}</span><div><b class="small">${r[1]}</b><div class="xs muted">${r[2]}</div></div></div>
+   <button class="btn btn-outline btn-sm mt16" onclick="toast('⬇ ${r[1]} downloaded (${r[3]})')">⬇ Download ${r[3]}</button></div>`).join("")}</div>
+  <div class="card"><h3 class="mb16" style="font-size:17px">📊 Skill Coverage This Quarter</h3>${svgBars([85,70,55,40,25],["Manual","Automation","API","Perf","AI-QA"],"#0E9C9C",170)}</div>`,
+  `<button class="btn btn-primary btn-sm" onclick="toast('📧 Weekly report schedule saved')">Schedule Weekly Email</button>`);
+}
+function viewCorpBilling(){
+ return dashPage("corporate","💳 Billing","Invoices & payment method",
+  `<div class="card"><table class="tbl"><thead><tr><th>Invoice</th><th>Description</th><th>Amount</th><th>Status</th><th></th></tr></thead><tbody>
+   ${[["INV-2291","Corporate Annual Plan · 25 seats",state.currency==="IDR"?"Rp 187.500.000":"$11,870","paid"],["INV-2308","Live workshop bundle",state.currency==="IDR"?"Rp 25.000.000":"$1,580","paid"],["INV-2340","Additional 10 seats (pro-rated)",state.currency==="IDR"?"Rp 56.250.000":"$3,560","pending"]].map(r=>`
+   <tr><td class="small" style="font-family:monospace"><b>${r[0]}</b></td><td class="small">${r[1]}</td><td><b class="small">${r[2]}</b></td>
+   <td><span class="badge ${r[3]==="paid"?"badge-green":"badge-amber"} xs">${r[3]}</span></td>
+   <td><button class="btn btn-outline btn-sm" onclick="toast('🧾 Invoice PDF downloaded')">🧾 PDF</button></td></tr>`).join("")}
+  </tbody></table></div>
+  <div class="card mt24"><h3 class="mb16" style="font-size:17px">Payment Method</h3>
+   <div class="flex between wrap"><span class="small">🏦 Corporate invoice — NET 30 · billing@logistiku.co.id</span>
+   <button class="btn btn-outline btn-sm" onclick="toast('Payment method editor — demo')">Change</button></div></div>`);
+}
+function viewCorpSettings(){
+ return dashPage("corporate","⚙️ Company Settings","Organization profile",
+  `<div class="card" style="max-width:520px"><label>Company name</label><input value="PT LogistiKu">
+   <label class="mt8">Billing email</label><input value="billing@logistiku.co.id">
+   <label class="mt8">Admin contacts</label><input value="admin@logistiku.co.id">
+   <label class="check mt8"><input type="checkbox" checked>Auto-assign onboarding course to new employees</label>
+   <label class="check"><input type="checkbox" checked>Weekly progress email</label>
+   <button class="btn btn-primary mt16" onclick="toast('✅ Company settings saved')">Save</button></div>`);
+}
+function openAddCategory(){openModal(`<h3 class="mb16">🗂 New Category</h3><label>Name</label><input placeholder="Category name"><label class="mt8">Icon (emoji)</label><input placeholder="🧪"><label class="check mt8"><input type="checkbox" checked>Visible in catalog & website menu</label><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Category created')">Create Category</button>`)}
+function openAddCoupon(){openModal(`<h3 class="mb16">🎟 New Coupon</h3><label>Code</label><input placeholder="NEWCODE20"><div class="grid g2 mt8" style="gap:10px"><div><label>Discount %</label><input type="number" value="20"></div><div><label>Max uses</label><input type="number" value="500"></div></div><label class="mt8">Expires</label><input type="date" value="2026-12-31"><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Coupon created & active')">Create Coupon</button>`)}
+function openBuySeats(){openModal(`<h3 class="mb16">🎟 Purchase Seats</h3><label>Additional seats</label><input type="number" value="10"><label class="mt8">Billing</label><select><option>Annual invoice (save 20%)</option><option>Monthly</option></select><button class="btn btn-primary mt16" style="width:100%;justify-content:center" onclick="closeModal();toast('✅ Quote sent — invoice via corporate billing')">Request Quote</button>`)}
+/* ============ NAV (updated: LMS portal + separate website) ============ */
+function renderNav(){
+  const links = state.role==="guest"
+    ? `<a href="#/" data-r="/">${t("Login")}</a><a href="#/catalog" data-r="/catalog">${t("Courses")}</a><a href="#/verify" data-r="/verify">${t("Verify Certificate")}</a>`
+    : state.role==="student"
+    ? `<a href="#/dashboard" data-r="/dashboard">${t("Dashboard")}</a><a href="#/catalog" data-r="/catalog">${t("Catalog")}</a><a href="#/learn/1" data-r="/learn">${t("My Learning")}</a><a href="#/discussions" data-r="/discussions">${t("Forum")}</a>`
+    : state.role==="instructor"
+    ? `<a href="#/instructor" data-r="/instructor">${t("Studio")}</a><a href="#/instructor/courses" data-r="/instructor/courses">${t("My Courses")}</a><a href="#/instructor/assignments" data-r="/instructor/assignments">${t("Grading")}</a>`
+    : state.role==="admin"
+    ? `<a href="#/admin" data-r="/admin">${t("Analytics")}</a><a href="#/admin/users" data-r="/admin/users">${t("Users")}</a><a href="#/admin/cms" data-r="/admin/cms">CMS</a>`
+    : `<a href="#/corporate" data-r="/corporate">${t("Team")}</a><a href="#/corporate/employees" data-r="/corporate/employees">${t("Employees")}</a><a href="#/corporate/reports" data-r="/corporate/reports">${t("Reports")}</a>`;
+  $("#nav").innerHTML = `<nav class="topnav"><div class="nav-inner">
+    <a class="logo" href="#/"><span class="shield"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="tcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B3A5C"/><stop offset=".55" stop-color="#16607C"/><stop offset="1" stop-color="#0E9C9C"/></linearGradient></defs><path d="M32 5 L55 13 V30 C55 45 44 55 32 59 C20 55 9 45 9 30 V13 Z" fill="none" stroke="url(#tcg)" stroke-width="5" stroke-linejoin="round"/><path d="M20 31 L30 41 L48 19" fill="none" stroke="#0E9C9C" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>TEST</b><span>CRAFT</span></span></a>
+    <div class="nav-links">${links}<a href="https://ariefrahakim.github.io/testcraft-website/" target="_blank">🌐 Website</a></div>
+    <select class="role-select" onchange="setRole(this.value)" title="Preview as role">
+      ${["guest","student","instructor","admin","corporate"].map(r=>`<option value="${r}" ${state.role===r?"selected":""}>${r==="guest"?"👤 Guest":r==="student"?"🎓 Student":r==="instructor"?"👨‍🏫 Instructor":r==="admin"?"🛡️ Admin":"🏢 Corporate"}</option>`).join("")}
+    </select>
+    <details class="lang-dd">
+      <summary class="icon-btn" style="width:auto;padding:0 10px;font-size:12px;font-weight:700">${state.lang==="id"?"🇮🇩":"🇬🇧"}&nbsp;${state.lang.toUpperCase()}&nbsp;<span style="font-size:9px">▾</span></summary>
+      <div class="lang-menu">
+        <button onclick="setLang('en')">🇬🇧 EN</button>
+        <button onclick="setLang('id')">🇮🇩 ID</button>
+      </div>
+    </details>
+    <button class="icon-btn" onclick="setCurrency(state.currency==='IDR'?'USD':'IDR')" title="Toggle currency" style="font-size:12px;font-weight:700">${state.currency}</button>
+    <button class="icon-btn" onclick="setTheme(state.theme==='light'?'dark':'light')" title="Toggle theme">${state.theme==="light"?"🌙":"☀️"}</button>
+    <button class="icon-btn" onclick="toast('${NOTIFS.length} notifications — see dashboard')" title="Notifications">🔔<span class="dot"></span></button>
+    ${state.role==="guest"?`<button class="btn btn-primary btn-sm" onclick="openRegister()">${t("Register")}</button>`:`<span class="avatar" title="Signed in (demo)">AR</span>`}
+  </div></nav>`;
+  const r=location.hash.replace("#","")||"/";
+  let best=null,bestLen=-1;
+  document.querySelectorAll(".nav-links a[data-r]").forEach(a=>{
+    const p=a.dataset.r;
+    const match = r===p || (p!=="/" && r.startsWith(p) && (r.length===p.length || r[p.length]==="/"));
+    if(match && p.length>bestLen){best=a;bestLen=p.length}
+  });
+  if(best)best.classList.add("active");
+}
+/* ============ ROUTER (LMS portal) ============ */
+function as(role,fn){state.role=role;return fn()}
+function render(){
+  const h=location.hash.replace("#","")||"/";
+  if(h!=="/quiz"&&state.quizTimer){clearInterval(state.quizTimer);state.quizTimer=null}
+  const app=$("#app");
+  window.scrollTo(0,0);
+  const R={
+   "/":viewLogin,"/login":viewLogin,
+   "/catalog":viewCatalog,"/paths":viewPaths,"/quiz":viewQuiz,"/certificate":viewCertificate,"/verify":viewVerify,
+   "/dashboard":()=>as(state.role==="guest"?"student":state.role,viewDashboard),
+   "/discussions":()=>as("student",viewDiscussions),
+   "/bookmarks":()=>as("student",viewBookmarks),
+   "/wishlist":()=>as("student",viewWishlist),
+   "/settings":()=>as("student",viewSettings),
+   "/instructor":()=>as("instructor",viewInstructor),
+   "/instructor/courses":()=>as("instructor",viewInstructorCourses),
+   "/instructor/quizzes":()=>as("instructor",viewInstructorQuizzes),
+   "/instructor/assignments":()=>as("instructor",viewInstructorAssignments),
+   "/instructor/discussions":()=>as("instructor",viewInstructorDiscussions),
+   "/instructor/messages":()=>as("instructor",viewInstructorMessages),
+   "/instructor/settings":()=>as("instructor",viewInstructorSettings),
+   "/admin":()=>as("admin",viewAdmin),
+   "/admin/users":()=>as("admin",viewAdminUsers),
+   "/admin/instructors":()=>as("admin",viewAdminInstructors),
+   "/admin/categories":()=>as("admin",viewAdminCategories),
+   "/admin/courses":()=>as("admin",viewAdminCourses),
+   "/admin/enrollments":()=>as("admin",viewAdminEnrollments),
+   "/admin/payments":()=>as("admin",viewAdminPayments),
+   "/admin/certificates":()=>as("admin",viewAdminCertificates),
+   "/admin/roles":()=>as("admin",viewAdminRoles),
+   "/admin/cms":()=>as("admin",viewAdminCMS),
+   "/admin/settings":()=>as("admin",viewAdminSettings),
+   "/corporate":()=>as("corporate",viewCorporate),
+   "/corporate/employees":()=>as("corporate",viewCorpEmployees),
+   "/corporate/seats":()=>as("corporate",viewCorpSeats),
+   "/corporate/reports":()=>as("corporate",viewCorpReports),
+   "/corporate/billing":()=>as("corporate",viewCorpBilling),
+   "/corporate/settings":()=>as("corporate",viewCorpSettings)
+  };
+  if(h.startsWith("/course/"))app.innerHTML=viewCourse(+h.split("/")[2]);
+  else if(h.startsWith("/learn/")){if(state.role==="guest")state.role="student";app.innerHTML=viewLearn(+h.split("/")[2])}
+  else if(R[h])app.innerHTML=R[h]();
+  else app.innerHTML=viewLogin();
+  renderNav();
+}
+window.addEventListener("hashchange",()=>render());
+document.addEventListener("click",e=>{document.querySelectorAll(".lang-dd[open]").forEach(d=>{if(!d.contains(e.target))d.removeAttribute("open")})});
+document.documentElement.dataset.theme=state.theme;
+render();
+</script>
+</body>
+</html>

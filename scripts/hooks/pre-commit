@@ -1,0 +1,59 @@
+#!/bin/bash
+# pre-commit hook — Stage 5 approval gate
+# Blocks commit if TypeScript or lint fails.
+# Install: cp scripts/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "🔍 TestCraft pre-commit gate (Stage 5: Deploy)"
+echo "---"
+
+# TypeScript check
+echo "→ TypeScript..."
+if ! npm run typecheck --workspaces --if-present --silent 2>&1; then
+  echo ""
+  echo "❌ BLOCKED: TypeScript errors found."
+  echo "   Fix errors then try committing again."
+  echo "   Run: npm run typecheck --workspaces"
+  exit 1
+fi
+echo "  ✅ TypeScript OK"
+
+# Lint
+echo "→ ESLint..."
+if ! npm run lint --workspaces --if-present --silent 2>&1; then
+  echo ""
+  echo "❌ BLOCKED: Lint errors found."
+  echo "   Run: npm run lint --workspaces --if-present"
+  exit 1
+fi
+echo "  ✅ Lint OK"
+
+# Check if OpenAPI spec is in sync (only if API files changed)
+API_CHANGED=$(git diff --cached --name-only | grep "apps/api/src" | wc -l)
+if [ "$API_CHANGED" -gt "0" ]; then
+  echo "→ OpenAPI spec sync..."
+  npm run docs:openapi --workspace @testcraft/api --silent 2>/dev/null || true
+  if ! git diff --exit-code docs/openapi.json > /dev/null 2>&1; then
+    echo ""
+    echo "❌ BLOCKED: docs/openapi.json is out of sync."
+    echo "   The API changed but the OpenAPI spec wasn't regenerated."
+    echo "   Run: npm run docs:openapi"
+    echo "   Then: git add docs/openapi.json"
+    exit 1
+  fi
+  echo "  ✅ OpenAPI in sync"
+fi
+
+# Check for console.log in production code (warn only)
+CONSOLE_LOGS=$(git diff --cached --name-only | xargs grep -l "console\.log" 2>/dev/null | grep -v "test\|spec\|seed\|scripts" || true)
+if [ -n "$CONSOLE_LOGS" ]; then
+  echo ""
+  echo "⚠️  WARNING: console.log found in production files:"
+  echo "$CONSOLE_LOGS" | while read f; do echo "   $f"; done
+  echo "   Consider removing before final merge."
+fi
+
+echo ""
+echo "✅ All pre-commit gates passed. Committing..."
+exit 0

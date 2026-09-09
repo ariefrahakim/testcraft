@@ -1,0 +1,237 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --blue: #0E9C9C;
+  --blue-dark: #0B7E7E;
+  --blue-light: #D5EFEE;
+  --navy: #12283E;
+  --navy-800: #1E293B;
+  --navy-700: #334155;
+  --light: #F8FAFC;
+  --green: #10B981;
+  --green-light: #D1FAE5;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --purple: #8B5CF6;
+  --bg: #F8FAFC;
+  --card: #FFFFFF;
+  --text: #12283E;
+  --text-2: #475569;
+  --text-3: #94A3B8;
+  --border: #E2E8F0;
+  --shadow: 0 1px 3px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .07);
+  --shadow-lg: 0 8px 40px rgba(15, 23, 42, .14);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --grad: linear-gradient(135deg, #0F2438 0%, #16506B 55%, #0E9C9C 100%);
+  --grad-accent: linear-gradient(135deg, #0E9C9C, #2FBF9F);
+}
+
+html[data-theme="dark"] {
+  --bg: #0B1220;
+  --card: #111A2E;
+  --text: #F1F5F9;
+  --text-2: #CBD5E1;
+  --text-3: #64748B;
+  --border: #1E293B;
+  --blue-light: #0E9C9C26;
+  --green-light: #065F4633;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .35);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, .5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.25;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
+
+@layer utilities {
+  .stat-num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.125rem;
+    font-weight: 800;
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .stat-num-sm {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grad-text {
+    background: linear-gradient(90deg, #5EEAD4, #34D399);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-3);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 500;
+  background: var(--blue);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Floating animation for hero card */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Pulse dot for badge */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* Fade-up reveal animation */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scale-in animation */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Shimmer for loading states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Utility classes */
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-fade-up { animation: fade-up 0.6s ease-out both; }
+.animate-scale-in { animation: scale-in 0.4s ease-out both; }
+
+/* Section entrance animation */
+section { scroll-margin-top: 80px; }
+
+/* Button hover improvements */
+a[href], button {
+  transition: all 0.2s ease;
+}
+
+/* Card hover improvements */
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Better mobile grid for program cards */
+@media (max-width: 640px) {
+  .programs-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Gradient border on hover */
+.hover-gradient-border {
+  position: relative;
+  background-clip: padding-box;
+}
+
+.hover-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--blue), #10B981);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: -1;
+}
+
+.hover-gradient-border:hover::before {
+  opacity: 1;
+}

@@ -1,0 +1,170 @@
+name: AI PR Review Checklist
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  ai-review-checklist:
+    name: Post AI-Native SDLC review checklist
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files and related spec
+        id: context
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+          # Try to find spec reference in changed files
+          SPEC_REF=""
+          for f in $CHANGED; do
+            if [ -f "$f" ]; then
+              REF=$(grep -h "Spec:" "$f" 2>/dev/null | head -1 | sed 's/.*Spec: //' | tr -d '\n\r')
+              if [ -n "$REF" ]; then
+                SPEC_REF="$REF"
+                break
+              fi
+            fi
+          done
+
+          # Find any spec files touched directly
+          SPEC_FILES=$(echo "$CHANGED" | grep "docs/specs/" | head -3)
+
+          echo "spec_ref=$SPEC_REF" >> $GITHUB_OUTPUT
+          echo "spec_files=$SPEC_FILES" >> $GITHUB_OUTPUT
+
+          # Detect what kind of changes this is
+          HAS_API=$(echo "$CHANGED" | grep -c "apps/api/" || true)
+          HAS_FE=$(echo "$CHANGED" | grep -c "apps/web/\|apps/marketing/" || true)
+          HAS_TESTS=$(echo "$CHANGED" | grep -c "tests/" || true)
+          HAS_SCHEMA=$(echo "$CHANGED" | grep -c "schema.prisma" || true)
+          HAS_OPENAPI=$(echo "$CHANGED" | grep -c "openapi.json" || true)
+
+          echo "has_api=$HAS_API" >> $GITHUB_OUTPUT
+          echo "has_fe=$HAS_FE" >> $GITHUB_OUTPUT
+          echo "has_tests=$HAS_TESTS" >> $GITHUB_OUTPUT
+          echo "has_schema=$HAS_SCHEMA" >> $GITHUB_OUTPUT
+          echo "has_openapi=$HAS_OPENAPI" >> $GITHUB_OUTPUT
+
+      - name: Post AI-Native SDLC review checklist
+        uses: actions/github-script@v7
+        env:
+          SPEC_REF: ${{ steps.context.outputs.spec_ref }}
+          SPEC_FILES: ${{ steps.context.outputs.spec_files }}
+          HAS_API: ${{ steps.context.outputs.has_api }}
+          HAS_FE: ${{ steps.context.outputs.has_fe }}
+          HAS_TESTS: ${{ steps.context.outputs.has_tests }}
+          HAS_SCHEMA: ${{ steps.context.outputs.has_schema }}
+          HAS_OPENAPI: ${{ steps.context.outputs.has_openapi }}
+          CHANGED_FILES: ${{ steps.context.outputs.changed_files }}
+        with:
+          script: |
+            const specRef = process.env.SPEC_REF || ''
+            const specFiles = process.env.SPEC_FILES || ''
+            const hasApi = parseInt(process.env.HAS_API) > 0
+            const hasFe = parseInt(process.env.HAS_FE) > 0
+            const hasTests = parseInt(process.env.HAS_TESTS) > 0
+            const hasSchema = parseInt(process.env.HAS_SCHEMA) > 0
+            const hasOpenApi = parseInt(process.env.HAS_OPENAPI) > 0
+
+            const specSection = specRef
+              ? `**Spec traced**: \`${specRef}\``
+              : specFiles
+                ? `**Spec file(s) changed**: \`${specFiles}\``
+                : `> ⚠️ **No spec reference found.** Add \`// Spec: docs/specs/<feature>.spec.md\` comment to changed files, or link the spec below.`
+
+            const apiChecks = hasApi ? `
+            ### Backend (apps/api) — ${hasApi ? '⚠️ changed' : '–'}
+            - [ ] Business logic is in **Service**, not Controller
+            - [ ] DTO validates all input fields with \`class-validator\`
+            - [ ] Auth guard applied (\`@Roles\` or \`@Public\` — explicit, not implicit)
+            - [ ] IDOR check: users can only access their own resources
+            - [ ] No sensitive fields in response (no password, token, answer keys)
+            - [ ] Price / discount recalculated server-side (never from request body)
+            ${hasSchema ? '- [ ] Prisma migration committed in `apps/api/prisma/migrations/`' : ''}
+            ${hasOpenApi ? '- [ ] `docs/openapi.json` updated (`npm run docs:openapi`)' : '- [ ] ⚠️ API changed but `docs/openapi.json` not updated — run `npm run docs:openapi`'}
+            ` : ''
+
+            const feChecks = hasFe ? `
+            ### Frontend (apps/web / apps/marketing) — ${hasFe ? '⚠️ changed' : '–'}
+            - [ ] All API calls go through \`src/lib/api.ts\` (no raw \`fetch()\`)
+            - [ ] \`data-testid\` attributes on every new interactive element
+            - [ ] Loading state handled (skeleton or spinner)
+            - [ ] Empty state handled (\`<EmptyState>\` component)
+            - [ ] Error state handled (error banner, not crash)
+            - [ ] Role check if page is restricted
+            - [ ] TypeScript passes (\`npm run typecheck --workspace @testcraft/web\`)
+            ` : ''
+
+            const testChecks = `
+            ### Tests — ${hasTests ? '✅ test files changed' : '⚠️ no test files changed'}
+            ${!hasTests && (hasApi || hasFe) ? '> ⚠️ **Code changed but no tests updated.** Every AC must have a test.' : ''}
+            - [ ] New/changed AC has a corresponding test (Playwright or NestJS e2e)
+            - [ ] Test title includes Qase case ID: \`TC-xxx: description\`
+            - [ ] No \`waitForTimeout()\` (hard waits) in Playwright tests
+            - [ ] Page Object Models used — no raw selectors in spec files
+            - [ ] Tests pass locally before pushing
+            `
+
+            const sdlcChecks = `
+            ### SDLC Pipeline
+            - [ ] Intent file exists: \`docs/intents/active/<feature>.intent.md\` (or \`done/\` if shipped)
+            - [ ] Spec status updated to \`IMPLEMENTED\`
+            - [ ] Spec AC table filled with Qase IDs
+            - [ ] \`CLAUDE.md\` updated if a new pattern was established
+            `
+
+            const body = `## AI-Native SDLC Review Checklist
+
+            ${specSection}
+
+            > All boxes must be checked before merge. CI gates enforce the technical checks; these cover the process and design gates.
+
+            ${apiChecks}
+            ${feChecks}
+            ${testChecks}
+            ${sdlcChecks}
+
+            ---
+            *Generated by the TestCraft AI-Native SDLC pipeline.*
+            *Stages: [Plan](docs/sdlc/STAGE1-PLAN.md) → [Design](docs/sdlc/STAGE2-DESIGN.md) → [Build](docs/sdlc/STAGE3-BUILD.md) → [Test](docs/sdlc/STAGE4-TEST.md) → [Deploy](docs/sdlc/STAGE5-DEPLOY.md)*`
+
+            // Check if we already posted a checklist for this PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            })
+
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' &&
+              c.body.includes('AI-Native SDLC Review Checklist')
+            )
+
+            if (existing) {
+              // Update existing comment instead of adding duplicate
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body
+              })
+            }

@@ -1,0 +1,101 @@
+# TestCraft Indonesia — stack lokal
+#
+#   docker compose up -d                 → hanya infrastruktur (db + redis)
+#   docker compose --profile full up -d  → sekaligus API, Web LMS, dan Marketing
+#
+# Semua container diberi prefix `testcraft-` agar mudah dikenali di
+# `docker ps` maupun Docker Desktop.
+name: testcraft
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: testcraft-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: testcraft
+      POSTGRES_PASSWORD: testcraft
+      POSTGRES_DB: testcraft
+    ports:
+      # Host 5433 → dipakai agar tidak bentrok dengan Postgres lain di 5432.
+      - "5433:5432"
+    volumes:
+      - testcraft-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testcraft -d testcraft"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: testcraft-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - testcraft-redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: testcraft-api:local
+    container_name: testcraft-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 4001
+      DATABASE_URL: postgresql://testcraft:testcraft@db:5432/testcraft?schema=public
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGINS: http://localhost:3000,http://localhost:3001
+    env_file:
+      - path: apps/api/.env
+        required: false
+    ports:
+      - "4001:4001"
+
+  web:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    image: testcraft-web:local
+    container_name: testcraft-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://localhost:4001/api/v1
+      API_INTERNAL_URL: http://api:4001/api/v1
+    ports:
+      - "3000:3000"
+
+  marketing:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: apps/marketing/Dockerfile
+    image: testcraft-marketing:local
+    container_name: testcraft-marketing
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+
+volumes:
+  testcraft-pgdata:
+    name: testcraft-pgdata
+  testcraft-redisdata:
+    name: testcraft-redisdata

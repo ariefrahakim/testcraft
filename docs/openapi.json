@@ -1,0 +1,4421 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "summary": "Liveness & readiness probe (termasuk cek koneksi DB)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Daftar akun student baru",
+        "description": "Membuat akun dengan role STUDENT dan langsung mengembalikan pasangan token.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Login dengan email & password",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "summary": "Tukar refresh token dengan access token baru",
+        "description": "Refresh token dirotasi — token lama langsung dicabut.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "summary": "Cabut refresh token (satu sesi atau semua sesi)",
+        "parameters": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "summary": "Profil user yang sedang login",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/google": {
+      "get": {
+        "operationId": "AuthController_google",
+        "summary": "Mulai alur masuk dengan Google",
+        "description": "Mengalihkan pengguna ke halaman izin Google. Bila GOOGLE_CLIENT_ID dan GOOGLE_CLIENT_SECRET belum diisi, pengguna dikembalikan ke halaman masuk dengan pesan `?error=google_not_configured`.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "patch": {
+        "operationId": "UsersController_updateMe",
+        "summary": "Perbarui profil sendiri",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "operationId": "UsersController_list",
+        "summary": "Daftar pengguna (admin)",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "SUPER_ADMIN",
+                "ADMIN",
+                "INSTRUCTOR",
+                "STUDENT",
+                "CORPORATE_ADMIN"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "patch": {
+        "operationId": "UsersController_adminUpdate",
+        "summary": "Ubah role / status aktif pengguna (admin)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructors": {
+      "get": {
+        "operationId": "InstructorsController_list",
+        "summary": "Daftar instruktur",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructors"
+        ]
+      }
+    },
+    "/api/v1/courses": {
+      "get": {
+        "operationId": "CoursesController_findAll",
+        "summary": "Daftar kursus (katalog publik)",
+        "description": "Mendukung filter kategori, level, rentang harga, pencarian teks, dan sorting. Publik hanya melihat kursus berstatus PUBLISHED.",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filter slug kategori",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "level",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "BEGINNER",
+                "INTERMEDIATE",
+                "ADVANCED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "description": "Harga minimum (IDR)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "description": "Harga maksimum (IDR)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "free",
+            "required": false,
+            "in": "query",
+            "description": "Hanya kursus gratis",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "featured",
+            "required": false,
+            "in": "query",
+            "description": "Hanya kursus unggulan",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "popular",
+              "enum": [
+                "popular",
+                "newest",
+                "rating",
+                "price_asc",
+                "price_desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Admin/instructor saja — publik selalu PUBLISHED",
+            "schema": {
+              "enum": [
+                "DRAFT",
+                "PUBLISHED",
+                "ARCHIVED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      },
+      "post": {
+        "operationId": "CoursesController_create",
+        "summary": "Buat kursus baru",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/courses/{slug}": {
+      "get": {
+        "operationId": "CoursesController_findOne",
+        "summary": "Detail kursus beserta kurikulum",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "example": "playwright-zero-to-expert",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ]
+      }
+    },
+    "/api/v1/courses/{id}": {
+      "patch": {
+        "operationId": "CoursesController_update",
+        "summary": "Perbarui kursus",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCourseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CoursesController_remove",
+        "summary": "Arsipkan kursus",
+        "description": "Soft delete — status menjadi ARCHIVED, data pembelian tetap utuh.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/pricing": {
+      "patch": {
+        "operationId": "CoursesController_updatePricing",
+        "summary": "Ubah harga satu kursus",
+        "description": "Dipakai halaman CMS → Pricing.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCoursePricingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/courses/pricing/bulk": {
+      "patch": {
+        "operationId": "CoursesController_bulkPricing",
+        "summary": "Ubah harga banyak kursus sekaligus (transaksional)",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkPricingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "updated": 12
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/courses/{id}/refresh-stats": {
+      "post": {
+        "operationId": "CoursesController_refreshStats",
+        "summary": "Hitung ulang rating / jumlah siswa / jumlah lesson",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Courses"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "operationId": "CategoriesController_findAll",
+        "summary": "Daftar kategori beserta jumlah kursus terbit",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categories"
+        ]
+      },
+      "post": {
+        "operationId": "CategoriesController_create",
+        "summary": "Tambah kategori",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/categories/{id}": {
+      "patch": {
+        "operationId": "CategoriesController_update",
+        "summary": "Perbarui kategori",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CategoriesController_remove",
+        "summary": "Hapus kategori (gagal bila masih dipakai kursus)",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Categories"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/learning-paths": {
+      "get": {
+        "operationId": "LearningPathsController_findAll",
+        "summary": "Daftar jalur belajar beserta urutan kursusnya",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Learning Paths"
+        ]
+      }
+    },
+    "/api/v1/learning-paths/{slug}": {
+      "get": {
+        "operationId": "LearningPathsController_findOne",
+        "summary": "Detail satu jalur belajar",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Learning Paths"
+        ]
+      }
+    },
+    "/api/v1/enrollments/me": {
+      "get": {
+        "operationId": "EnrollmentsController_listMine",
+        "summary": "Kursus yang saya ikuti beserta progres",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/enrollments": {
+      "post": {
+        "operationId": "EnrollmentsController_enroll",
+        "summary": "Daftar ke sebuah kursus",
+        "description": "Kursus berbayar menolak pendaftaran bila belum ada Payment berstatus PAID.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrollDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/enrollments/me/assignments": {
+      "get": {
+        "operationId": "EnrollmentsController_myAssignments",
+        "summary": "Tugas dari semua kursus saya beserta status penilaiannya",
+        "description": "Diurutkan dari tenggat terdekat. Dipakai halaman \"Tugas & Nilai\" siswa.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/enrollments/assignments/{assignmentId}/submit": {
+      "post": {
+        "operationId": "EnrollmentsController_submitAssignment",
+        "summary": "Kirim jawaban tugas",
+        "description": "Bila submission sebelumnya belum dinilai, jawaban diperbarui. Bila sudah dinilai, dibuat percobaan baru.",
+        "parameters": [
+          {
+            "name": "assignmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/enrollments/lessons/{lessonId}/progress": {
+      "post": {
+        "operationId": "EnrollmentsController_track",
+        "summary": "Simpan progres belajar sebuah lesson",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrackProgressDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Enrollments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructor/courses": {
+      "get": {
+        "operationId": "InstructorController_courses",
+        "summary": "Kursus yang saya ampu",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructor Workspace"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructor/submissions": {
+      "get": {
+        "operationId": "InstructorController_submissions",
+        "summary": "Antrian penilaian tugas",
+        "description": "Default menampilkan submission berstatus SUBMITTED, diurutkan dari yang paling lama menunggu.",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "SUBMITTED",
+              "enum": [
+                "DRAFT",
+                "SUBMITTED",
+                "GRADED",
+                "RETURNED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "description": "Batasi ke satu kursus",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructor Workspace"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructor/submissions/pending-summary": {
+      "get": {
+        "operationId": "InstructorController_pendingSummary",
+        "summary": "Ringkasan tugas yang belum dinilai per assignment",
+        "description": "Diurutkan dari deadline terdekat — dipakai banner \"perlu tindakan\" di dashboard instruktur.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructor Workspace"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructor/submissions/{id}/grade": {
+      "patch": {
+        "operationId": "InstructorController_grade",
+        "summary": "Beri nilai & umpan balik pada sebuah submission",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GradeSubmissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructor Workspace"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/instructor/payouts": {
+      "get": {
+        "operationId": "InstructorController_payouts",
+        "summary": "Ringkasan pendapatan dari penjualan kursus saya",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Instructor Workspace"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/settings": {
+      "get": {
+        "operationId": "CmsController_getSettings",
+        "summary": "Ambil pengaturan situs (brand, kurs, pajak, dll.)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "CmsController_updateSettings",
+        "summary": "Perbarui pengaturan situs",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiteSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pages": {
+      "get": {
+        "operationId": "CmsController_listPages",
+        "summary": "Daftar halaman CMS",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "DRAFT",
+                "PUBLISHED",
+                "SCHEDULED",
+                "ARCHIVED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createPage",
+        "summary": "Buat halaman baru",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pages/{slug}": {
+      "get": {
+        "operationId": "CmsController_getPage",
+        "summary": "Detail halaman beserta blok konten (termasuk draft)",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pages/{id}": {
+      "patch": {
+        "operationId": "CmsController_updatePage",
+        "summary": "Perbarui halaman",
+        "description": "Mengirim `blocks` akan mengganti seluruh blok halaman (replace-all) dalam satu transaksi.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deletePage",
+        "summary": "Hapus halaman",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pages/{id}/publish": {
+      "post": {
+        "operationId": "CmsController_publishPage",
+        "summary": "Terbitkan halaman",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/banners": {
+      "get": {
+        "operationId": "CmsController_listBanners",
+        "summary": "Daftar banner/pengumuman",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createBanner",
+        "summary": "Buat banner",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBannerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/banners/{id}": {
+      "patch": {
+        "operationId": "CmsController_updateBanner",
+        "summary": "Perbarui banner",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBannerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deleteBanner",
+        "summary": "Hapus banner",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pricing-plans": {
+      "get": {
+        "operationId": "CmsController_listPlans",
+        "summary": "Daftar paket harga (bundle/langganan)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createPlan",
+        "summary": "Buat paket harga",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePricingPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/pricing-plans/{id}": {
+      "patch": {
+        "operationId": "CmsController_updatePlan",
+        "summary": "Perbarui paket harga",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePricingPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deletePlan",
+        "summary": "Hapus paket harga",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/coupons": {
+      "get": {
+        "operationId": "CmsController_listCoupons",
+        "summary": "Daftar kupon diskon",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createCoupon",
+        "summary": "Buat kupon",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/coupons/{id}": {
+      "patch": {
+        "operationId": "CmsController_updateCoupon",
+        "summary": "Perbarui kupon",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deleteCoupon",
+        "summary": "Hapus kupon",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/testimonials": {
+      "get": {
+        "operationId": "CmsController_listTestimonials",
+        "summary": "Daftar testimoni",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createTestimonial",
+        "summary": "Tambah testimoni",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTestimonialDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/testimonials/{id}": {
+      "patch": {
+        "operationId": "CmsController_updateTestimonial",
+        "summary": "Perbarui testimoni",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTestimonialDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deleteTestimonial",
+        "summary": "Hapus testimoni",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/faqs": {
+      "get": {
+        "operationId": "CmsController_listFaqs",
+        "summary": "Daftar FAQ",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createFaq",
+        "summary": "Tambah FAQ",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFaqDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/faqs/{id}": {
+      "patch": {
+        "operationId": "CmsController_updateFaq",
+        "summary": "Perbarui FAQ",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFaqDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deleteFaq",
+        "summary": "Hapus FAQ",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/navigation": {
+      "get": {
+        "operationId": "CmsController_listNav",
+        "summary": "Daftar item menu",
+        "parameters": [
+          {
+            "name": "menu",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "header",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "CmsController_createNav",
+        "summary": "Tambah item menu",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNavItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/navigation/{id}": {
+      "patch": {
+        "operationId": "CmsController_updateNav",
+        "summary": "Perbarui item menu",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNavItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "CmsController_deleteNav",
+        "summary": "Hapus item menu",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/media": {
+      "get": {
+        "operationId": "CmsController_listMedia",
+        "summary": "Daftar media yang diunggah",
+        "parameters": [
+          {
+            "name": "folder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/content/settings": {
+      "get": {
+        "operationId": "PublicContentController_settings",
+        "summary": "Pengaturan situs untuk render brand & kurs",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/pages/{slug}": {
+      "get": {
+        "operationId": "PublicContentController_page",
+        "summary": "Halaman terbit beserta blok kontennya",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/banners": {
+      "get": {
+        "operationId": "PublicContentController_banners",
+        "summary": "Banner aktif pada rentang tanggal saat ini",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/pricing-plans": {
+      "get": {
+        "operationId": "PublicContentController_plans",
+        "summary": "Paket harga aktif",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/testimonials": {
+      "get": {
+        "operationId": "PublicContentController_testimonials",
+        "summary": "Testimoni (opsional hanya yang unggulan)",
+        "parameters": [
+          {
+            "name": "featured",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/faqs": {
+      "get": {
+        "operationId": "PublicContentController_faqs",
+        "summary": "FAQ yang terbit",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/content/navigation": {
+      "get": {
+        "operationId": "PublicContentController_navigation",
+        "summary": "Item menu yang terlihat",
+        "parameters": [
+          {
+            "name": "menu",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "header",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Content (Public)"
+        ]
+      }
+    },
+    "/api/v1/cms/assignments": {
+      "get": {
+        "operationId": "AssignmentsController_list",
+        "summary": "Daftar tugas beserta statistik penilaiannya",
+        "description": "Sumber tunggal konfigurasi tugas: instruksi, rubrik, poin maksimum, dan tenggat. Dipakai siswa (halaman Tugas & Nilai) dan mentor (antrian penilaian).",
+        "parameters": [
+          {
+            "name": "courseId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "AssignmentsController_create",
+        "summary": "Buat tugas baru pada sebuah lesson",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/assignments/available-lessons": {
+      "get": {
+        "operationId": "AssignmentsController_availableLessons",
+        "summary": "Lesson yang belum memiliki tugas",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/cms/assignments/{id}": {
+      "patch": {
+        "operationId": "AssignmentsController_update",
+        "summary": "Perbarui instruksi, rubrik, poin, atau tenggat tugas",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "AssignmentsController_remove",
+        "summary": "Hapus tugas beserta seluruh submission-nya",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "CMS (Admin)"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/certificates/me": {
+      "get": {
+        "operationId": "CertificatesController_listMine",
+        "summary": "Sertifikat milik saya",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Certificates"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/certificates/verify": {
+      "get": {
+        "operationId": "CertificatesController_verifyByQuery",
+        "summary": "Verifikasi keaslian sertifikat (publik)",
+        "description": "Dipakai halaman /verify dan QR code pada sertifikat.",
+        "parameters": [
+          {
+            "name": "number",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "example": "TC-2026-08421",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Certificates"
+        ]
+      }
+    },
+    "/api/v1/certificates/verify/{number}": {
+      "get": {
+        "operationId": "CertificatesController_verify",
+        "summary": "Verifikasi sertifikat lewat path (publik)",
+        "parameters": [
+          {
+            "name": "number",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Certificates"
+        ]
+      }
+    },
+    "/api/v1/payments/checkout": {
+      "post": {
+        "operationId": "PaymentsController_checkout",
+        "summary": "Buat invoice pembelian kursus",
+        "description": "Harga, diskon kupon, dan pajak dihitung ulang di server — nilai dari klien diabaikan.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/me": {
+      "get": {
+        "operationId": "PaymentsController_listMine",
+        "summary": "Riwayat pembayaran saya",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments": {
+      "get": {
+        "operationId": "PaymentsController_listAll",
+        "summary": "Semua transaksi (admin)",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "PENDING",
+                "PAID",
+                "FAILED",
+                "REFUNDED",
+                "EXPIRED"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/payments/webhook/midtrans": {
+      "post": {
+        "operationId": "PaymentsController_midtransWebhook",
+        "summary": "Webhook notifikasi Midtrans",
+        "description": "Idempoten — pemanggilan berulang untuk invoice yang sama tidak menggandakan enrollment. Di produksi, verifikasi signature_key sebelum memproses.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ]
+      }
+    },
+    "/api/v1/payments/simulate-paid": {
+      "post": {
+        "operationId": "PaymentsController_simulatePaid",
+        "summary": "Tandai invoice lunas (khusus development/QA)",
+        "description": "Memicu alur yang sama dengan webhook: enrollment + notifikasi.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Payments"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/leads": {
+      "post": {
+        "operationId": "LeadsController_create",
+        "summary": "Kirim data calon peserta dari form landing page",
+        "description": "Minimal salah satu dari email atau nomor telepon wajib diisi.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLeadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Leads"
+        ]
+      },
+      "get": {
+        "operationId": "LeadsController_list",
+        "summary": "Daftar leads (admin)",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Kata kunci pencarian",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/leads/{id}": {
+      "patch": {
+        "operationId": "LeadsController_update",
+        "summary": "Tandai lead sudah ditindaklanjuti",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLeadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Leads"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "operationId": "NotificationsController_list",
+        "summary": "50 notifikasi terbaru milik saya",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/notifications/read-all": {
+      "patch": {
+        "operationId": "NotificationsController_markAllRead",
+        "summary": "Tandai semua notifikasi sudah dibaca",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/notifications/{id}/read": {
+      "patch": {
+        "operationId": "NotificationsController_markRead",
+        "summary": "Tandai satu notifikasi sudah dibaca",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Notifications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/analytics/overview": {
+      "get": {
+        "operationId": "AnalyticsController_overview",
+        "summary": "Ringkasan KPI untuk dashboard admin",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/analytics/top-courses": {
+      "get": {
+        "operationId": "AnalyticsController_topCourses",
+        "summary": "10 kursus dengan peserta terbanyak",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/analytics/revenue-by-month": {
+      "get": {
+        "operationId": "AnalyticsController_revenue",
+        "summary": "Pendapatan 12 bulan terakhir",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Analytics"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "TestCraft Indonesia LMS API",
+    "description": "REST API untuk platform LMS TestCraft Indonesia.\n\n### Autentikasi\nSemua endpoint memerlukan header `Authorization: Bearer <accessToken>`\nkecuali yang bertanda **Public**. Access token berlaku 15 menit;\ngunakan `POST /auth/refresh` untuk memperbarui (refresh token dirotasi\nsetiap kali dipakai).\n\n### Format error\n```json\n{\n  \"statusCode\": 400,\n  \"message\": [\"email harus berupa alamat email yang valid\"],\n  \"error\": \"Bad Request\",\n  \"path\": \"/api/v1/auth/register\",\n  \"timestamp\": \"2026-07-27T03:21:00.000Z\"\n}\n```\n\n### Paginasi\nEndpoint list menerima `?page=1&limit=20&q=kata-kunci` dan mengembalikan\n`{ data: [...], meta: { page, limit, total, totalPages, hasNext, hasPrev } }`.\n\n### Rate limit\n120 request per menit per IP.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "TestCraft Indonesia",
+      "url": "https://wa.me/6282395568743",
+      "email": "testcraftindonesia@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Status layanan"
+    },
+    {
+      "name": "Auth",
+      "description": "Registrasi, login, refresh token"
+    },
+    {
+      "name": "Users",
+      "description": "Profil pengguna & manajemen user"
+    },
+    {
+      "name": "Instructors",
+      "description": "Data instruktur"
+    },
+    {
+      "name": "Categories",
+      "description": "Kategori kursus"
+    },
+    {
+      "name": "Courses",
+      "description": "Katalog & manajemen kursus"
+    },
+    {
+      "name": "Enrollments",
+      "description": "Pendaftaran kursus & progres belajar"
+    },
+    {
+      "name": "Payments",
+      "description": "Checkout, invoice, dan webhook pembayaran"
+    },
+    {
+      "name": "Content (Public)",
+      "description": "Konten CMS untuk halaman publik"
+    },
+    {
+      "name": "CMS (Admin)",
+      "description": "Pengelolaan konten, harga, kupon, dan pengaturan"
+    },
+    {
+      "name": "Analytics",
+      "description": "Statistik untuk dashboard admin"
+    },
+    {
+      "name": "Leads",
+      "description": "Prospek dari form landing page"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:4000/api/v1",
+      "description": "Local development"
+    },
+    {
+      "url": "https://api.testcraft.id/api/v1",
+      "description": "Production"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Budi Santoso"
+          },
+          "email": {
+            "type": "string",
+            "example": "budi@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Rahasia123",
+            "description": "Min 8 karakter, mengandung huruf dan angka"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+6281234567890"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password"
+        ]
+      },
+      "UserProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "object"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "ADMIN",
+              "INSTRUCTOR",
+              "STUDENT",
+              "CORPORATE_ADMIN"
+            ]
+          },
+          "avatarUrl": {
+            "type": "object"
+          },
+          "xp": {
+            "type": "number"
+          },
+          "level": {
+            "type": "number"
+          },
+          "streakDays": {
+            "type": "number"
+          },
+          "companyId": {
+            "type": "object"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "role",
+          "xp",
+          "level",
+          "streakDays",
+          "createdAt"
+        ]
+      },
+      "AuthTokensDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "expiresIn": {
+            "type": "number",
+            "example": 900,
+            "description": "Umur access token (detik)"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "expiresIn"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserProfileDto"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/AuthTokensDto"
+          }
+        },
+        "required": [
+          "user",
+          "tokens"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "admin@testcraft.id"
+          },
+          "password": {
+            "type": "string",
+            "example": "Admin#12345"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh token dari /auth/login"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminUpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "SUPER_ADMIN",
+              "ADMIN",
+              "INSTRUCTOR",
+              "STUDENT",
+              "CORPORATE_ADMIN"
+            ]
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateCourseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "playwright-zero-to-expert"
+          },
+          "title": {
+            "type": "string",
+            "example": "Playwright Automation Testing from Zero to Expert"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "BEGINNER",
+              "INTERMEDIATE",
+              "ADVANCED"
+            ]
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "ID kategori"
+          },
+          "instructorId": {
+            "type": "string",
+            "description": "ID profil instruktur"
+          },
+          "priceIDR": {
+            "type": "number",
+            "example": 1250000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 79
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 2500000,
+            "description": "Harga coret"
+          },
+          "compareAtUSD": {
+            "type": "number"
+          },
+          "isFree": {
+            "type": "boolean",
+            "default": false
+          },
+          "icon": {
+            "type": "string",
+            "example": "🎭"
+          },
+          "thumbnailUrl": {
+            "type": "string"
+          },
+          "previewVideoUrl": {
+            "type": "string"
+          },
+          "durationMin": {
+            "type": "number",
+            "example": 1920,
+            "description": "Durasi total (menit)"
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "targetAudience": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "ARCHIVED"
+            ],
+            "default": "DRAFT"
+          },
+          "isBestseller": {
+            "type": "boolean"
+          },
+          "isFeatured": {
+            "type": "boolean"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "seoDescription": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "description",
+          "level",
+          "categoryId",
+          "instructorId"
+        ]
+      },
+      "UpdateCourseDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "playwright-zero-to-expert"
+          },
+          "title": {
+            "type": "string",
+            "example": "Playwright Automation Testing from Zero to Expert"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "BEGINNER",
+              "INTERMEDIATE",
+              "ADVANCED"
+            ]
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "ID kategori"
+          },
+          "instructorId": {
+            "type": "string",
+            "description": "ID profil instruktur"
+          },
+          "priceIDR": {
+            "type": "number",
+            "example": 1250000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 79
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 2500000,
+            "description": "Harga coret"
+          },
+          "compareAtUSD": {
+            "type": "number"
+          },
+          "isFree": {
+            "type": "boolean",
+            "default": false
+          },
+          "icon": {
+            "type": "string",
+            "example": "🎭"
+          },
+          "thumbnailUrl": {
+            "type": "string"
+          },
+          "previewVideoUrl": {
+            "type": "string"
+          },
+          "durationMin": {
+            "type": "number",
+            "example": 1920,
+            "description": "Durasi total (menit)"
+          },
+          "outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "prerequisites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "targetAudience": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "ARCHIVED"
+            ],
+            "default": "DRAFT"
+          },
+          "isBestseller": {
+            "type": "boolean"
+          },
+          "isFeatured": {
+            "type": "boolean"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "seoDescription": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateCoursePricingDto": {
+        "type": "object",
+        "properties": {
+          "priceIDR": {
+            "type": "number",
+            "example": 1350000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 85
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 2700000
+          },
+          "compareAtUSD": {
+            "type": "number"
+          },
+          "isFree": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "priceIDR",
+          "priceUSD"
+        ]
+      },
+      "BulkPricingItemDto": {
+        "type": "object",
+        "properties": {
+          "priceIDR": {
+            "type": "number",
+            "example": 1350000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 85
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 2700000
+          },
+          "compareAtUSD": {
+            "type": "number"
+          },
+          "isFree": {
+            "type": "boolean"
+          },
+          "courseId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "priceIDR",
+          "priceUSD",
+          "courseId"
+        ]
+      },
+      "BulkPricingDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BulkPricingItemDto"
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "CreateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Automation Testing"
+          },
+          "slug": {
+            "type": "string",
+            "example": "automation-testing"
+          },
+          "icon": {
+            "type": "string",
+            "example": "🤖"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "name",
+          "slug"
+        ]
+      },
+      "UpdateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Automation Testing"
+          },
+          "slug": {
+            "type": "string",
+            "example": "automation-testing"
+          },
+          "icon": {
+            "type": "string",
+            "example": "🤖"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "EnrollDto": {
+        "type": "object",
+        "properties": {
+          "courseId": {
+            "type": "string",
+            "description": "ID kursus"
+          }
+        }
+      },
+      "SubmitAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "contentHtml": {
+            "type": "string",
+            "description": "Jawaban dalam HTML sederhana"
+          },
+          "codeSnippet": {
+            "type": "string",
+            "description": "Potongan kode / tautan repositori"
+          },
+          "fileUrls": {
+            "description": "URL lampiran",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TrackProgressDto": {
+        "type": "object",
+        "properties": {
+          "completed": {
+            "type": "boolean",
+            "description": "Tandai lesson selesai"
+          },
+          "resumeSecond": {
+            "type": "number",
+            "description": "Posisi video terakhir (detik)"
+          },
+          "watchedSec": {
+            "type": "number",
+            "description": "Total detik ditonton"
+          }
+        }
+      },
+      "GradeSubmissionDto": {
+        "type": "object",
+        "properties": {
+          "grade": {
+            "type": "number",
+            "example": 85,
+            "description": "Nilai; dipotong ke maxPoints tugas"
+          },
+          "feedback": {
+            "type": "string",
+            "example": "Struktur test case sudah rapi, tambahkan negative case."
+          },
+          "returnForRevision": {
+            "type": "boolean",
+            "default": false,
+            "description": "Bila true, status menjadi RETURNED agar siswa merevisi"
+          }
+        },
+        "required": [
+          "grade"
+        ]
+      },
+      "SiteSettingsDto": {
+        "type": "object",
+        "properties": {
+          "brandName": {
+            "type": "string",
+            "example": "TestCraft Indonesia"
+          },
+          "tagline": {
+            "type": "string",
+            "example": "Learn. Build. Automate."
+          },
+          "logoUrl": {
+            "type": "string"
+          },
+          "faviconUrl": {
+            "type": "string"
+          },
+          "primaryColor": {
+            "type": "string",
+            "example": "#2563EB"
+          },
+          "contactEmail": {
+            "type": "string",
+            "example": "testcraftindonesia@gmail.com"
+          },
+          "whatsapp": {
+            "type": "string",
+            "example": "6282395568743"
+          },
+          "address": {
+            "type": "string"
+          },
+          "socials": {
+            "type": "object",
+            "example": {
+              "linkedin": "https://linkedin.com/company/testcraft",
+              "youtube": ""
+            }
+          },
+          "defaultCurrency": {
+            "type": "string",
+            "enum": [
+              "IDR",
+              "USD"
+            ],
+            "example": "IDR"
+          },
+          "usdRate": {
+            "type": "number",
+            "example": 16000,
+            "description": "Kurs 1 USD dalam IDR"
+          },
+          "taxPercent": {
+            "type": "number",
+            "example": 11,
+            "description": "PPN dalam persen"
+          },
+          "maintenanceMode": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "brandName",
+          "tagline",
+          "primaryColor",
+          "contactEmail",
+          "whatsapp",
+          "defaultCurrency",
+          "usdRate",
+          "taxPercent",
+          "maintenanceMode"
+        ]
+      },
+      "ContentBlockDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Kosongkan untuk blok baru"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "HERO",
+              "RICH_TEXT",
+              "COURSE_GRID",
+              "STATS",
+              "TESTIMONIALS",
+              "FAQ",
+              "PRICING_TABLE",
+              "CTA",
+              "LEARNING_PATHS",
+              "LOGO_CLOUD",
+              "HTML"
+            ]
+          },
+          "order": {
+            "type": "number",
+            "example": 0
+          },
+          "visible": {
+            "type": "boolean",
+            "default": true
+          },
+          "data": {
+            "type": "object",
+            "description": "Payload blok, bentuknya bergantung pada `type`",
+            "example": {
+              "heading": "Kuasai Software Testing",
+              "subheading": "Dari manual sampai AI-powered automation",
+              "ctaLabel": "Lihat Katalog",
+              "ctaUrl": "/catalog"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "order",
+          "data"
+        ]
+      },
+      "CreatePageDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "home"
+          },
+          "title": {
+            "type": "string",
+            "example": "Beranda"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "SCHEDULED",
+              "ARCHIVED"
+            ],
+            "default": "DRAFT"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "seoDescription": {
+            "type": "string"
+          },
+          "ogImageUrl": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentBlockDto"
+            }
+          }
+        },
+        "required": [
+          "slug",
+          "title"
+        ]
+      },
+      "UpdatePageDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "home"
+          },
+          "title": {
+            "type": "string",
+            "example": "Beranda"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "PUBLISHED",
+              "SCHEDULED",
+              "ARCHIVED"
+            ],
+            "default": "DRAFT"
+          },
+          "seoTitle": {
+            "type": "string"
+          },
+          "seoDescription": {
+            "type": "string"
+          },
+          "ogImageUrl": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentBlockDto"
+            }
+          }
+        }
+      },
+      "CreateBannerDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "top-promo"
+          },
+          "title": {
+            "type": "string",
+            "example": "Diskon 50% semua kelas automation"
+          },
+          "body": {
+            "type": "string"
+          },
+          "ctaLabel": {
+            "type": "string",
+            "example": "Ambil Promo"
+          },
+          "ctaUrl": {
+            "type": "string",
+            "example": "/catalog"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "info",
+              "promo",
+              "warning"
+            ],
+            "default": "info"
+          },
+          "active": {
+            "type": "boolean",
+            "default": false
+          },
+          "startsAt": {
+            "type": "string",
+            "example": "2026-08-01T00:00:00.000Z"
+          },
+          "endsAt": {
+            "type": "string",
+            "example": "2026-08-31T23:59:59.000Z"
+          }
+        },
+        "required": [
+          "key",
+          "title"
+        ]
+      },
+      "UpdateBannerDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "top-promo"
+          },
+          "title": {
+            "type": "string",
+            "example": "Diskon 50% semua kelas automation"
+          },
+          "body": {
+            "type": "string"
+          },
+          "ctaLabel": {
+            "type": "string",
+            "example": "Ambil Promo"
+          },
+          "ctaUrl": {
+            "type": "string",
+            "example": "/catalog"
+          },
+          "imageUrl": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "info",
+              "promo",
+              "warning"
+            ],
+            "default": "info"
+          },
+          "active": {
+            "type": "boolean",
+            "default": false
+          },
+          "startsAt": {
+            "type": "string",
+            "example": "2026-08-01T00:00:00.000Z"
+          },
+          "endsAt": {
+            "type": "string",
+            "example": "2026-08-31T23:59:59.000Z"
+          }
+        }
+      },
+      "CreatePricingPlanDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "pro-bootcamp"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pro Bootcamp"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priceIDR": {
+            "type": "number",
+            "example": 4990000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 312
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 7990000
+          },
+          "interval": {
+            "type": "string",
+            "enum": [
+              "ONE_TIME",
+              "MONTHLY",
+              "YEARLY"
+            ],
+            "default": "ONE_TIME"
+          },
+          "features": {
+            "example": [
+              "Akses semua kelas",
+              "Mentoring 1-on-1"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlighted": {
+            "type": "boolean",
+            "default": false
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "priceIDR",
+          "priceUSD"
+        ]
+      },
+      "UpdatePricingPlanDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "pro-bootcamp"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pro Bootcamp"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priceIDR": {
+            "type": "number",
+            "example": 4990000
+          },
+          "priceUSD": {
+            "type": "number",
+            "example": 312
+          },
+          "compareAtIDR": {
+            "type": "number",
+            "example": 7990000
+          },
+          "interval": {
+            "type": "string",
+            "enum": [
+              "ONE_TIME",
+              "MONTHLY",
+              "YEARLY"
+            ],
+            "default": "ONE_TIME"
+          },
+          "features": {
+            "example": [
+              "Akses semua kelas",
+              "Mentoring 1-on-1"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "highlighted": {
+            "type": "boolean",
+            "default": false
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      },
+      "CreateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "MERDEKA50"
+          },
+          "description": {
+            "type": "string"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "PERCENT",
+              "FIXED_IDR"
+            ],
+            "default": "PERCENT"
+          },
+          "value": {
+            "type": "number",
+            "example": 50,
+            "description": "Persen (0-100) atau nominal IDR"
+          },
+          "maxUses": {
+            "type": "number",
+            "example": 100
+          },
+          "maxUsesPerUser": {
+            "type": "number",
+            "default": 1
+          },
+          "minPurchaseIDR": {
+            "type": "number",
+            "example": 500000
+          },
+          "appliesToCourseIds": {
+            "description": "Kosong = berlaku semua kursus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startsAt": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "code",
+          "discountType",
+          "value"
+        ]
+      },
+      "UpdateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "MERDEKA50"
+          },
+          "description": {
+            "type": "string"
+          },
+          "discountType": {
+            "type": "string",
+            "enum": [
+              "PERCENT",
+              "FIXED_IDR"
+            ],
+            "default": "PERCENT"
+          },
+          "value": {
+            "type": "number",
+            "example": 50,
+            "description": "Persen (0-100) atau nominal IDR"
+          },
+          "maxUses": {
+            "type": "number",
+            "example": 100
+          },
+          "maxUsesPerUser": {
+            "type": "number",
+            "default": 1
+          },
+          "minPurchaseIDR": {
+            "type": "number",
+            "example": 500000
+          },
+          "appliesToCourseIds": {
+            "description": "Kosong = berlaku semua kursus",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startsAt": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "CreateTestimonialDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Rizky Ananda"
+          },
+          "role": {
+            "type": "string",
+            "example": "QA Engineer"
+          },
+          "company": {
+            "type": "string",
+            "example": "Tokopedia"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 5
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          }
+        },
+        "required": [
+          "name",
+          "quote"
+        ]
+      },
+      "UpdateTestimonialDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Rizky Ananda"
+          },
+          "role": {
+            "type": "string",
+            "example": "QA Engineer"
+          },
+          "company": {
+            "type": "string",
+            "example": "Tokopedia"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number",
+            "default": 5,
+            "minimum": 1,
+            "maximum": 5
+          },
+          "featured": {
+            "type": "boolean",
+            "default": false
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      },
+      "CreateFaqDto": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "example": "Apakah sertifikatnya diakui industri?"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string",
+            "default": "general"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "published": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "question",
+          "answer"
+        ]
+      },
+      "UpdateFaqDto": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "example": "Apakah sertifikatnya diakui industri?"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string",
+            "default": "general"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "published": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "CreateNavItemDto": {
+        "type": "object",
+        "properties": {
+          "menu": {
+            "type": "string",
+            "example": "header"
+          },
+          "label": {
+            "type": "string",
+            "example": "Katalog"
+          },
+          "url": {
+            "type": "string",
+            "example": "/catalog"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "menu",
+          "label",
+          "url"
+        ]
+      },
+      "UpdateNavItemDto": {
+        "type": "object",
+        "properties": {
+          "menu": {
+            "type": "string",
+            "example": "header"
+          },
+          "label": {
+            "type": "string",
+            "example": "Katalog"
+          },
+          "url": {
+            "type": "string",
+            "example": "/catalog"
+          },
+          "order": {
+            "type": "number",
+            "default": 0
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "RubricItemDto": {
+        "type": "object",
+        "properties": {
+          "criterion": {
+            "type": "string",
+            "example": "Kelengkapan test case"
+          },
+          "points": {
+            "type": "number",
+            "example": 40
+          }
+        },
+        "required": [
+          "criterion",
+          "points"
+        ]
+      },
+      "CreateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "lessonId": {
+            "type": "string",
+            "description": "ID lesson tempat tugas dilampirkan"
+          },
+          "title": {
+            "type": "string",
+            "example": "Final Project — Framework Playwright"
+          },
+          "brief": {
+            "type": "string",
+            "description": "Instruksi pengerjaan untuk siswa"
+          },
+          "maxPoints": {
+            "type": "number",
+            "default": 100
+          },
+          "rubric": {
+            "description": "Kriteria penilaian yang dilihat siswa maupun mentor",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RubricItemDto"
+            }
+          },
+          "dueAt": {
+            "type": "string",
+            "description": "Tenggat pengumpulan siswa"
+          }
+        },
+        "required": [
+          "lessonId",
+          "title",
+          "brief"
+        ]
+      },
+      "UpdateAssignmentDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "brief": {
+            "type": "string"
+          },
+          "maxPoints": {
+            "type": "number"
+          },
+          "rubric": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RubricItemDto"
+            }
+          },
+          "dueAt": {
+            "type": "string"
+          }
+        }
+      },
+      "CheckoutDto": {
+        "type": "object",
+        "properties": {
+          "courseIds": {
+            "description": "Daftar ID kursus yang dibeli",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "MIDTRANS",
+              "XENDIT",
+              "STRIPE",
+              "PAYPAL",
+              "MANUAL_TRANSFER",
+              "INVOICE"
+            ],
+            "default": "MIDTRANS"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "IDR",
+              "USD"
+            ],
+            "default": "IDR"
+          },
+          "couponCode": {
+            "type": "string",
+            "example": "MERDEKA50"
+          }
+        },
+        "required": [
+          "courseIds"
+        ]
+      },
+      "WebhookDto": {
+        "type": "object",
+        "properties": {
+          "invoiceNo": {
+            "type": "string",
+            "example": "INV-2026-000001"
+          },
+          "externalId": {
+            "type": "string",
+            "description": "ID transaksi di gateway"
+          },
+          "transactionStatus": {
+            "type": "string",
+            "example": "settlement"
+          }
+        },
+        "required": [
+          "invoiceNo"
+        ]
+      },
+      "CreateLeadDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Rizky Ananda"
+          },
+          "email": {
+            "type": "string",
+            "example": "rizky@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+6281234567890"
+          },
+          "interest": {
+            "type": "string",
+            "example": "Playwright Automation"
+          },
+          "message": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "default": "landing"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateLeadDto": {
+        "type": "object",
+        "properties": {
+          "handled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "handled"
+        ]
+      }
+    }
+  }
+}

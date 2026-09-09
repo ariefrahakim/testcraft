@@ -1,0 +1,36 @@
+{
+  "name": "testcraft",
+  "version": "3.0.0",
+  "private": true,
+  "description": "TestCraft Indonesia — LMS + Marketing (monorepo)",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:api dev:web dev:marketing",
+    "dev:api": "npm run dev --workspace @testcraft/api",
+    "dev:web": "npm run dev --workspace @testcraft/web",
+    "dev:marketing": "npm run dev --workspace @testcraft/marketing",
+    "build": "npm run build --workspace @testcraft/shared && npm run build --workspace @testcraft/api && npm run build --workspace @testcraft/web && npm run build --workspace @testcraft/marketing",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run db:generate --workspace @testcraft/api",
+    "db:migrate": "npm run db:migrate --workspace @testcraft/api",
+    "db:seed": "npm run db:seed --workspace @testcraft/api",
+    "db:studio": "npm run db:studio --workspace @testcraft/api",
+    "docs:openapi": "npm run docs:openapi --workspace @testcraft/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:prod": "docker compose -f docker-compose.prod.yml up -d"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}

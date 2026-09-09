@@ -1,0 +1,215 @@
+# Regression pipeline. The Qase project + app name come from pipeline
+# variables, never from a value baked in here — the SAME pipeline serves
+# every app repo, and the only per-repo difference is the set of modules
+# discovered by `scripts/list-modules.ts`.
+#
+# Mirrors `.github/workflows/regression.yml` one-for-one so a team switching CI
+# gets the same behaviour: sweep every module sequentially — classic modules
+# under `tests/e2e/<module>/` and BDD modules under `features/**/<module>.feature`
+# alike — with each module addressed by its own name in the matrix. A red
+# module is captured and never halts the sweep.
+#
+# workers:1 is enforced by playwright.config.ts (CLAUDE.md §13) — the app under
+# test allows one active SSO session per user, so per-module jobs run
+# sequentially and never in parallel.
+
+name: Regression
+
+trigger: none        # manual only, like the GitHub workflow
+pr: none
+
+parameters:
+  - name: env
+    displayName: Target environment
+    type: string
+    default: staging
+    values: [staging, production]
+  - name: cycleKey
+    displayName: Existing test run id (leave empty to auto-create)
+    type: string
+    default: " "
+
+variables:
+  # Link a variable group holding the secrets. Secret variables are never
+  # printed and are not auto-mapped into the process env — every step that needs
+  # one maps it explicitly below, which is also what makes the dependency visible.
+  - group: qa-agent-secrets
+  - name: APP_ENV
+    value: ${{ parameters.env }}
+  # Qase is TMS on both stacks — same gate as the jira stack.
+  - name: QASE_MODE
+    value: testops
+  - name: CI
+    value: "1"
+  # Deterministic regression — no retries mask flake. Every red module is a
+  # real red; the sweep-level `continueOnError` still keeps the matrix going
+  # through the remaining modules. `playwright.config.ts` reads `PW_RETRIES`
+  # and pins retries to this value.
+  - name: PW_RETRIES
+    value: "0"
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: setup
+    displayName: Install, verify, discover
+    jobs:
+      - job: setup
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "20.x"
+            displayName: Use Node 20
+
+          - script: |
+              set -e
+              missing=()
+              [ -n "$USER_ID" ]  || missing+=("secret USER_ID")
+              [ -n "$USER_PWD" ] || missing+=("secret USER_PWD")
+              [ -n "$HOST" ]     || missing+=("variable HOST_${APP_ENV^^}")
+              [ -n "$SSO_LOGIN_URL" ] || missing+=("variable SSO_LOGIN_URL_${APP_ENV^^}")
+              [ -n "$AZURE_ORG_URL" ] || missing+=("variable AZURE_ORG_URL")
+              [ -n "$AZURE_PROJECT" ] || missing+=("variable AZURE_PROJECT")
+              if [ ${#missing[@]} -gt 0 ]; then
+                echo "##vso[task.logissue type=error]Missing required setting(s) for env='$APP_ENV': ${missing[*]}"
+                exit 1
+              fi
+            displayName: Verify required secrets and variables
+            # Checked here rather than left to shared/env.ts so the error names
+            # the pipeline setting instead of surfacing as a mid-test throw.
+            env:
+              USER_ID: $(USER_ID)
+              USER_PWD: $(USER_PWD)
+              HOST: $(HOST)
+              SSO_LOGIN_URL: $(SSO_LOGIN_URL)
+              AZURE_ORG_URL: $(AZURE_ORG_URL)
+              AZURE_PROJECT: $(AZURE_PROJECT)
+
+          - script: npm ci
+            displayName: Install dependencies
+
+          - script: npm run install:browsers
+            displayName: Install Playwright Chromium
+
+          - script: npm run typecheck
+            displayName: Typecheck
+
+          - script: npm run lint
+            displayName: Lint
+
+          - script: |
+              set -e
+              if [ -n "$(echo "${{ parameters.cycleKey }}" | tr -d '[:space:]')" ]; then
+                RUN_ID="$(echo "${{ parameters.cycleKey }}" | tr -d '[:space:]')"
+                echo "Reusing test run $RUN_ID"
+              else
+                # $APP_NAME falls back to the Azure repo name so a fresh
+                # scaffold still gets a readable label without extra vars.
+                LABEL="${APP_NAME:-$BUILD_REPOSITORY_NAME}"
+                TITLE="Regression_${APP_ENV}_${LABEL}_manual_$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+                RUN_ID=$(npx tsx utils/qase-helper.ts create-run "$TITLE" | tail -1)
+                echo "Created test run $RUN_ID"
+              fi
+              echo "##vso[task.setvariable variable=cycleKey;isOutput=true]$RUN_ID"
+            name: run
+            displayName: Create or reuse the test run
+            env:
+              APP_NAME: $(APP_NAME)
+              # Qase is TMS on both stacks — create-run/complete-run call the
+              # Qase API. Boards vars are not needed here.
+              QASE_PROJECT: $(QASE_PROJECT)
+              API_TOKEN: $(API_TOKEN)
+
+          - script: |
+              set -e
+              # Same discovery as the GitHub workflow — unions
+              # tests/e2e/<m>/ with features/**/<m>.feature and keeps modules
+              # that have a `test:<m>` npm script. Adding a module means
+              # adding that script (qa-codegen writes it automatically);
+              # this file never needs editing. Emitted as an Azure matrix
+              # object.
+              MATRIX=$(npm run --silent modules | npx tsx scripts/modules-to-azure-matrix.ts)
+              echo "$MATRIX"
+              echo "##vso[task.setvariable variable=matrix;isOutput=true]$MATRIX"
+            name: modules
+            displayName: Discover modules (TDD + BDD)
+
+  - stage: sweep
+    displayName: Run modules
+    dependsOn: setup
+    condition: succeeded()
+    jobs:
+      - job: module
+        # maxParallel:1 is not a performance choice — see the single-session
+        # note at the top of this file.
+        strategy:
+          matrix: $[ stageDependencies.setup.setup.outputs['modules.matrix'] ]
+          maxParallel: "1"
+        variables:
+          cycleKey: $[ stageDependencies.setup.setup.outputs['run.cycleKey'] ]
+        continueOnError: "true"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "20.x"
+            displayName: Use Node 20
+
+          - script: npm ci
+            displayName: Install dependencies
+
+          - script: npm run install:browsers
+            displayName: Install Playwright Chromium
+
+          - script: npm run "test:$(moduleName)"
+            displayName: Run $(moduleName)
+            env:
+              CYCLE_KEY: $(cycleKey)
+              # Every module but the last leaves the run open; the finish
+              # stage completes it. Without this each module would close the
+              # run and the next would upload into a completed one.
+              QASE_COMPLETE: "false"
+              # Qase upload gate (TMS on both stacks).
+              QASE_MODE: $(QASE_MODE)
+              QASE_PROJECT: $(QASE_PROJECT)
+              API_TOKEN: $(API_TOKEN)
+              HOST: $(HOST)
+              SSO_LOGIN_URL: $(SSO_LOGIN_URL)
+              USER_ID: $(USER_ID)
+              USER_PWD: $(USER_PWD)
+              # Boards vars are needed only if qa-defect fires from within a
+              # module run and posts a comment on a PBI/Task work item.
+              AZURE_ORG_URL: $(AZURE_ORG_URL)
+              AZURE_PROJECT: $(AZURE_PROJECT)
+              AZURE_PAT: $(AZURE_PAT)
+
+          - task: PublishPipelineArtifact@1
+            condition: always()
+            inputs:
+              targetPath: reports
+              artifact: reports-$(moduleName)
+            displayName: Publish reports
+
+  - stage: finish
+    displayName: Complete the run
+    dependsOn:
+      - setup
+      - sweep
+    condition: always()
+    jobs:
+      - job: complete
+        variables:
+          cycleKey: $[ stageDependencies.setup.setup.outputs['run.cycleKey'] ]
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "20.x"
+            displayName: Use Node 20
+          - script: npm ci
+            displayName: Install dependencies
+          - script: npx tsx utils/qase-helper.ts complete-run "$(cycleKey)"
+            displayName: Mark the test run Completed
+            env:
+              # Qase call — no Boards vars needed.
+              QASE_PROJECT: $(QASE_PROJECT)
+              API_TOKEN: $(API_TOKEN)

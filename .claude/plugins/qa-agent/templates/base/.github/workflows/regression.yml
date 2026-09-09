@@ -1,0 +1,253 @@
+# Regression workflow. The Qase project + app name come from repo variables
+# (Settings → Variables), never from a value baked in here — the SAME workflow
+# serves every app repo, and the only per-repo difference is the set of
+# modules discovered by `scripts/list-modules.ts`.
+# Sweeps every module sequentially — classic modules under `tests/e2e/<module>/`
+# and BDD modules under `features/<module>.feature` alike, each addressed by its
+# own module name in the matrix below. A red module is captured with
+# `continue-on-error: true` and never halts the sweep.
+# `workers:1` is enforced by playwright.config.ts (see CLAUDE.md §13) — the
+# app-under-test only allows one active SSO session per user, so per-module
+# jobs run sequentially (`needs: setup`) and never in parallel.
+name: Regression
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: Target environment
+        type: choice
+        options: [staging, production]
+        default: staging
+      cycle_key:
+        description: Existing Qase run id (leave empty to auto-create a new run)
+        type: string
+        required: false
+        default: ""
+
+env:
+  APP_ENV: ${{ inputs.env || 'staging' }}
+  CYCLE_KEY: ${{ inputs.cycle_key }}
+  QASE_MODE: testops
+  # Deterministic regression — no retries mask flake. Every red module is a
+  # real red; the sweep-level `continue-on-error` still keeps the matrix
+  # going through the remaining modules. `playwright.config.ts` reads
+  # `PW_RETRIES` and pins retries to this value.
+  PW_RETRIES: "0"
+  # Qase project code — sourced strictly from the `QASE_PROJECT` repo variable
+  # (no hardcoded default) so the same workflow serves every app repo:
+  # each repo sets its own value under Settings → Variables.
+  QASE_PROJECT: ${{ vars.QASE_PROJECT }}
+  # App name — used only to label the Qase run title. Falls back to the repo
+  # name so a fresh scaffold still gets a readable label without extra vars.
+  APP_NAME: ${{ vars.APP_NAME || github.event.repository.name }}
+  # Reporter picks these up from the env if set.
+  API_TOKEN: ${{ secrets.API_TOKEN }}
+  # App creds — configured under repo → Settings → Secrets and variables.
+  USER_ID: ${{ secrets.USER_ID }}
+  USER_PWD: ${{ secrets.USER_PWD }}
+  EMAIL: ${{ secrets.EMAIL }}
+  # Host / SSO URLs — resolved per-environment from the corresponding
+  # `_STAGING` / `_PRODUCTION` secret. Staging is the default. Production
+  # requires HOST_PRODUCTION + SSO_LOGIN_URL_PRODUCTION to be set; the
+  # setup job fails fast (see `Verify required secrets`) if they're
+  # missing when env=production, so the sweep never starts blind.
+  HOST: ${{ inputs.env == 'production' && secrets.HOST_PRODUCTION || secrets.HOST_STAGING }}
+  SSO_LOGIN_URL: ${{ inputs.env == 'production' && secrets.SSO_LOGIN_URL_PRODUCTION || secrets.SSO_LOGIN_URL_STAGING }}
+  # Teams Incoming Webhook — used by scripts/post-run-summary.ts to post the
+  # sweep summary card to a channel. No-op if unset (notify job just logs).
+  TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+
+jobs:
+  setup:
+    name: Install + typecheck + lint
+    runs-on: ubuntu-latest
+    outputs:
+      cycle_key: ${{ steps.qase.outputs.cycle_key }}
+      modules: ${{ steps.modules.outputs.modules }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Verify required secrets for ${{ inputs.env || 'staging' }}
+        # Fails fast when a required secret is missing so the sweep never
+        # starts against a blank host / no creds. Production adds two
+        # extra secrets — staging currently ships with HOST_STAGING +
+        # SSO_LOGIN_URL_STAGING already configured.
+        run: |
+          missing=()
+          [ -n "$USER_ID" ]  || missing+=("USER_ID")
+          [ -n "$USER_PWD" ] || missing+=("USER_PWD")
+          [ -n "$HOST" ]     || missing+=("HOST_${{ inputs.env == 'production' && 'PRODUCTION' || 'STAGING' }}")
+          [ -n "$SSO_LOGIN_URL" ] || missing+=("SSO_LOGIN_URL_${{ inputs.env == 'production' && 'PRODUCTION' || 'STAGING' }}")
+          if [ ${#missing[@]} -gt 0 ]; then
+            echo "::error::Missing required secret(s) for env='${{ inputs.env || 'staging' }}': ${missing[*]}"
+            exit 1
+          fi
+      - name: Install deps
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npm run install:browsers
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Discover modules (TDD + BDD)
+        id: modules
+        # The matrix is DATA-DRIVEN, so adding a module needs no workflow edit:
+        #   TDD module → a directory under tests/e2e/
+        #   BDD module → a features/<area>/<module>.feature file
+        # A module is swept only when package.json has its `test:<module>`
+        # script (that script is what knows whether to run bddgen first); one
+        # without a script is reported as a ::warning::, never dropped silently.
+        # Same logic is runnable locally: `npm run modules`.
+        run: npx tsx scripts/list-modules.ts
+
+      - name: Create Qase run (if none supplied)
+        id: qase
+        # Mint a fresh run in the configured Qase project ($QASE_PROJECT) and
+        # expose its id to downstream jobs via $GITHUB_OUTPUT.
+        run: |
+          if [ -n "${{ env.CYCLE_KEY }}" ]; then
+            echo "Reusing existing cycle key ${{ env.CYCLE_KEY }}"
+            echo "cycle_key=${{ env.CYCLE_KEY }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -z "$API_TOKEN" ]; then
+            echo "::warning::API_TOKEN not set — tests will run without Qase reporting"
+            echo "cycle_key=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          TRIGGER="${{ github.event_name }}"
+          TITLE="Regression_${APP_ENV}_${APP_NAME}_${TRIGGER}_$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          RUN_ID=$(npx tsx utils/qase-helper.ts create-run "$TITLE" | tail -1)
+          echo "Created Qase run $RUN_ID → https://app.qase.io/run/$QASE_PROJECT/dashboard/$RUN_ID"
+          echo "cycle_key=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "### Qase run created" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Run ID: **$RUN_ID**" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Title: $TITLE" >> "$GITHUB_STEP_SUMMARY"
+          echo "- URL: https://app.qase.io/run/$QASE_PROJECT/dashboard/$RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+
+  module:
+    name: e2e / ${{ matrix.module }}
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # SSO evicts concurrent sessions from the same user; keep matrix
+      # sequential by pinning `max-parallel: 1`. If the account pool grows,
+      # bump this in tandem with playwright.config.ts `workers`.
+      max-parallel: 1
+      matrix:
+        # Discovered by the `setup` job — always MODULE NAMES, never a runner
+        # name. Each maps to the `test:<module>` script in package.json:
+        #   classic Qase cases → `playwright test tests/e2e/<module>`
+        #   BDD Qase cases     → `bddgen && playwright test --project=bdd \
+        #                          .features-gen/features/<area>/<module>.feature.spec.js`
+        # so a BDD module is swept by its own name exactly like a classic one and
+        # neither this file nor the matrix needs editing when one is added
+        # (CLAUDE.md §5a).
+        module: ${{ fromJSON(needs.setup.outputs.modules) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npm run install:browsers
+      - name: Run ${{ matrix.module }}
+        continue-on-error: true
+        env:
+          CYCLE_KEY: ${{ needs.setup.outputs.cycle_key }}
+        run: npm run test:${{ matrix.module }} --if-present
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.module }}
+          path: reports/html
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload test-results (traces / videos / screenshots)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.module }}
+          path: reports/test-results
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Upload Playwright JSON (aggregator input for Teams notify)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: results-json-${{ matrix.module }}
+          path: reports/results.json
+          if-no-files-found: ignore
+          retention-days: 14
+
+  notify:
+    name: Post Teams summary
+    needs: [setup, module]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install deps
+        run: npm ci
+      - name: Download per-module Playwright JSON
+        # Aggregator (scripts/post-run-summary.ts) reads reports/results.json
+        # from each module job — download all `results-json-*` artifacts into
+        # per-module folders so the aggregator can infer the module from the
+        # folder name.
+        uses: actions/download-artifact@v4
+        with:
+          pattern: results-json-*
+          path: reports/downloaded
+      - name: Post summary to Teams + GitHub step summary
+        env:
+          CYCLE_KEY: ${{ needs.setup.outputs.cycle_key }}
+          GITHUB_ACTIONS_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -n "${{ needs.setup.outputs.cycle_key }}" ]; then
+            echo "### Regression sweep complete" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Qase run: https://app.qase.io/run/${{ vars.QASE_PROJECT }}/dashboard/${{ needs.setup.outputs.cycle_key }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Environment: ${{ inputs.env || 'staging' }}" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Trigger: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "::notice::TEAMS_WEBHOOK_URL not set — skipping Teams post"
+            exit 0
+          fi
+          if [ ! -f scripts/post-run-summary.ts ]; then
+            echo "::notice::scripts/post-run-summary.ts not present — skipping Teams post (GitHub step summary card was already written above)"
+            exit 0
+          fi
+          npx tsx scripts/post-run-summary.ts
+      - name: Triage failures (deterministic — classifies signatures, posts Teams triage card)
+        # Fires AFTER the sweep summary — classifies every failed case by
+        # error signature, clusters shared signatures per module (SSO / staging
+        # cascades vs isolated selector breakage vs assertion mismatches),
+        # writes a triage report to $GITHUB_STEP_SUMMARY, and posts a compact
+        # triage card to the same Teams channel (with an "Open PR" link when
+        # the branch has one open). LLM-free, cheap, always safe to run.
+        # The `qa-regression-check` slash-command agent is the human-invoked
+        # counterpart that can additionally heal + open a PR.
+        if: always()
+        env:
+          CYCLE_KEY: ${{ needs.setup.outputs.cycle_key }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ ! -f scripts/triage-regression.ts ]; then
+            echo "::notice::scripts/triage-regression.ts not present — skipping deterministic triage card"
+            exit 0
+          fi
+          npx tsx scripts/triage-regression.ts --artifacts-dir reports/downloaded
