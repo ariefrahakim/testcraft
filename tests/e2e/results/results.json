@@ -1,0 +1,393 @@
+{
+  "config": {
+    "argv": [
+      "/opt/homebrew/Cellar/node/24.5.0/bin/node",
+      "/Users/ariefrahman/Desktop/testcraft/tests/e2e/node_modules/.bin/playwright",
+      "test",
+      "specs/exploration/admin-courses-crop.spec.ts",
+      "--project=chromium",
+      "--workers=1"
+    ],
+    "configFile": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/playwright.config.ts",
+    "rootDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/global-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "setup:student",
+        "name": "setup:student",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "/.*auth\\.setup\\.ts/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "api",
+        "name": "api",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "/specs\\/api\\/.*/"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "marketing",
+        "name": "marketing",
+        "testDir": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "/specs\\/marketing\\/.*/"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "results/html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results/results.json"
+        }
+      ],
+      [
+        "/Users/ariefrahman/Desktop/testcraft/tests/e2e/node_modules/playwright-qase-reporter/dist/index.js",
+        {
+          "mode": "testops",
+          "testops": {
+            "api": {
+              "token": "37a62456081995d96b403d9c4bf0f07915a35360baa1a9dda36548e55b71577c"
+            },
+            "project": "TC",
+            "run": {
+              "title": "Playwright Run 2026-09-09T02:13",
+              "complete": true
+            },
+            "uploadAttachments": true
+          }
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth/auth.setup.ts",
+      "file": "auth/auth.setup.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Auth state setup",
+          "file": "auth/auth.setup.ts",
+          "line": 12,
+          "column": 7,
+          "specs": [
+            {
+              "title": "save student auth state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "setup:student",
+                  "projectName": "setup:student",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 482,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-09T02:13:42.628Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-state-setup-save-student-auth-state-setup-student/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-state-setup-save-student-auth-state-setup-student/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b45c5396b06e34bf5a1f-439a30e8ab0904b69f30",
+              "file": "auth/auth.setup.ts",
+              "line": 13,
+              "column": 8
+            },
+            {
+              "title": "save admin auth state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "setup:student",
+                  "projectName": "setup:student",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 265,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-09T02:13:43.326Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-state-setup-save-admin-auth-state-setup-student/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-state-setup-save-admin-auth-state-setup-student/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b45c5396b06e34bf5a1f-343436ad1897898b80df",
+              "file": "auth/auth.setup.ts",
+              "line": 22,
+              "column": 8
+            },
+            {
+              "title": "save instructor auth state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "setup:student",
+                  "projectName": "setup:student",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 255,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-09-09T02:13:43.595Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-st-b10e4--save-instructor-auth-state-setup-student/test-finished-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/auth-auth.setup.ts-Auth-st-b10e4--save-instructor-auth-state-setup-student/video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b45c5396b06e34bf5a1f-f722241b18fcd2de662e",
+              "file": "auth/auth.setup.ts",
+              "line": 31,
+              "column": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "exploration/admin-courses-crop.spec.ts",
+      "file": "exploration/admin-courses-crop.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Admin courses status crop",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 851,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "Status badges: [ \u001b[32m'SA'\u001b[39m, \u001b[32m'Terbit'\u001b[39m, \u001b[32m'Diarsipkan'\u001b[39m ]\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-09T02:13:44.049Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/exploration-admin-courses-crop-Admin-courses-status-crop-chromium/test-finished-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "/Users/ariefrahman/Desktop/testcraft/tests/e2e/results/artifacts/exploration-admin-courses-crop-Admin-courses-status-crop-chromium/video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "0e827fa41dd33e804760-0f0808c87610c09021e7",
+          "file": "exploration/admin-courses-crop.spec.ts",
+          "line": 5,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-09T02:13:42.364Z",
+    "duration": 2675.955,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
