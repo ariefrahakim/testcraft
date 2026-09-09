@@ -77,7 +77,6 @@ function CertificatePreview({ num, data, certRef }: { num: string; data: CertDat
             fontSize: "11px", fontFamily: "sans-serif", color: "#9ca3af",
             textAlign: "right", lineHeight: 1.6,
           }}>
-            <div style={{ fontWeight: 600, color: "#0E9C9C" }}>{data.score}% Score</div>
             <div>{data.completed}</div>
           </div>
         </div>
