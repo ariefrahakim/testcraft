@@ -169,7 +169,7 @@ export function Navbar() {
 
         {/* LMS Portal link */}
         <a
-          href="https://app.testcraft.id"
+          href="http://localhost:3000"
           target="_blank"
           rel="noopener noreferrer"
           className="nav-cta"
@@ -296,7 +296,7 @@ export function Navbar() {
           </a>
         ))}
         <a
-          href="https://app.testcraft.id"
+          href="http://localhost:3000"
           target="_blank"
           rel="noopener noreferrer"
           style={{
