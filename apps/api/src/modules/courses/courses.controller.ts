@@ -56,17 +56,17 @@ export class CoursesController {
   }
 
   @Post()
-  @Roles(Role.ADMIN, Role.INSTRUCTOR)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Buat kursus baru' })
+  @ApiOperation({ summary: 'Buat kursus baru (Admin only)' })
   create(@Body() dto: CreateCourseDto) {
     return this.courses.create(dto);
   }
 
   @Patch(':id')
-  @Roles(Role.ADMIN, Role.INSTRUCTOR)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Perbarui kursus' })
+  @ApiOperation({ summary: 'Perbarui kursus (Admin only)' })
   update(@Param('id') id: string, @Body() dto: UpdateCourseDto) {
     return this.courses.update(id, dto);
   }

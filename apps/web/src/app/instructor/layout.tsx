@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   MessageSquare,
   Video,
-  Wallet,
 } from 'lucide-react';
 import { WorkspaceShell, type NavSection } from '@/components/workspace/workspace-shell';
 import { useApi } from '@/lib/use-api';
@@ -42,7 +41,6 @@ export default function InstructorLayout({ children }: { children: React.ReactNo
       items: [
         { href: '/instructor/content', labelKey: 'menu.content', icon: Video },
         { href: '/instructor/certificates', labelKey: 'menu.certificates', icon: Award },
-        { href: '/instructor/payouts', labelKey: 'menu.payouts', icon: Wallet },
       ],
     },
   ];
