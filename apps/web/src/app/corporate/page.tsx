@@ -52,19 +52,19 @@ export default async function CorporatePage() {
             Program upskilling untuk tim engineering Anda — dari manual testing sampai AI for
             QA, dengan pendampingan praktisi industri.
           </p>
-          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <ButtonLink
               href={waLink(
                 settings.whatsapp,
                 'Halo TestCraft, saya ingin penawaran corporate training.',
               )}
-              variant="whatsapp"
               size="lg"
               target="_blank"
+              className="bg-white text-navy hover:bg-primary-light"
             >
-              <WhatsAppIcon className="h-5 w-5" /> Minta Penawaran
+              <WhatsAppIcon className="h-5 w-5 text-[#25D366]" /> Minta Penawaran
             </ButtonLink>
-            <ButtonLink href="/catalog" variant="outline" size="lg" className="bg-white/10 text-white">
+            <ButtonLink href="/catalog" variant="outline" size="lg" className="bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white hover:border-white/50">
               Lihat Katalog Kelas
             </ButtonLink>
           </div>
@@ -106,10 +106,9 @@ export default async function CorporatePage() {
                 settings.whatsapp,
                 'Halo TestCraft, saya ingin konsultasi corporate training.',
               )}
-              variant="whatsapp"
               target="_blank"
             >
-              <WhatsAppIcon className="h-5 w-5" /> Konsultasi Gratis
+              <WhatsAppIcon className="h-5 w-5 text-[#25D366]" /> Konsultasi Gratis
             </ButtonLink>
           </CardBody>
         </Card>
