@@ -43,14 +43,14 @@ Login ke `/login` lalu:
 
 Login ke `/login` lalu akses menu Instructor:
 
-1. **Overview** (`/instructor`) → statistik kursus, rating, dan pendapatan
-2. **Kursus Saya** (`/instructor/courses`) → daftar kursus yang dibuat
-3. **Buat Kursus** → isi judul, slug, deskripsi, harga (isi `0` untuk gratis), kategori, dan icon
-4. **Tambah Konten** (`/instructor/content`) → tambah modul & lesson (video URL / teks / kuis) per kursus
-5. **Nilai Tugas** (`/instructor/grading`) → review dan beri nilai submission murid
-6. **Feedback** (`/instructor/feedback`) → lihat rating dan ulasan per kursus
-7. **Sertifikat** (`/instructor/certificates`) → sertifikat yang terbit dari kursus Anda
-8. **Payouts** (`/instructor/payouts`) → riwayat pembayaran royalti
+1. **Overview** (`/instructor`) → statistik kursus dan rating (read-only)
+2. **Info Kelas** (`/instructor/courses`) → daftar kursus yang ditugaskan (read-only, tidak bisa buat/edit kursus)
+3. **Submit Materi** (`/instructor/content`) → tambah modul & lesson (video URL / teks / kuis) per kursus
+4. **Nilai Tugas** (`/instructor/grading`) → review dan beri nilai submission murid
+5. **Feedback** (`/instructor/feedback`) → lihat rating dan ulasan per kursus
+6. **Sertifikat** (`/instructor/certificates`) → sertifikat yang terbit dari kursus Anda
+
+> **Catatan:** Instructor **tidak bisa** membuat atau mengedit kursus. Pembuatan dan pengelolaan kursus hanya bisa dilakukan oleh Admin / Super Admin.
 
 ---
 
@@ -62,9 +62,10 @@ Login ke `/login` → akses otomatis ke `/admin`.
 Statistik real-time: revenue 30 hari, total revenue, jumlah murid, instruktur, kursus publish, sertifikat, dan leads.
 
 #### Manajemen Kursus (`/admin/courses`)
+- **Buat kursus baru** (hanya Admin / Super Admin yang bisa)
 - Lihat semua kursus dari semua instruktur
 - **Publish / Unpublish** kursus
-- Edit harga, kategori, dan status kursus
+- Edit judul, harga, kategori, dan status kursus
 - Hapus kursus yang melanggar kebijakan
 
 #### Manajemen Users (`/admin/users`)
