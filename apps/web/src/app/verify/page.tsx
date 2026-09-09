@@ -23,163 +23,117 @@ function CertificatePreview({ num, data, certRef }: { num: string; data: CertDat
       id="certificate-canvas"
       style={{
         position: "relative",
+        background: "#fdfcf8",
+        borderRadius: "12px",
+        border: "1px solid #e8e0d0",
         overflow: "hidden",
-        borderRadius: "16px",
-        background: "linear-gradient(135deg, #0a1628 0%, #0f2438 30%, #0e3d5c 60%, #0E9C9C 100%)",
-        padding: "2px",
         fontFamily: "Georgia, 'Times New Roman', serif",
+        boxShadow: "0 4px 40px rgba(0,0,0,0.08)",
       }}
     >
-      {/* Inner certificate */}
-      <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          borderRadius: "14px",
-          background: "linear-gradient(160deg, #0d1f35 0%, #0f2c45 40%, #113a55 70%, #0d3349 100%)",
-          minHeight: "420px",
-          padding: "0",
-        }}
-      >
-        {/* Gold corner ornaments */}
-        <div style={{ position: "absolute", top: 0, left: 0, width: "80px", height: "80px", opacity: 0.4 }}>
-          <svg viewBox="0 0 80 80" style={{ width: "100%", height: "100%" }}>
-            <path d="M0 0 L40 0 L0 40 Z" fill="#d4af37" opacity="0.3" />
-            <path d="M0 0 L20 0 L0 20 Z" fill="#d4af37" opacity="0.6" />
-            <circle cx="12" cy="12" r="4" fill="#d4af37" opacity="0.8" />
-          </svg>
-        </div>
-        <div style={{ position: "absolute", top: 0, right: 0, width: "80px", height: "80px", opacity: 0.4, transform: "scaleX(-1)" }}>
-          <svg viewBox="0 0 80 80" style={{ width: "100%", height: "100%" }}>
-            <path d="M0 0 L40 0 L0 40 Z" fill="#d4af37" opacity="0.3" />
-            <path d="M0 0 L20 0 L0 20 Z" fill="#d4af37" opacity="0.6" />
-            <circle cx="12" cy="12" r="4" fill="#d4af37" opacity="0.8" />
-          </svg>
-        </div>
-        <div style={{ position: "absolute", bottom: 0, left: 0, width: "80px", height: "80px", opacity: 0.4, transform: "scaleY(-1)" }}>
-          <svg viewBox="0 0 80 80" style={{ width: "100%", height: "100%" }}>
-            <path d="M0 0 L40 0 L0 40 Z" fill="#d4af37" opacity="0.3" />
-            <path d="M0 0 L20 0 L0 20 Z" fill="#d4af37" opacity="0.6" />
-            <circle cx="12" cy="12" r="4" fill="#d4af37" opacity="0.8" />
-          </svg>
-        </div>
-        <div style={{ position: "absolute", bottom: 0, right: 0, width: "80px", height: "80px", opacity: 0.4, transform: "scale(-1)" }}>
-          <svg viewBox="0 0 80 80" style={{ width: "100%", height: "100%" }}>
-            <path d="M0 0 L40 0 L0 40 Z" fill="#d4af37" opacity="0.3" />
-            <path d="M0 0 L20 0 L0 20 Z" fill="#d4af37" opacity="0.6" />
-            <circle cx="12" cy="12" r="4" fill="#d4af37" opacity="0.8" />
-          </svg>
-        </div>
+      {/* Left teal accent bar */}
+      <div style={{
+        position: "absolute", left: 0, top: 0, bottom: 0, width: "6px",
+        background: "linear-gradient(180deg, #0E9C9C 0%, #12283E 100%)",
+      }} />
 
-        {/* Radial glow center */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse at 50% 40%, rgba(14,156,156,0.12) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
+      {/* Watermark seal */}
+      <div style={{
+        position: "absolute", right: "32px", bottom: "32px",
+        width: "90px", height: "90px", opacity: 0.06,
+      }}>
+        <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }}>
+          <circle cx="50" cy="50" r="48" fill="none" stroke="#0E9C9C" strokeWidth="3" />
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#0E9C9C" strokeWidth="1.5" />
+          <text x="50" y="46" textAnchor="middle" fontSize="9" fill="#0E9C9C" fontWeight="700" letterSpacing="3">TESTCRAFT</text>
+          <text x="50" y="58" textAnchor="middle" fontSize="7" fill="#0E9C9C" letterSpacing="2">VERIFIED</text>
+        </svg>
+      </div>
 
-        {/* Gold top border line */}
-        <div style={{ height: "3px", background: "linear-gradient(90deg, transparent, #d4af37, #f0d060, #d4af37, transparent)" }} />
-
-        <div style={{ padding: "36px 48px 32px", textAlign: "center" }}>
-          {/* Brand */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-            <svg viewBox="0 0 32 32" style={{ width: "28px", height: "28px" }}>
+      <div style={{ padding: "40px 52px 36px 58px" }}>
+        {/* Top: brand + label */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <svg viewBox="0 0 32 32" style={{ width: "32px", height: "32px" }}>
               <defs>
                 <linearGradient id="cert-logo" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stopColor="#0E9C9C" />
-                  <stop offset="100%" stopColor="#2FBF9F" />
+                  <stop offset="100%" stopColor="#12283E" />
                 </linearGradient>
               </defs>
               <path d="M16 2.5 4.5 6.8v8.4c0 6.9 4.7 13.3 11.5 15.3 6.8-2 11.5-8.4 11.5-15.3V6.8L16 2.5Z" fill="url(#cert-logo)" />
               <path d="m10.6 16.2 3.7 3.8 7.1-7.6" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span style={{ fontFamily: "Poppins, sans-serif", fontSize: "18px", fontWeight: 800, color: "#e2f0f0", letterSpacing: "-0.3px" }}>
-              TestCraft<span style={{ color: "#0E9C9C" }}>Indonesia</span>
-            </span>
+            <div>
+              <div style={{ fontFamily: "sans-serif", fontSize: "15px", fontWeight: 800, color: "#12283E", letterSpacing: "-0.3px" }}>
+                TestCraft <span style={{ color: "#0E9C9C" }}>Indonesia</span>
+              </div>
+              <div style={{ fontSize: "9px", letterSpacing: "0.18em", color: "#0E9C9C", fontFamily: "sans-serif", fontWeight: 600, marginTop: "1px" }}>
+                CERTIFICATE OF COMPLETION
+              </div>
+            </div>
           </div>
-
-          {/* Subtitle */}
-          <div style={{ marginTop: "6px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-            <div style={{ height: "1px", width: "48px", background: "linear-gradient(90deg, transparent, #d4af37)" }} />
-            <span style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#d4af37", fontFamily: "sans-serif", fontWeight: 600 }}>
-              CERTIFICATE OF COMPLETION
-            </span>
-            <div style={{ height: "1px", width: "48px", background: "linear-gradient(90deg, #d4af37, transparent)" }} />
-          </div>
-
-          {/* Awarded to */}
-          <p style={{ marginTop: "28px", fontSize: "12px", color: "#94b8c8", fontFamily: "sans-serif" }}>
-            This is to certify that
-          </p>
-          <p style={{
-            marginTop: "8px",
-            fontFamily: "Georgia, serif",
-            fontSize: "30px",
-            fontWeight: 700,
-            fontStyle: "italic",
-            color: "#f0f9f9",
-            textShadow: "0 0 30px rgba(14,156,156,0.3)",
-            lineHeight: 1.2,
-          }}>
-            {data.student}
-          </p>
-
-          <p style={{ marginTop: "14px", fontSize: "12px", color: "#94b8c8", fontFamily: "sans-serif" }}>
-            has successfully completed the course
-          </p>
-          <p style={{
-            marginTop: "8px",
-            fontFamily: "Poppins, sans-serif",
-            fontSize: "15px",
-            fontWeight: 700,
-            color: "#7dd8d8",
-            padding: "0 16px",
-            lineHeight: 1.4,
-          }}>
-            {data.course}
-          </p>
-
-          {/* Gold divider */}
-          <div style={{ margin: "20px auto 0", width: "160px", height: "1px", background: "linear-gradient(90deg, transparent, #d4af37 40%, #d4af37 60%, transparent)" }} />
-
-          {/* Stats */}
           <div style={{
-            marginTop: "18px",
-            display: "inline-flex",
-            gap: 0,
-            borderRadius: "12px",
-            border: "1px solid rgba(212,175,55,0.25)",
-            overflow: "hidden",
-            background: "rgba(255,255,255,0.04)",
+            fontSize: "11px", fontFamily: "sans-serif", color: "#9ca3af",
+            textAlign: "right", lineHeight: 1.6,
           }}>
-            <div style={{ padding: "12px 24px", textAlign: "center", borderRight: "1px solid rgba(212,175,55,0.2)" }}>
-              <p style={{ fontSize: "10px", color: "#94b8c8", fontFamily: "sans-serif", letterSpacing: "0.1em" }}>SCORE</p>
-              <p style={{ fontSize: "22px", fontWeight: 800, color: "#0E9C9C", fontFamily: "sans-serif", marginTop: "2px" }}>{data.score}%</p>
-            </div>
-            <div style={{ padding: "12px 24px", textAlign: "center", borderRight: "1px solid rgba(212,175,55,0.2)" }}>
-              <p style={{ fontSize: "10px", color: "#94b8c8", fontFamily: "sans-serif", letterSpacing: "0.1em" }}>COMPLETED</p>
-              <p style={{ fontSize: "13px", fontWeight: 700, color: "#e2f0f0", fontFamily: "sans-serif", marginTop: "4px" }}>{data.completed}</p>
-            </div>
-            <div style={{ padding: "12px 24px", textAlign: "center" }}>
-              <p style={{ fontSize: "10px", color: "#94b8c8", fontFamily: "sans-serif", letterSpacing: "0.1em" }}>INSTRUCTOR</p>
-              <p style={{ fontSize: "13px", fontWeight: 700, color: "#e2f0f0", fontFamily: "sans-serif", marginTop: "4px" }}>{data.instructor}</p>
-            </div>
-          </div>
-
-          {/* Certificate number */}
-          <div style={{ marginTop: "18px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0E9C9C" strokeWidth="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" />
-            </svg>
-            <span style={{ fontFamily: "monospace", fontSize: "11px", color: "#7dd8d8", letterSpacing: "0.05em" }}>
-              Certificate No: {num}
-            </span>
+            <div style={{ fontWeight: 600, color: "#0E9C9C" }}>{data.score}% Score</div>
+            <div>{data.completed}</div>
           </div>
         </div>
 
-        {/* Gold bottom border line */}
-        <div style={{ height: "3px", background: "linear-gradient(90deg, transparent, #d4af37, #f0d060, #d4af37, transparent)" }} />
+        {/* Thin divider */}
+        <div style={{ margin: "24px 0", height: "1px", background: "linear-gradient(90deg, #0E9C9C, #e8e0d0 80%)" }} />
+
+        {/* Main content */}
+        <div>
+          <div style={{ fontSize: "11px", color: "#9ca3af", fontFamily: "sans-serif", letterSpacing: "0.05em" }}>
+            This is to certify that
+          </div>
+          <div style={{
+            marginTop: "6px",
+            fontSize: "34px",
+            fontWeight: 700,
+            fontStyle: "italic",
+            color: "#12283E",
+            letterSpacing: "-0.5px",
+            lineHeight: 1.15,
+          }}>
+            {data.student}
+          </div>
+          <div style={{ marginTop: "12px", fontSize: "11px", color: "#9ca3af", fontFamily: "sans-serif" }}>
+            has successfully completed
+          </div>
+          <div style={{
+            marginTop: "4px",
+            fontSize: "16px",
+            fontWeight: 700,
+            color: "#0E9C9C",
+            fontFamily: "sans-serif",
+            lineHeight: 1.4,
+          }}>
+            {data.course}
+          </div>
+        </div>
+
+        {/* Thin divider */}
+        <div style={{ margin: "24px 0", height: "1px", background: "linear-gradient(90deg, #e8e0d0, transparent 60%)" }} />
+
+        {/* Footer row */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ fontSize: "9px", letterSpacing: "0.12em", color: "#9ca3af", fontFamily: "sans-serif" }}>INSTRUCTOR</div>
+            <div style={{ fontSize: "13px", fontWeight: 600, color: "#374151", fontFamily: "sans-serif", marginTop: "2px" }}>{data.instructor}</div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: "9px", letterSpacing: "0.12em", color: "#9ca3af", fontFamily: "sans-serif" }}>CERTIFICATE NO</div>
+            <div style={{ fontSize: "11px", fontFamily: "monospace", color: "#0E9C9C", marginTop: "2px", letterSpacing: "0.05em" }}>{num}</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: "9px", letterSpacing: "0.12em", color: "#9ca3af", fontFamily: "sans-serif" }}>ISSUED BY</div>
+            <div style={{ fontSize: "13px", fontWeight: 600, color: "#374151", fontFamily: "sans-serif", marginTop: "2px" }}>TestCraft Indonesia</div>
+          </div>
+        </div>
       </div>
     </div>
   );
